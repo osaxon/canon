@@ -16,7 +16,10 @@
     "react": "18.2.0",
     "react-native": "0.72.6",
     "react-native-elements": "^3.4.3",
-    "react-native-url-polyfill": "^2.0.0"
+    "react-native-url-polyfill": "^2.0.0",
+    "expo-web-browser": "~12.3.2",
+    "expo-linking": "~5.0.2",
+    "expo-auth-session": "~5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
