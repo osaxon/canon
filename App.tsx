@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import EmailForm from "./components/EmailForm";
+import HomePage from "./app/HomePage";
 
 export default function App() {
     return (
         <View style={styles.container}>
-            <EmailForm />
+            <HomePage />
         </View>
     );
 }

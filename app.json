@@ -1,5 +1,9 @@
 {
   "expo": {
+    "experiments": {
+      "typedRoutes": true
+    },
+    "scheme": "canon-scheme",
     "name": "project-canon",
     "slug": "project-canon",
     "version": "1.0.0",
@@ -25,6 +29,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
