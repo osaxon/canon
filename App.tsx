@@ -1,8 +1,9 @@
+import HomePage from "./app/HomePage";
 import { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Auth from "./components/Auth";
-import EmailForm from "./components/EmailForm";
+import Auth from "./app/Auth";
+import EmailForm from "./app/EmailForm";
 import { supabase } from "./lib/supabase";
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
 
     return (
         <View style={styles.container}>
+            <HomePage />
             <EmailForm />
             <Auth />
             <Text>{session?.user.id}</Text>
