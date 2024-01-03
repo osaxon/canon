@@ -1,8 +1,8 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { StackParams } from '../App';
+import { StoriesStackParams } from '../App';
 
-type Props = NativeStackScreenProps<StackParams, "StoryConfirm">
+type Props = NativeStackScreenProps<StoriesStackParams, "StoryConfirm">
 
 const StoryConfirm: React.FC<Props> =  ({route, navigation}) => {
     const {story_id} = route.params
