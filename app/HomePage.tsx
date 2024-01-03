@@ -11,8 +11,8 @@ export default function HomePage() {
         <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
           <Text>Sign In</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Explore')}>
-          <Text>About</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Profile', {user_id: 1})}>
+          <Text>Profile</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Stories')}>
           <Text>Stories</Text>

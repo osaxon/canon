@@ -13,12 +13,14 @@ import Stories from "./app/Stories";
 import StoryAdd from "./app/StoryAdd";
 import StoryConfirm from "./app/StoryConfirm";
 import FullStory from "./app/FullStory";
+import Profile from "./app/Profile";
 
 export type StackParams = {
     Home: any;
     SignIn: any;
     Explore: any;
     Stories: any,
+    Profile: {user_id: number}
     StoryAdd: {story_id: number},
     StoryConfirm: {story_id: number},
     FullStory: {story_id: number},
@@ -51,6 +53,8 @@ export default function App() {
                 <Stack.Screen name="StoryAdd" component={StoryAdd} options = {{title: "Add"}}/>
                 <Stack.Screen name="StoryConfirm" component={StoryConfirm} options = {{title: "Confirm"}}/>
                 <Stack.Screen name="FullStory" component={FullStory} options = {{title: "Full Story"}}/>
+                <Stack.Screen name="Profile" component={Profile} options = {{title: "Profile"}}/>
+
             </Stack.Navigator>
         </NavigationContainer>
     );
