@@ -1,7 +1,7 @@
-import { Text, TouchableOpacity, View } from 'react-native';
-import { StackParams, StoriesStackParams, UsersStackParams } from '../App';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import {useNavigation} from '@react-navigation/core'
+import { useNavigation } from "@react-navigation/core";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Text, TouchableOpacity, View } from "react-native";
+import { StackParams, StoriesStackParams, UsersStackParams } from "../App";
 
 export default function HomePage() {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>()
