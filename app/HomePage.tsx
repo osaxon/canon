@@ -7,8 +7,9 @@ export default function HomePage() {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>()
   return (
     <>
+      <View>
         <Text>Home page</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+        <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
           <Text>Sign In</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Profile', {user_id: 1})}>
@@ -17,6 +18,7 @@ export default function HomePage() {
         <TouchableOpacity onPress={() => navigation.navigate('Stories')}>
           <Text>Stories</Text>
         </TouchableOpacity>
+        </View>
     </>
   );
 }
