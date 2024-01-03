@@ -6,17 +6,16 @@ import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import Profile from "./app/Profile";
 import { supabase } from "./lib/supabase";
-import Explore from "./app/Explore";
 import Stories from "./app/Stories";
 import StoryAdd from "./app/StoryAdd";
 import StoryConfirm from "./app/StoryConfirm";
 import FullStory from "./app/FullStory";
-import HomePage from "./app/HomePage";
 import StoryComments from "./app/StoryComments";
 import UserProfile from "./app/UserProfile";
 import Users from "./app/Users";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SignIn from "./app/SignIn";
+import ProfileButton from "./components/ProfileButton";
 
 export type StackParams = {
   Home: any;
@@ -107,26 +106,20 @@ export default function App() {
 
   console.log(session, "<--- session");
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomePage} />
-        <Stack.Screen name="SignIn" component={SignIn} />
-        <Stack.Screen name="Explore" component={Explore} />
-        <Stack.Screen name="StoriesStack" component={StoriesScreenStack} />
-        <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={{ title: "Profile" }}
-        />
-        <Stack.Screen
-          name="UsersStack"
-          component={UsersScreenStack}
-          options={{ title: "Users" }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+    return (
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="SignIn" screenOptions = {{headerRight: () => (
+                <ProfileButton session = {session?.access_token}/>
+          ),}} >
+                
+                <Stack.Screen name="SignIn" component={SignIn} />
+                <Stack.Screen name="Explore" component={StoriesScreenStack} />
+                <Stack.Screen name="Profile" component={Profile} options = {{title: "Profile"}}/>
+                <Stack.Screen name="UsersStack" component={UsersScreenStack} options = {{title: "Users"}}/>
+                
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
 }
 
 const styles = StyleSheet.create({
