@@ -1,9 +1,9 @@
 import { Text } from 'react-native';
 
-export default function About() {
+export default function Explore() {
   return (
     <>
-        <Text>About page</Text>
+        <Text>Explore page</Text>
     </>
   );
 }
