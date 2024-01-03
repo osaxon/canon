@@ -6,18 +6,32 @@ import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import Profile from "./app/Profile";
 import { supabase } from "./lib/supabase";
-
+import Explore from "./app/Explore";
+import Stories from "./app/Stories";
+import StoryAdd from "./app/StoryAdd";
+import StoryConfirm from "./app/StoryConfirm";
+import FullStory from "./app/FullStory";
 import HomePage from "./app/HomePage";
+import StoryComments from "./app/StoryComments";
+import UserProfile from "./app/UserProfile";
+import Users from "./app/Users";
 import SignIn from "./app/SignIn";
 
-export type RootStackParams = {
+export type StackParams = {
   Home: any;
   SignIn: any;
+  Explore: any;
   Stories: any;
-  Profile: any;
+  Profile: { user_id: number };
+  UserProfile: { user_id: number };
+  StoryAdd: { story_id: number };
+  StoryConfirm: { story_id: number };
+  FullStory: { story_id: number };
+  StoryComments: { story_id: number };
+  Users: any;
 };
 
-const Stack = createNativeStackNavigator<RootStackParams>();
+const Stack = createNativeStackNavigator<StackParams>();
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -36,21 +50,50 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomePage} />
         <Stack.Screen name="SignIn" component={SignIn} />
-        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Explore" component={Explore} />
+        <Stack.Screen name="Stories" component={Stories} />
+        <Stack.Screen
+          name="StoryAdd"
+          component={StoryAdd}
+          options={{ title: "Add" }}
+        />
+        <Stack.Screen
+          name="StoryConfirm"
+          component={StoryConfirm}
+          options={{ title: "Confirm" }}
+        />
+        <Stack.Screen
+          name="FullStory"
+          component={FullStory}
+          options={{ title: "Full Story" }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{ title: "Profile" }}
+        />
+        <Stack.Screen
+          name="UserProfile"
+          component={UserProfile}
+          options={{ title: "Profile" }}
+        />
+        <Stack.Screen
+          name="Users"
+          component={Users}
+          options={{ title: "Users" }}
+        />
+        <Stack.Screen
+          name="StoryComments"
+          component={StoryComments}
+          options={{ title: "Comments" }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-// <View style={styles.container}>
-//     <HomePage />
-//     <EmailForm />
-//     <Auth />
-//     <Text>{session?.user.id}</Text>
-// </View>
 
 const styles = StyleSheet.create({
   container: {
