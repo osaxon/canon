@@ -16,23 +16,57 @@ import HomePage from "./app/HomePage";
 import StoryComments from "./app/StoryComments";
 import UserProfile from "./app/UserProfile"
 import Users from "./app/Users";
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 
 export type StackParams = {
     Home: any;
     SignIn: any;
     Explore: any,
-    Stories: any,
+    StoriesStack: StoriesStackParams,
     Profile: {user_id: number}
     UserProfile: {user_id: number}
     StoryAdd: {story_id: number},
     StoryConfirm: {story_id: number},
     FullStory: {story_id: number},
     StoryComments: {story_id: number}
-    Users: any
+    UsersStack: UsersStackParams
 };
 
+const Stack = createBottomTabNavigator<StackParams>();
 
-const Stack = createNativeStackNavigator<StackParams>();
+export type StoriesStackParams = {
+    Stories: any,
+    StoryAdd: {story_id: number},
+    StoryConfirm: {story_id: number},
+    FullStory: {story_id: number},
+    StoryComments: {story_id: number}
+}
+const StoriesStack = createNativeStackNavigator<StoriesStackParams>();
+const StoriesScreenStack = () => {
+    return (
+        <StoriesStack.Navigator>
+            <StoriesStack.Screen name = "Stories" component = {Stories}/>
+            <StoriesStack.Screen name="StoryAdd" component={StoryAdd} options = {{title: "Add"}}/>
+            <StoriesStack.Screen name="StoryConfirm" component={StoryConfirm} options = {{title: "Confirm"}}/>
+            <StoriesStack.Screen name="FullStory" component={FullStory} options = {{title: "Full Story"}}/>
+            <StoriesStack.Screen name="StoryComments" component={StoryComments} options = {{title: "Comments"}}/>
+        </StoriesStack.Navigator>
+    )
+}
+
+export type UsersStackParams = {
+    Users: any,
+    UserProfile: {user_id: number}
+}
+const UsersStack = createNativeStackNavigator<UsersStackParams>();
+const UsersScreenStack = () => {
+    return (
+        <UsersStack.Navigator>
+            <UsersStack.Screen name="Users" component={Users} options = {{title: "Users"}}/>
+            <UsersStack.Screen name="UserProfile" component={UserProfile} options = {{title: "Profile"}}/>
+        </UsersStack.Navigator>
+    )
+}
 
 export default function App() {
     const [session, setSession] = useState<Session | null>(null);
@@ -55,14 +89,10 @@ export default function App() {
                 <Stack.Screen name="Home" component={HomePage} />
                 <Stack.Screen name="SignIn" component={Auth} />
                 <Stack.Screen name="Explore" component={Explore} />
-                <Stack.Screen name="Stories" component={Stories} />
-                <Stack.Screen name="StoryAdd" component={StoryAdd} options = {{title: "Add"}}/>
-                <Stack.Screen name="StoryConfirm" component={StoryConfirm} options = {{title: "Confirm"}}/>
-                <Stack.Screen name="FullStory" component={FullStory} options = {{title: "Full Story"}}/>
+                <Stack.Screen name="StoriesStack" component={StoriesScreenStack} />
                 <Stack.Screen name="Profile" component={Profile} options = {{title: "Profile"}}/>
-                <Stack.Screen name="UserProfile" component={UserProfile} options = {{title: "Profile"}}/>
-                <Stack.Screen name="Users" component={Users} options = {{title: "Users"}}/>
-                <Stack.Screen name="StoryComments" component={StoryComments} options = {{title: "Comments"}}/>
+                <Stack.Screen name="UsersStack" component={UsersScreenStack} options = {{title: "Users"}}/>
+                
             </Stack.Navigator>
         </NavigationContainer>
     );
