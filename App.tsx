@@ -8,8 +8,6 @@ import Auth from "./app/Auth";
 import EmailForm from "./app/EmailForm";
 import Profile from "./app/Profile"
 import { supabase } from "./lib/supabase";
-import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import HomePage from "./app/HomePage";
 
