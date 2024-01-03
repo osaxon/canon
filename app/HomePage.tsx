@@ -8,7 +8,9 @@ export default function HomePage() {
   return (
     <>
       <View>
-        <Text>Home page</Text>
+      <TouchableOpacity onPress={() => navigation.push("Home")}>
+          <Text>Home</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
           <Text>Sign In</Text>
         </TouchableOpacity>
@@ -17,6 +19,9 @@ export default function HomePage() {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Stories')}>
           <Text>Stories</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Users')}>
+          <Text>Users</Text>
         </TouchableOpacity>
         </View>
     </>

@@ -9,6 +9,9 @@ const FullStory: React.FC<Props> =  ({route, navigation}) => {
     return (
         <>
         <Text>Story ID: {story_id}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('StoryComments', {story_id})}>
+          <Text>See comments</Text>
+        </TouchableOpacity>
         </>
     )
 }
