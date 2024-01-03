@@ -5,15 +5,22 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import Auth from "./app/Auth";
-import HomePage from "./app/HomePage";
-import About from "./app/about";
+import EmailForm from "./app/EmailForm";
+import Profile from "./app/Profile"
 import { supabase } from "./lib/supabase";
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+
+import HomePage from "./app/HomePage";
+
 
 export type RootStackParams = {
     Home: any;
     SignIn: any;
-    About: any;
+    Stories: any;
+    Profile: any;
 };
+
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 
@@ -36,8 +43,8 @@ export default function App() {
         <NavigationContainer>
             <Stack.Navigator>
                 <Stack.Screen name="Home" component={HomePage} />
-                <Stack.Screen name="SignIn" component={Auth} />
-                <Stack.Screen name="About" component={About} />
+                <Stack.Screen name="SignIn" component={EmailForm} />
+                <Stack.Screen name="Profile" component={Profile} />
             </Stack.Navigator>
         </NavigationContainer>
     );
