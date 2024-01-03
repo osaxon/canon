@@ -1,8 +1,8 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { StackParams } from '../App';
+import { UsersStackParams } from '../App';
 
-type Props = NativeStackScreenProps<StackParams, "Users">
+type Props = NativeStackScreenProps<UsersStackParams, "Users">
 
 const Users: React.FC<Props> =  ({route, navigation}) => {
     
