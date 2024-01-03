@@ -6,11 +6,15 @@ import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import Profile from "./app/Profile";
 import { supabase } from "./lib/supabase";
+<<<<<<< HEAD
+
+=======
 import Explore from "./app/Explore";
 import Stories from "./app/Stories";
 import StoryAdd from "./app/StoryAdd";
 import StoryConfirm from "./app/StoryConfirm";
 import FullStory from "./app/FullStory";
+>>>>>>> bb9ec1d785fa3bf11305b515346d0ca94fa7a81a
 import HomePage from "./app/HomePage";
 import StoryComments from "./app/StoryComments";
 import UserProfile from "./app/UserProfile";
