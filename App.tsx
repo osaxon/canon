@@ -13,8 +13,9 @@ import StoryAdd from "./app/StoryAdd";
 import StoryConfirm from "./app/StoryConfirm";
 import FullStory from "./app/FullStory";
 import HomePage from "./app/HomePage";
-
-
+import StoryComments from "./app/StoryComments";
+import UserProfile from "./app/UserProfile"
+import Users from "./app/Users";
 
 export type StackParams = {
     Home: any;
@@ -22,11 +23,12 @@ export type StackParams = {
     Explore: any,
     Stories: any,
     Profile: {user_id: number}
+    UserProfile: {user_id: number}
     StoryAdd: {story_id: number},
     StoryConfirm: {story_id: number},
     FullStory: {story_id: number},
-
-
+    StoryComments: {story_id: number}
+    Users: any
 };
 
 
@@ -58,7 +60,9 @@ export default function App() {
                 <Stack.Screen name="StoryConfirm" component={StoryConfirm} options = {{title: "Confirm"}}/>
                 <Stack.Screen name="FullStory" component={FullStory} options = {{title: "Full Story"}}/>
                 <Stack.Screen name="Profile" component={Profile} options = {{title: "Profile"}}/>
-
+                <Stack.Screen name="UserProfile" component={UserProfile} options = {{title: "Profile"}}/>
+                <Stack.Screen name="Users" component={Users} options = {{title: "Users"}}/>
+                <Stack.Screen name="StoryComments" component={StoryComments} options = {{title: "Comments"}}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
