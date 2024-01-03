@@ -7,12 +7,10 @@ import { StyleSheet } from "react-native";
 import Auth from "./app/Auth";
 import Profile from "./app/Profile"
 import { supabase } from "./lib/supabase";
-import Explore from "./app/Explore";
 import Stories from "./app/Stories";
 import StoryAdd from "./app/StoryAdd";
 import StoryConfirm from "./app/StoryConfirm";
 import FullStory from "./app/FullStory";
-import HomePage from "./app/HomePage";
 import StoryComments from "./app/StoryComments";
 import UserProfile from "./app/UserProfile"
 import Users from "./app/Users";
@@ -20,6 +18,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import { Button } from "react-native";
 import {useNavigation} from '@react-navigation/core'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import ProfileButton from "./components/ProfileButton";
 
 export type StackParams = {
     Home: any;
@@ -73,7 +72,7 @@ const UsersScreenStack = () => {
 
 export default function App() {
     const [session, setSession] = useState<Session | null>(null);
-    const navigation = useNavigation<NativeStackNavigationProp<StackParams>>()
+     //const navigation = useNavigation<NativeStackNavigationProp<StackParams>>()
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
@@ -90,15 +89,11 @@ export default function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator initialRouteName="SignIn" screenOptions = {{headerRight: () => (
-            <Button
-              onPress={() => navigation.navigate("Profile", {user_id: 1})}
-              title="Profile"
-              color="#00cc00"
-            />
+                <ProfileButton/>
           ),}} >
-                {/* <Stack.Screen name="Home" component={HomePage} /> */}
+                
                 <Stack.Screen name="SignIn" component={Auth} />
-                {/* <Stack.Screen name="Explore" component={Explore} /> */}
+                
                 <Stack.Screen name="Explore" component={StoriesScreenStack} />
                 <Stack.Screen name="Profile" component={Profile} options = {{title: "Profile"}}/>
                 <Stack.Screen name="UsersStack" component={UsersScreenStack} options = {{title: "Users"}}/>
