@@ -1,11 +1,17 @@
+import { useNavigation } from "@react-navigation/core";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
+import {
+    FlatList,
+    Image,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { Text } from "react-native-elements";
-import { FlatList, Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StackParams } from "../App";
 import { Database } from "../database.types";
-import {useNavigation} from '@react-navigation/core'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { StackParams } from '../App';
+import { supabase } from "../lib/supabase";
 
 const styles = StyleSheet.create({
   container: {
@@ -19,32 +25,34 @@ const styles = StyleSheet.create({
 });
 
 function Stories() {
-  const navigation = useNavigation<NativeStackNavigationProp<StackParams>>()
-  const [stories, setStories] = useState<
-    Database["public"]["Tables"]["story_items"]["Row"][] | null
-  >(null);
+    const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+    const [stories, setStories] = useState<
+        Database["public"]["Tables"]["story_items"]["Row"][] | null
+    >(null);
 
-  useEffect(() => {
-    const getStories = async () => {
-      const { data, error } = await supabase.from("story_items").select("*");
-      data?.sort((a,b) => {
-        return a.id - b.id
-      })
-      const storyItems: Database["public"]["Tables"]["story_items"]["Row"][] = []
-      const n = data?.length || 0
-      for (let i = 1; i <= n; i++) {
-        const story: any = data?.find((element) => {
-          return element.story_id === i
-        })
-        if(story){
-          storyItems.push(story)
-        }
-
-      }
-      setStories(storyItems);
-    };
-    getStories();
-  }, []);
+    useEffect(() => {
+        const getStories = async () => {
+            const { data, error } = await supabase
+                .from("story_items")
+                .select("*");
+            data?.sort((a, b) => {
+                return a.id - b.id;
+            });
+            const storyItems: Database["public"]["Tables"]["story_items"]["Row"][] =
+                [];
+            const n = data?.length || 0;
+            for (let i = 1; i <= n; i++) {
+                const story: any = data?.find((element) => {
+                    return element.story_id === i;
+                });
+                if (story) {
+                    storyItems.push(story);
+                }
+            }
+            setStories(storyItems);
+        };
+        getStories();
+    }, []);
 
   if (!stories) return null;
   return (
