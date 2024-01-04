@@ -1,10 +1,15 @@
 import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+    FlatList,
+    Image,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { Text } from "react-native-elements";
 import { StackParams } from "../App";
-import GenerateImage from "../components/GenerateImage";
 import { Database } from "../database.types";
 import { supabase } from "../lib/supabase";
 
@@ -26,10 +31,24 @@ function Stories() {
 
     useEffect(() => {
         const getStories = async () => {
-            let { data, error } = await supabase
+            const { data, error } = await supabase
                 .from("story_items")
                 .select("*");
-            setStories(data);
+            data?.sort((a, b) => {
+                return a.id - b.id;
+            });
+            const storyItems: Database["public"]["Tables"]["story_items"]["Row"][] =
+                [];
+            const n = data?.length || 0;
+            for (let i = 1; i <= n; i++) {
+                const story: any = data?.find((element) => {
+                    return element.story_id === i;
+                });
+                if (story) {
+                    storyItems.push(story);
+                }
+            }
+            setStories(storyItems);
         };
         getStories();
     }, []);
@@ -37,24 +56,29 @@ function Stories() {
     if (!stories) return null;
     return (
         <>
-            <View>
-                <GenerateImage />
+            <View style={styles.container}>
+                <Text>{JSON.stringify(stories)}</Text>
+
+                <FlatList
+                    data={stories}
+                    renderItem={({ item }) => (
+                        <View>
+                            <TouchableOpacity
+                                onPress={() =>
+                                    navigation.navigate("StoryAdd", {
+                                        story_id: item.story_id!,
+                                    })
+                                }
+                            >
+                                <Image
+                                    style={styles.stretch}
+                                    source={{ uri: item.image_url! }}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                />
             </View>
-            <TouchableOpacity
-                onPress={() =>
-                    navigation.navigate("StoryAdd", {
-                        story_id: stories[0].story_id!,
-                    })
-                }
-            >
-                <View style={styles.container}>
-                    <Text>{JSON.stringify(stories)}</Text>
-                    <Image
-                        style={styles.stretch}
-                        source={{ uri: stories[0].image_url! }}
-                    />
-                </View>
-            </TouchableOpacity>
         </>
     );
 }
