@@ -6,7 +6,9 @@
         "start": "expo start",
         "android": "expo start --android",
         "ios": "expo start --ios",
-        "web": "expo start --web"
+        "web": "expo start --web",
+        "test:smoke-test": "deno test --allow-all supabase/tests/smoke-test.ts --env=supabase/.env.local",
+        "test:generate-image": "deno test --allow-all supabase/tests/generate-image-tests.ts --env=supabase/.env.local"
     },
     "dependencies": {
         "@react-native-async-storage/async-storage": "1.18.2",
