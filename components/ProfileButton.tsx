@@ -12,7 +12,7 @@ export default function ProfileButton(props: any) {
    if(!props.session){
     return (
         <>
-          <Button title="Sign-In" onPress={() => navigation.navigate("SignIn")} />
+          <Button title="Sign-In" onPress={() => navigation.navigate("Profile", {user_id: -1})} />
         </>
       );
    } 
