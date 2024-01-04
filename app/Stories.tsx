@@ -9,11 +9,12 @@ import { StackParams } from '../App';
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
+    paddingTop: 25,
   },
   stretch: {
-    width: 50,
+    width: 400,
     height: 200,
+    alignSelf: 'center'
   },
 });
 
@@ -49,11 +50,11 @@ function Stories() {
   return (
     <>
       <View style={styles.container}>
-        <Text>{JSON.stringify(stories)}</Text>
+        {/* <Text>{JSON.stringify(stories)}</Text> */}
         
         <FlatList data = {stories} renderItem={({item}) => 
-        <View>
-          <TouchableOpacity onPress={() => navigation.navigate('StoryAdd', {story_id: item.story_id!})}>
+        <View style={styles.container}>
+          <TouchableOpacity onPress={() => navigation.navigate('FullStory', {story_id: item.story_id!})}>
         <Image style={styles.stretch} source={{ uri: item.image_url! }} />
         </TouchableOpacity>
         </View>}/>
