@@ -36,10 +36,6 @@ export default function SignIn() {
     setLoading(false);
   }
 
-  const signout = async () => {
-    await supabase.auth.signOut();
-  };
-
   return (
     <View style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
@@ -78,9 +74,6 @@ export default function SignIn() {
         />
       </View>
       <Auth />
-      <Text style={styles.signOut} onPress={signout}>
-        Sign Out
-      </Text>
     </View>
   );
 }
