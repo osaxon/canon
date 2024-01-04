@@ -108,13 +108,11 @@ export default function App() {
 
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="SignIn" screenOptions = {{headerRight: () => (
+            <Stack.Navigator initialRouteName="Explore" screenOptions = {{headerRight: () => (
                 <ProfileButton session = {session?.access_token}/>
           ),}} >
-                
-                <Stack.Screen name="SignIn" component={SignIn} />
                 <Stack.Screen name="Explore" component={StoriesScreenStack} />
-                <Stack.Screen name="Profile" component={Profile} options = {{title: "Profile"}}/>
+                <Stack.Screen name="Profile" component={session?.access_token ? Profile : SignIn} options = {{title: "Profile"}}/>
                 <Stack.Screen name="UsersStack" component={UsersScreenStack} options = {{title: "Users"}}/>
                 
             </Stack.Navigator>
