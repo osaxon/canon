@@ -15,6 +15,7 @@ import StoryComments from "./app/StoryComments";
 import StoryConfirm from "./app/StoryConfirm";
 import UserProfile from "./app/UserProfile";
 import Users from "./app/Users";
+import GenerateImage from "./components/GenerateImage";
 import ProfileButton from "./components/ProfileButton";
 import { supabase } from "./lib/supabase";
 
@@ -30,6 +31,7 @@ export type StackParams = {
     FullStory: { story_id: number };
     StoryComments: { story_id: number };
     UsersStack: UsersStackParams;
+    test: undefined;
 };
 
 const Stack = createBottomTabNavigator<StackParams>();
@@ -133,6 +135,7 @@ export default function App() {
                         component={UsersScreenStack}
                         options={{ title: "Users" }}
                     />
+                    <Stack.Screen name="test" component={GenerateImage} />
                 </Stack.Navigator>
             </NavigationContainer>
         </QueryClientProvider>
