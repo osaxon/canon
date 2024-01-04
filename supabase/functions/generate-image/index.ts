@@ -1,10 +1,12 @@
 import { serve } from "https://deno.land/std@0.131.0/http/server.ts";
-import OpenAI from "openai";
+import { load } from "https://deno.land/std@0.210.0/dotenv/mod.ts";
+import OpenAI from "https://deno.land/x/openai@v4.20.1/mod.ts";
 // Follow this setup guide to integrate the Deno language server with your editor:
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
+const env = await load();
 
-const openai = new OpenAI({ apiKey: Deno.env.get("OPENAI_API_KEY") });
+const openai = new OpenAI({ apiKey: env["OPEN_AI_API_KEY"] });
 
 const prompts = [
   "A futuristic cityscape with flying cars and a giant robot playing the saxophone on a rooftop.",

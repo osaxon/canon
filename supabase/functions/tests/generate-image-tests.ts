@@ -45,6 +45,7 @@ const testHelloWorld = async () => {
 
   // Log the response from the function
   console.log(JSON.stringify(func_data, null, 2));
+  console.log(apiKey, "<---- the open ai api key");
 
   // Assert that the function returned the expected result
   assertEquals(func_data.message, "Hello bar!");
