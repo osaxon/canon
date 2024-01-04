@@ -7,6 +7,7 @@ import {
   createClient,
   SupabaseClient,
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
+import { Database } from "../../database.types.ts";
 
 // Set up the configuration for the Supabase client
 const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
@@ -21,7 +22,11 @@ const options = {
 
 // Test the creation and functionality of the Supabase client
 const testClientCreation = async () => {
-  var client: SupabaseClient = createClient(supabaseUrl, supabaseKey, options);
+  const client: SupabaseClient = createClient<Database>(
+    supabaseUrl,
+    supabaseKey,
+    options,
+  );
 
   // Verify if the Supabase URL and key are provided
   if (!supabaseUrl) throw new Error("supabaseUrl is required.");
@@ -29,7 +34,7 @@ const testClientCreation = async () => {
 
   // Test a simple query to the database
   const { data: table_data, error: table_error } = await client
-    .from("my_table")
+    .from("story_items")
     .select("*")
     .limit(1);
   if (table_error) {
