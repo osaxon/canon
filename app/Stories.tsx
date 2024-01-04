@@ -1,30 +1,24 @@
-import { useNavigation } from "@react-navigation/core";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 import {
     FlatList,
-    Image,
+    ScrollView,
     StyleSheet,
-    TouchableOpacity,
-    View,
 } from "react-native";
-import { Text } from "react-native-elements";
-import { StackParams } from "../App";
 import { Database } from "../database.types";
 import { supabase } from "../lib/supabase";
+import StoryCard from "./StoryCard";
+
 
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: 50,
-    },
-    stretch: {
-        width: 50,
-        height: 200,
-    },
+  container: {
+    overflow:"scroll",
+    fontSize:"1em",
+    boxSizing:"border-box",
+    padding:1,
+  },
 });
 
-function Stories() {
-    const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+export default function Stories() {
     const [stories, setStories] = useState<
         Database["public"]["Tables"]["story_items"]["Row"][] | null
     >(null);
@@ -52,35 +46,15 @@ function Stories() {
         };
         getStories();
     }, []);
-
-    if (!stories) return null;
     return (
-        <>
-            <View style={styles.container}>
-                <Text>{JSON.stringify(stories)}</Text>
-
-                <FlatList
-                    data={stories}
-                    renderItem={({ item }) => (
-                        <View>
-                            <TouchableOpacity
-                                onPress={() =>
-                                    navigation.navigate("StoryAdd", {
-                                        story_id: item.story_id!,
-                                    })
-                                }
-                            >
-                                <Image
-                                    style={styles.stretch}
-                                    source={{ uri: item.image_url! }}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                />
-            </View>
-        </>
+      <ScrollView style={styles.container}>
+          {stories ? <FlatList
+            data={stories}
+            renderItem={({ item : story}) => (
+              <StoryCard storyData={story as any} />
+            )}
+          /> : null}
+      </ScrollView>
     );
 }
 
-export default Stories;
