@@ -1,25 +1,41 @@
+// Import required libraries and modules
 import {
   assert,
   assertEquals,
-  assertExists,
 } from "https://deno.land/std@0.210.0/assert/mod.ts";
 import {
   createClient,
   SupabaseClient,
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
 
-const apiKey = Deno.env.get("OPENAI_API_KEY");
-
-const supabaseUrl =
-  Deno.env.get("EXPO_PUBLIC_YOUR_REACT_NATIVE_SUPABASE_URL") ?? "";
-const supabaseKey =
-  Deno.env.get("EXPO_PUBLIC_YOUR_REACT_NATIVE_SUPABASE_ANON_KEY") ?? "";
+// Set up the configuration for the Supabase client
+const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
 const options = {
   auth: {
     autoRefreshToken: false,
     persistSession: false,
     detectSessionInUrl: false,
   },
+};
+
+// Test the creation and functionality of the Supabase client
+const testClientCreation = async () => {
+  var client: SupabaseClient = createClient(supabaseUrl, supabaseKey, options);
+
+  // Verify if the Supabase URL and key are provided
+  if (!supabaseUrl) throw new Error("supabaseUrl is required.");
+  if (!supabaseKey) throw new Error("supabaseKey is required.");
+
+  // Test a simple query to the database
+  const { data: table_data, error: table_error } = await client
+    .from("my_table")
+    .select("*")
+    .limit(1);
+  if (table_error) {
+    throw new Error("Invalid Supabase client: " + table_error.message);
+  }
+  assert(table_data, "Data should be returned from the query.");
 };
 
 // Test the 'hello-world' function
@@ -45,10 +61,11 @@ const testHelloWorld = async () => {
 
   // Log the response from the function
   console.log(JSON.stringify(func_data, null, 2));
-  console.log(apiKey, "<---- the open ai api key");
 
   // Assert that the function returned the expected result
   assertEquals(func_data.message, "Hello bar!");
 };
 
+// Register and run the tests
+Deno.test("Client Creation Test", testClientCreation);
 Deno.test("Hello-world Function Test", testHelloWorld);
