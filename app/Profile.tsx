@@ -5,33 +5,70 @@ import {
   View,
   Button,
   ScrollView,
-  Alert,
 } from "react-native";
-import React, { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-import { launchImageLibrary } from "react-native-image-picker";
+import React from "react";
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
+import { supabase } from "../lib/supabase";
+import { decode } from 'base64-arraybuffer'
 
 export default function Profile() {
-//   const supabase = createClient(
-//     "https://ykmnivylzhcxvtsjznhb.supabase.co",
-//     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlrbW5pdnlsemhjeHZ0c2p6bmhiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwMzE3MjY5NiwiZXhwIjoyMDE4NzQ4Njk2fQ.yV_BM32bQkLTAZYfV2yX_J2aToUYS4jbTHihHSN-S-U"
-//   );
+  async function pickImage(bucketName: string, filePath: string) {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
 
-  const pickImage = () => {
+      if (!result.canceled) {
+        if (result.assets && result.assets.length > 0) {
+          const firstAsset = result.assets[0];
+          if (firstAsset.uri) {
+            try {
+              const base64 = await FileSystem.readAsStringAsync(
+                firstAsset.uri,
+                {
+                  encoding: FileSystem.EncodingType.Base64,
+                }
+              );
 
-    let options = {
-        storageOptions: {
-            path: "image"
+              const { data, error } = await supabase.storage
+                .from(bucketName)
+                .upload(filePath, decode(`${base64}`), {
+                  contentType: 'image/jpeg'
+                });
+
+              if (error) {
+                alert("Error uploading file: " + error.message); 
+                return;
+              }
+
+              alert("File uploaded successfully" + JSON.stringify(data));
+            } catch (error) {
+              console.error("Error processing the file: ", error);
+            }
+          } else {
+            console.log("URI is undefined");
+            return;
+          }
         }
+      } else {
+        console.log("Image picking was cancelled");
+      }
+    } catch (error) {
+      console.error("Error during image picking or uploading: ", error);
     }
-    launchImageLibrary(options, response => console.log(response));
-
-    }
+  }
 
   return (
     <>
-     <Image style={styles.profile} source={require('../assets/dalle1.png')} />
-      <Button onPress={() => pickImage()} title="edit image" />
+      <Image style={styles.profile} source={require("../assets/dalle1.png")} />
+      <Button
+        onPress={() => pickImage("avatars", `user_avatars/user123.jpg`)}
+        title="edit"
+      />
       <View>
         <Text>Points</Text>
         <Text>12</Text>
