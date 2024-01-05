@@ -1,20 +1,9 @@
-import { Image } from "@rneui/themed";
+import { Card } from "@rneui/themed";
 import { useQuery } from "@tanstack/react-query";
-import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { SafeAreaView, StyleSheet } from "react-native";
 import { supabase } from "../lib/supabase";
 import { GenerateImageResponse } from "../types/functions";
-
-const styles = StyleSheet.create({
-    list: {
-        width: "100%",
-        backgroundColor: "#000",
-    },
-    item: {
-        aspectRatio: 1,
-        width: "100%",
-        flex: 1,
-    },
-});
 
 const generateImageFromPrompt = async () => {
     const {
@@ -34,13 +23,25 @@ export default function GenerateImage() {
     });
 
     return (
-        <View>
-            <Text>Create new</Text>
-            <Image
-                source={{ uri: image?.data[0].url }}
-                containerStyle={styles.item}
-            />
-            {image && <Text>{JSON.stringify(image)}</Text>}
-        </View>
+        <SafeAreaView style={styles.container}>
+            <Card>
+                <Card.Image source={{ uri: image?.data[0].url }} />
+            </Card>
+            <Card.FeaturedSubtitle>
+                {image?.data[0].revised_prompt}
+            </Card.FeaturedSubtitle>
+        </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        width: "100%",
+        padding: 6,
+    },
+    card: {
+        aspectRatio: 1,
+        width: "100%",
+        flex: 1,
+    },
+});

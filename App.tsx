@@ -20,12 +20,7 @@ import ProfileButton from "./components/ProfileButton";
 import { supabase } from "./lib/supabase";
 
 const theme = createTheme({
-    lightColors: {
-        primary: "red",
-    },
-    darkColors: {
-        primary: "blue",
-    },
+    mode: "dark",
     components: {
         Button: {
             raised: true,
