@@ -16,6 +16,19 @@ export const useGetStories = () => {
     });
 };
 
+export const useGetComments = () => {
+    return useQuery({
+        queryKey: ["comments"],
+        queryFn: async () => {
+            const { data } = await supabase
+                .from("comments")
+                .select("*")
+                .throwOnError();
+            return data || [];
+        },
+    });
+};
+
 export const useStoreImage = ({
     base64,
     fileName,

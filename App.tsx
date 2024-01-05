@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { ThemeProvider, createTheme } from "@rneui/themed";
 import { Session } from "@supabase/supabase-js";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -18,6 +19,20 @@ import GenerateImage from "./components/GenerateImage";
 import ProfileButton from "./components/ProfileButton";
 import { supabase } from "./lib/supabase";
 
+const theme = createTheme({
+    lightColors: {
+        primary: "red",
+    },
+    darkColors: {
+        primary: "blue",
+    },
+    components: {
+        Button: {
+            raised: true,
+        },
+    },
+});
+
 export type StackParams = {
     Home: any;
     SignIn: any;
@@ -30,7 +45,7 @@ export type StackParams = {
     FullStory: { story_id: number };
     StoryComments: { story_id: number };
     UsersStack: UsersStackParams;
-    test: undefined;
+    CreateNew: undefined; // TODO may need to add story_id as a param to make route re-usable for adding to existing story
 };
 
 const Stack = createBottomTabNavigator<StackParams>();
@@ -111,32 +126,39 @@ export default function App() {
 
     return (
         <QueryClientProvider client={queryClient}>
-            <NavigationContainer>
-                <Stack.Navigator
-                    initialRouteName="Explore"
-                    screenOptions={{
-                        headerRight: () => (
-                            <ProfileButton session={session?.access_token} />
-                        ),
-                    }}
-                >
-                    <Stack.Screen
-                        name="Explore"
-                        component={StoriesScreenStack}
-                    />
-                    <Stack.Screen
-                        name="Profile"
-                        component={session?.access_token ? Profile : SignIn}
-                        options={{ title: "Profile" }}
-                    />
-                    <Stack.Screen
-                        name="UsersStack"
-                        component={UsersScreenStack}
-                        options={{ title: "Users" }}
-                    />
-                    <Stack.Screen name="test" component={GenerateImage} />
-                </Stack.Navigator>
-            </NavigationContainer>
+            <ThemeProvider theme={theme}>
+                <NavigationContainer>
+                    <Stack.Navigator
+                        initialRouteName="Explore"
+                        screenOptions={{
+                            headerRight: () => (
+                                <ProfileButton
+                                    session={session?.access_token}
+                                />
+                            ),
+                        }}
+                    >
+                        <Stack.Screen
+                            name="Explore"
+                            component={StoriesScreenStack}
+                        />
+                        <Stack.Screen
+                            name="Profile"
+                            component={session?.access_token ? Profile : SignIn}
+                            options={{ title: "Profile" }}
+                        />
+                        <Stack.Screen
+                            name="UsersStack"
+                            component={UsersScreenStack}
+                            options={{ title: "Users" }}
+                        />
+                        <Stack.Screen
+                            name="CreateNew"
+                            component={GenerateImage}
+                        />
+                    </Stack.Navigator>
+                </NavigationContainer>
+            </ThemeProvider>
         </QueryClientProvider>
     );
 }
