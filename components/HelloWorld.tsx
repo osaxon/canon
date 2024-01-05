@@ -11,7 +11,7 @@ export default function HelloWorld() {
         const fetchMsg = async () => {
             const { data, error } = await supabase.functions.invoke(
                 "hello-world",
-                { body: { name: "from the Supabase Edge!" } }
+                { body: { name: "from the other side!" } }
             );
 
             if (error) setError(error);

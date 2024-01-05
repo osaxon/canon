@@ -14,13 +14,14 @@ import { Database } from "../database.types";
 import { supabase } from "../lib/supabase";
 
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: 50,
-    },
-    stretch: {
-        width: 50,
-        height: 200,
-    },
+  container: {
+    paddingTop: 25,
+  },
+  stretch: {
+    width: 400,
+    height: 200,
+    alignSelf: 'center'
+  },
 });
 
 function Stories() {
@@ -53,34 +54,21 @@ function Stories() {
         getStories();
     }, []);
 
-    if (!stories) return null;
-    return (
-        <>
-            <View style={styles.container}>
-                <Text>{JSON.stringify(stories)}</Text>
-
-                <FlatList
-                    data={stories}
-                    renderItem={({ item }) => (
-                        <View>
-                            <TouchableOpacity
-                                onPress={() =>
-                                    navigation.navigate("StoryAdd", {
-                                        story_id: item.story_id!,
-                                    })
-                                }
-                            >
-                                <Image
-                                    style={styles.stretch}
-                                    source={{ uri: item.image_url! }}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                />
-            </View>
-        </>
-    );
+  if (!stories) return null;
+  return (
+    <>
+      <View style={styles.container}>
+        {/* <Text>{JSON.stringify(stories)}</Text> */}
+        
+        <FlatList data = {stories} renderItem={({item}) => 
+        <View style={styles.container}>
+          <TouchableOpacity onPress={() => navigation.navigate('FullStory', {story_id: item.story_id!})}>
+        <Image style={styles.stretch} source={{ uri: item.image_url! }} />
+        </TouchableOpacity>
+        </View>}/>
+      </View>
+    </>
+  );
 }
 
 export default Stories;
