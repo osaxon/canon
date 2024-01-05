@@ -1,6 +1,6 @@
 import { supabase } from "../lib/supabase";
 import { Tables } from "../types/database";
-import { StoreImageProps } from "../types/functions";
+import { GenerateImageResponse, StoreImageProps } from "../types/functions";
 import { storeImage } from "./supabase";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
