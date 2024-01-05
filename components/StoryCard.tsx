@@ -2,10 +2,8 @@ import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
 import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
-
+import { timeAgo } from "../utils/timeFunctions";
 import { Avatar } from "react-native-elements";
-
-const defaultUser = require("../assets/user.png");
 
 const styles = StyleSheet.create({
   image: {
@@ -51,49 +49,26 @@ interface StoryCardProps {
     id: number;
     story_id: number;
     profile_id: number | null;
-    created_at: string | null;
+    created_at: string | number | Date;
     image_url: string | null;
     comment_count: number | null;
     votes: number | null;
-  };
-  opProfile: {
-    avatar_url: string;
-    bio: string | null;
-    full_name: string | null;
-    id: string;
-    points: number | null;
-    rank: number | null;
-    updated_at: string | null;
-    username: string | null;
+    profiles: { username: string | null; avatar_url: string | null } | null;
   };
 }
 
 const StoryCard = ({
-  storyData: {
-    id,
-    story_id,
-    profile_id,
-    created_at,
-    image_url,
-    comment_count,
-    votes,
-  },
-  opProfile: { avatar_url, username },
+  storyData: { id, story_id, profile_id, created_at, image_url, comment_count, votes, profiles },
 }: StoryCardProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
-  const createdAt = new Date(created_at);
-  const dateAdded = createdAt.toLocaleString();
+
   return (
     <>
       <View style={styles.storyCard}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("FullStory", { story_id })}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("FullStory", { story_id })}>
           <Image style={styles.image} source={{ uri: image_url! }} />
         </TouchableOpacity>
-        <Text
-          style={styles.text}
-        >{`${comment_count} comments, ${votes} votes`}</Text>
+
         <View style={styles.avatarBox}>
           <Avatar
             size={"medium"}
@@ -103,11 +78,16 @@ const StoryCard = ({
               borderStyle: "solid",
               borderWidth: 1,
             }}
-            source={{ uri: avatar_url! } || defaultUser}
+            source={{
+              uri: profiles?.avatar_url
+                ? profiles?.avatar_url
+                : "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
+            }}
           />
-          <Text
-            style={styles.text}
-          >{`${profile_id} posted on ${created_at}`}</Text>
+          <View>
+            <Text style={styles.text}>{`${profiles?.username} posted ${timeAgo(created_at)}`}</Text>
+            <Text style={styles.text}>{`${comment_count} comments, ${votes} votes`}</Text>
+          </View>
         </View>
       </View>
     </>

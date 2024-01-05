@@ -6,6 +6,9 @@ import { supabase } from "../lib/supabase";
 import { Text } from "react-native";
 import { timeAgo } from "../utils/timeFunctions";
 
+
+const defaultUser = require("../assets/user.png");
+
 type CommentsProps = {
   story_id: number;
 };
@@ -23,8 +26,6 @@ function Comments(props: CommentsProps) {
         .select("*,profiles(username,avatar_url)")
         .eq("story_id", props.story_id)
         .order("created_at", { ascending: false });
-      console.log(data, "<-- comments");
-      console.log(error);
       setComments(data);
     };
     getStoryComments();
@@ -40,7 +41,7 @@ function Comments(props: CommentsProps) {
             source={{
               uri: comment.profiles?.avatar_url
                 ? comment.profiles?.avatar_url
-                : "https://randomuser.me/api/portraits/men/36.jpg",
+                : "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
             }}
           />
           <ListItem.Content>

@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import AddToStory from "../components/AddToStory";
 import Comments from "../components/Comments";
-import FullStoryCard from "../components/StoryItemCard";
+import StoryItemCard from "../components/StoryItemCard";
+import { Tables } from "../types/database";
 
 type Props = NativeStackScreenProps<StackParams, "FullStory">;
 const styles = StyleSheet.create({
@@ -19,18 +20,19 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 });
+interface Story extends Tables<"story_items"> {
+  profiles: { username: string | null; avatar_url: string | null } | null;
+}
 
 const FullStory: React.FC<Props> = ({ route, navigation }) => {
   const { story_id } = route.params;
-  const [story, setStory] = useState<
-    Database["public"]["Tables"]["story_items"]["Row"][] | null
-  >(null);
+  const [story, setStory] = useState<Story[] | null>(null);
 
   useEffect(() => {
     const getStory = async () => {
       const { data, error } = await supabase
         .from("story_items")
-        .select("*")
+        .select("*, profiles(username,avatar_url)")
         .eq("story_id", story_id);
       setStory(data);
     };
@@ -43,7 +45,8 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
           <FlatList
             data={story}
             renderItem={({ item: storyItem }) => (
-              <FullStoryCard storyItemData={storyItem as any} />
+              <StoryItemCard storyItemData={storyItem as any} 
+              />
             )}
           />
         ) : null}
