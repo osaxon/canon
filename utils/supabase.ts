@@ -11,6 +11,9 @@ export const storeImage = async ({
         .from(filePath)
         .upload(fileName, decode(`${base64}`), {
             contentType: "image/jpeg",
+        })
+        .catch(() => {
+            throw new Error("failed to upload");
         });
     if (error) throw error;
 

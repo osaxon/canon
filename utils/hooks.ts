@@ -2,7 +2,7 @@ import { supabase } from "../lib/supabase";
 import { Tables } from "../types/database";
 import { StoreImageProps } from "../types/functions";
 import { storeImage } from "./supabase";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useGetStories = () => {
     return useQuery({
@@ -80,6 +80,15 @@ export const useStoreImageForStory = ({
                 .throwOnError();
 
             return data || [];
+        },
+    });
+};
+
+export const useUpvote = (storyId: string, currVotes: number) => {
+    return useMutation({
+        mutationKey: ["upvote", storyId],
+        mutationFn: async () => {
+            await supabase.from("story_items").update({ votes: currVotes + 1 });
         },
     });
 };
