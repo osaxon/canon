@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
 import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
-
+import { timeAgo } from "../utils/timeFunctions";
 import { Avatar } from "react-native-elements";
 
 const defaultUser = require("../assets/user.png");
@@ -49,11 +49,12 @@ interface StoryItemCardProps {
     id: number;
     story_id: number;
     user_id: number | null;
-    created_at: string | null;
+    created_at: string | number | Date;
     image_url: string | null;
     comment_count: number | null;
     votes: number | null;
     prompt: string | null;
+    profiles: { username: string | null; avatar_url: string | null } | null;
   };
 }
 
@@ -67,6 +68,7 @@ const StoryItemCard = ({
     comment_count,
     votes,
     prompt,
+    profiles
   },
 }: StoryItemCardProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
@@ -86,11 +88,15 @@ const StoryItemCard = ({
               borderStyle: "solid",
               borderWidth: 1,
             }}
-            source={defaultUser}
+            source={{
+              uri: profiles?.avatar_url
+                ? profiles?.avatar_url
+                : "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
+            }}
           />
           <Text
             style={styles.text}
-          >{`${user_id} posted on ${created_at}`}</Text>
+          >{`${profiles?.username} posted ${timeAgo(created_at)}`}</Text>
         </View>
       </View>
     </>
