@@ -9,72 +9,33 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      comments: {
-        Row: {
-          content: string | null
-          created_at: string | null
-          id: number
-          story_item_id: number | null
-          user_id: string | null
-        }
-        Insert: {
-          content?: string | null
-          created_at?: string | null
-          id: number
-          story_item_id?: number | null
-          user_id?: string | null
-        }
-        Update: {
-          content?: string | null
-          created_at?: string | null
-          id?: number
-          story_item_id?: number | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "comments_story_item_id_fkey"
-            columns: ["story_item_id"]
-            isOneToOne: false
-            referencedRelation: "story_items"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       followers: {
         Row: {
           created_at: string | null
-          follower_user_id: string | null
-          user_id: string | null
+          follower_profile_id: string | null
+          profile_id: string | null
         }
         Insert: {
           created_at?: string | null
-          follower_user_id?: string | null
-          user_id?: string | null
+          follower_profile_id?: string | null
+          profile_id?: string | null
         }
         Update: {
           created_at?: string | null
-          follower_user_id?: string | null
-          user_id?: string | null
+          follower_profile_id?: string | null
+          profile_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "followers_follower_user_id_fkey"
-            columns: ["follower_user_id"]
+            foreignKeyName: "followers_follower_profile_id_fkey"
+            columns: ["follower_profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "followers_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "followers_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -84,30 +45,30 @@ export interface Database {
       following: {
         Row: {
           created_at: string | null
-          following_user_id: string | null
-          user_id: string | null
+          following_profile_id: string | null
+          profile_id: string | null
         }
         Insert: {
           created_at?: string | null
-          following_user_id?: string | null
-          user_id?: string | null
+          following_profile_id?: string | null
+          profile_id?: string | null
         }
         Update: {
           created_at?: string | null
-          following_user_id?: string | null
-          user_id?: string | null
+          following_profile_id?: string | null
+          profile_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "following_following_user_id_fkey"
-            columns: ["following_user_id"]
+            foreignKeyName: "following_following_profile_id_fkey"
+            columns: ["following_profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "following_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "following_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -179,15 +140,93 @@ export interface Database {
         }
         Relationships: []
       }
+      story_comments: {
+        Row: {
+          content: string | null
+          created_at: string
+          id: number
+          profile_id: string | null
+          story_id: number | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          id?: number
+          profile_id?: string | null
+          story_id?: number | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          id?: number
+          profile_id?: string | null
+          story_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "story_comments_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "story_comments_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "stories"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      story_item_comments: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          id: number
+          profile_id: string | null
+          story_item_id: number | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          id: number
+          profile_id?: string | null
+          story_item_id?: number | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          id?: number
+          profile_id?: string | null
+          story_item_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "story_item_comments_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "story_item_comments_story_item_id_fkey"
+            columns: ["story_item_id"]
+            isOneToOne: false
+            referencedRelation: "story_items"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       story_items: {
         Row: {
           comment_count: number | null
           created_at: string | null
           id: number
           image_url: string | null
+          profile_id: string | null
           prompt: string | null
           story_id: number | null
-          user_id: string | null
           votes: number | null
         }
         Insert: {
@@ -195,9 +234,9 @@ export interface Database {
           created_at?: string | null
           id: number
           image_url?: string | null
+          profile_id?: string | null
           prompt?: string | null
           story_id?: number | null
-          user_id?: string | null
           votes?: number | null
         }
         Update: {
@@ -205,24 +244,24 @@ export interface Database {
           created_at?: string | null
           id?: number
           image_url?: string | null
+          profile_id?: string | null
           prompt?: string | null
           story_id?: number | null
-          user_id?: string | null
           votes?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "story_items_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "story_items_story_id_fkey"
             columns: ["story_id"]
             isOneToOne: false
             referencedRelation: "stories"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "story_items_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
         ]

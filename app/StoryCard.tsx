@@ -48,7 +48,7 @@ interface StoryCardProps {
   storyData: {
     id: number;
     story_id: number;
-    user_id: number | null;
+    profile_id: number | null;
     created_at: string | null;
     image_url: string | null;
     comment_count: number | null;
@@ -60,7 +60,7 @@ const StoryCard = ({
   storyData: {
     id,
     story_id,
-    user_id,
+    profile_id,
     created_at,
     image_url,
     comment_count,
@@ -72,7 +72,7 @@ const StoryCard = ({
     <>
       <View style={styles.storyCard}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("StoryAdd", { story_id })}
+          onPress={() => navigation.navigate("FullStory", { story_id })}
         >
           <Image style={styles.image} source={{ uri: image_url! }} />
         </TouchableOpacity>
@@ -92,7 +92,7 @@ const StoryCard = ({
           />
           <Text
             style={styles.text}
-          >{`${user_id} posted on ${created_at}`}</Text>
+          >{`${profile_id} posted on ${created_at}`}</Text>
         </View>
       </View>
     </>
