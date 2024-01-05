@@ -17,6 +17,12 @@ import { Session } from "@supabase/supabase-js";
 export default function Profile() {
   const [session, setSession] = useState<Session | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  // const [images, setImages] = useState<object | null>([]);
+  const [followerCount, setFollowerCount] = useState<number | null>(null);
+  const [isOwnProfile, setIsOwnProfile] = useState<boolean | false>(false);
+
+  const userId = session?.user?.id || "";
+  console.log([userId])
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -30,11 +36,11 @@ export default function Profile() {
 
   useEffect(() => {
     async function fetchAvatarUrl() {
-      if (session?.user.id) {
+      if (userId) {
         const { data, error } = await supabase
           .from("profiles")
           .select("avatar_url")
-          .eq("id", session.user.id)
+          .eq("id", userId)
           .single();
 
         if (error) {
@@ -51,6 +57,44 @@ export default function Profile() {
   const filePath = `${session?.user.user_metadata.user_name}_avatars/${
     session?.user.user_metadata.user_name
   }_${new Date().getTime()}.jpg`;
+
+  // async function getStory() {
+  //   try {
+  //     const { data, error } = await supabase.storage
+  //       .from("DALLEImages")
+  //       .list("", {
+  //         limit: 100,
+  //         offset: 0,
+  //         sortBy: { column: "created_at", order: "asc" },
+  //       });
+
+  //     if (error) {
+  //       console.error("Error getting story: ", error);
+  //     } else if (data) {
+  //       setImages(data);
+  //       console.log(data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error getting story: ", error);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   getStory();
+  // }, []);
+
+  const fauxImages = [
+    require("../assets/icon.png"),
+    require("../assets/icon.png"),
+    require("../assets/icon.png"),
+    require("../assets/icon.png"),
+    require("../assets/icon.png"),
+    require("../assets/icon.png"),
+    require("../assets/icon.png"),
+    require("../assets/icon.png"),
+    require("../assets/icon.png"),
+  ];
+
   async function pickImage(bucketName: string, filePath: string) {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -109,7 +153,7 @@ export default function Profile() {
       const { error } = await supabase
         .from("profiles")
         .update({ avatar_url: uploadedImageUrl })
-        .eq("id", session?.user.id);
+        .eq("id", userId);
 
       if (error) {
         console.error("Error updating profile: ", error);
@@ -126,6 +170,100 @@ export default function Profile() {
     }
   }
 
+  async function fetchFollowCount() {
+
+    if (!userId) {
+      return;
+    }
+
+    try {
+      const { data, error: fetchError } = await supabase
+        .from("profiles")
+        .select("follower_count")
+        .eq('id', userId)
+        .single();
+
+      if (fetchError) {
+        console.error("Error fetching follower count: ", fetchError);
+        return;
+      } else if (data) {
+        setFollowerCount(data.follower_count);
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchFollowCount();
+  }, [userId]);
+
+  async function increaseFollowCount() {
+    if (!userId) {
+      return;
+    }
+
+    try {
+      const { data, error: fetchError } = await supabase
+        .from("profiles")
+        .select("follower_count")
+        .eq('id', userId)
+        .single();
+
+      if (fetchError) {
+        console.error("Error fetching follower count: ", fetchError);
+        return;
+      }
+
+      const newFollowerCount = (data.follower_count || 0) + 1;
+      setFollowerCount(newFollowerCount);
+
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ follower_count: newFollowerCount })
+        .eq('id', userId);
+
+      if (updateError) {
+        console.error("Error: ", updateError);
+      } else {
+        console.log("Follower count updated successfully");
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  }
+
+  async function profileOwnership() {
+
+    if (!userId) {
+      return false;
+    }
+
+    try {
+      const { data, error: fetchError } = await supabase
+        .from("profiles")
+        .select('*')
+        .eq('id', userId);
+
+      if (fetchError) {
+        console.error("Error: fetching user id ", fetchError);
+        return false;
+      }
+      return data.length > 0 && userId === data[0].id;
+    } catch (error) {
+      console.error("Error getting user id: ", error);
+      return false;
+    }
+  }
+
+  useEffect(() => {
+    async function checkProfileOwnership() {
+      const ownProfile = await profileOwnership();
+      setIsOwnProfile(ownProfile);
+    }
+    checkProfileOwnership();
+  }, [userId]);
+
   return (
     <>
       <View style={styles.container}>
@@ -140,33 +278,31 @@ export default function Profile() {
           <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
         <View style={styles.userInfoSection}>
-          <Text style={styles.userInfoText}>Following: 5</Text>
+          <Text style={styles.userInfoText}>
+            Following: {`${followerCount}`}
+          </Text>
           <Text
             style={styles.userInfoText}
           >{`${session?.user.user_metadata.user_name}`}</Text>
           {/* <Text style={styles.userInfoText}>Story Additions</Text>
           <Text style={styles.userInfoText}>Story Creations</Text> */}
         </View>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Follow</Text>
-        </TouchableOpacity>
+        {!isOwnProfile ? (
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => increaseFollowCount()}
+          >
+            <Text style={styles.buttonText}>Follow</Text>
+          </TouchableOpacity>
+        ) : null}
         <Text style={styles.titleText}>Latest Stories</Text>
-        <View style={styles.storyContainer}>
-          {/* <ScrollView showsHorizontalScrollIndicator={false}> */}
-            <Image
-              style={styles.stories}
-              source={require("../assets/icon.png")}
-            />
-            <Image
-              style={styles.stories}
-              source={require("../assets/icon.png")}
-            />
-            <Image
-              style={styles.stories}
-              source={require("../assets/icon.png")}
-            />
-          {/* </ScrollView> */}
-        </View>
+        <ScrollView>
+          <View style={styles.storyContainer}>
+            {fauxImages.map((source, index) => (
+              <Image key={index} style={styles.stories} source={source} />
+            ))}
+          </View>
+        </ScrollView>
       </View>
     </>
   );
@@ -178,7 +314,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     alignItems: "center",
     justifyContent: "flex-start",
-    width: '100%',
+    width: "100%",
   },
   profile: {
     width: 120,
