@@ -14,16 +14,23 @@ const styles = StyleSheet.create({
 });
 
 export default function Stories() {
-  const [stories, setStories] = useState<Database["public"]["Tables"]["story_items"]["Row"][] | null>(null);
-  const [profiles, setProfiles] = useState<Database["public"]["Tables"]["profiles"]["Row"][] | null>(null);
+  const [stories, setStories] = useState<
+    Database["public"]["Tables"]["story_items"]["Row"][] | null
+  >(null);
+  const [profiles, setProfiles] = useState<
+    Database["public"]["Tables"]["profiles"]["Row"][] | null
+  >(null);
 
   useEffect(() => {
     const getStories = async () => {
-      const { data, error } = await supabase.from("story_items").select("*, profiles(username,avatar_url)");
+      const { data, error } = await supabase
+        .from("story_items")
+        .select("*, profiles(username,avatar_url)");
       data?.sort((a, b) => {
         return a.id - b.id;
       });
-      const storyItems: Database["public"]["Tables"]["story_items"]["Row"][] = [];
+      const storyItems: Database["public"]["Tables"]["story_items"]["Row"][] =
+        [];
       const n = data?.length || 0;
       for (let i = 1; i <= n; i++) {
         const story: any = data?.find((element) => {
@@ -34,7 +41,7 @@ export default function Stories() {
         }
       }
       setStories(() => {
-        return storyItems.reverse()
+        return storyItems.reverse();
       });
     };
     getStories();
@@ -45,7 +52,7 @@ export default function Stories() {
   }, [stories]);
 
   return (
-    <View>
+    <>
       {stories ? (
         <FlatList
           data={stories}
@@ -54,6 +61,6 @@ export default function Stories() {
           }}
         />
       ) : null}
-    </View>
+    </>
   );
 }

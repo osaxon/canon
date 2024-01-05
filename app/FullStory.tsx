@@ -40,7 +40,6 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
   }, []);
   return (
     <>
-      <ScrollView style={styles.container}>
         {story ? (
           <FlatList
             data={story}
@@ -48,12 +47,14 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
               <StoryItemCard storyItemData={storyItem as any} 
               />
             )}
+            ListFooterComponent={<>
+                          <Text>See comments</Text>
+              <Comments story_id={story_id} />
+              <AddToStory />
+            </>
+            }
           />
         ) : null}
-        <Text>See comments</Text>
-        <Comments story_id={story_id} />
-        <AddToStory />
-      </ScrollView>
     </>
   );
 };
