@@ -1,5 +1,8 @@
 // Import required libraries and modules
-import { assertEquals } from "https://deno.land/std@0.210.0/assert/mod.ts";
+import {
+  assertEquals,
+  assertExists,
+} from "https://deno.land/std@0.210.0/assert/mod.ts";
 import {
   createClient,
   SupabaseClient,
@@ -36,11 +39,14 @@ const testGenerateImage = async () => {
   }
 
   // Log the response from the function
-  console.log(JSON.stringify(func_data, null, 2));
+  console.log(
+    JSON.stringify(func_data, null, 2),
+    "<---- the response from openai",
+  );
 
   // Assert that the function returned the expected result
-  assertEquals(func_data.message, "Hello images!");
+  assertExists(func_data[0].url);
 };
 
 // Register and run the tests
-Deno.test("Hello-world Function Test", testGenerateImage);
+Deno.test("Generate Image Test", testGenerateImage);
