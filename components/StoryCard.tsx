@@ -50,8 +50,8 @@ interface StoryCardProps {
   storyData: {
     id: number;
     story_id: number;
-    user_id: number | null;
-    created_at: string;
+    profile_id: number | null;
+    created_at: string | null;
     image_url: string | null;
     comment_count: number | null;
     votes: number | null;
@@ -65,27 +65,24 @@ interface StoryCardProps {
     rank: number | null;
     updated_at: string | null;
     username: string | null;
-  }
+  };
 }
 
 const StoryCard = ({
   storyData: {
     id,
     story_id,
-    user_id,
+    profile_id,
     created_at,
     image_url,
     comment_count,
     votes,
   },
-  opProfile:{
-    avatar_url,
-    username,
-  }
+  opProfile: { avatar_url, username },
 }: StoryCardProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
-  const createdAt = new Date(created_at)
-  const dateAdded = createdAt.toLocaleString()
+  const createdAt = new Date(created_at);
+  const dateAdded = createdAt.toLocaleString();
   return (
     <>
       <View style={styles.storyCard}>
@@ -110,7 +107,7 @@ const StoryCard = ({
           />
           <Text
             style={styles.text}
-          >{`${username || user_id} posted on ${dateAdded}`}</Text>
+          >{`${profile_id} posted on ${created_at}`}</Text>
         </View>
       </View>
     </>
