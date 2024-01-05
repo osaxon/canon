@@ -1,7 +1,7 @@
-import { Card } from "@rneui/themed";
-import { useQuery } from "@tanstack/react-query";
+import { Button, Card } from "@rneui/themed";
+import { useMutation } from "@tanstack/react-query";
 import React from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { ActivityIndicator, SafeAreaView, StyleSheet } from "react-native";
 import { supabase } from "../lib/supabase";
 import { GenerateImageResponse } from "../types/functions";
 
@@ -17,19 +17,39 @@ const generateImageFromPrompt = async () => {
 };
 
 export default function GenerateImage() {
-    const { data: image } = useQuery({
-        queryKey: ["generated-image"],
-        queryFn: generateImageFromPrompt,
+    const { mutate: generate, data: image } = useMutation({
+        mutationKey: ["seed-image"],
+        mutationFn: async () => {
+            const { data } = (await supabase.functions.invoke(
+                "generate-image",
+                { body: {} }
+            )) as { data?: GenerateImageResponse };
+
+            const { data: image } = data || { data: undefined };
+
+            return image?.[0] || undefined;
+        },
     });
+
+    // return it as base64
+    // store it in storage bucket
+    // update db with url from bucket
+    // update the story
 
     return (
         <SafeAreaView style={styles.container}>
             <Card>
-                <Card.Image source={{ uri: image?.data[0].url }} />
+                <Card.Image
+                    source={{ uri: image && image.url }}
+                    PlaceholderContent={<ActivityIndicator />}
+                />
             </Card>
             <Card.FeaturedSubtitle>
-                {image?.data[0].revised_prompt}
+                {image && image.revised_prompt}
             </Card.FeaturedSubtitle>
+            <Button color="primary" onPress={() => generate()}>
+                Generate
+            </Button>
         </SafeAreaView>
     );
 }
