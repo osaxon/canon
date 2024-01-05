@@ -4,24 +4,21 @@
 import OpenAI from "https://deno.land/x/openai@v4.24.0/mod.ts";
 
 Deno.serve(async (req) => {
-  const apiKey = Deno.env.get("OPENAI_API_KEY");
-  console.log(Deno.env.toObject(), "<----- api key");
-  const openai = new OpenAI({
-    apiKey: apiKey,
-  });
-  const chatCompletion = await openai.images.generate({
-    prompt:
-      "an image of a majestic whale shark swimming the tropical waters of thailand",
-    model: "dall-e-3",
-    n: 1,
-    size: "1024x1024",
-  });
+    const apiKey = Deno.env.get("OPENAI_API_KEY");
+    console.log(Deno.env.toObject(), "<----- api key");
+    const openai = new OpenAI({
+        apiKey: apiKey,
+    });
+    const image = await openai.images.generate({
+        prompt: "an image of a majestic whale shark swimming the tropical waters of thailand",
+        model: "dall-e-3",
+        n: 1,
+        size: "1024x1024",
+    });
 
-  const reply = chatCompletion;
-
-  return new Response(JSON.stringify(reply), {
-    headers: { "Content-Type": "application/json" },
-  });
+    return new Response(JSON.stringify(image), {
+        headers: { "Content-Type": "application/json" },
+    });
 });
 
 /* To invoke locally:

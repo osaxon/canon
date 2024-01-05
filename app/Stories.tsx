@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FlatList, ScrollView, StyleSheet } from "react-native";
 import { Database } from "../types/database";
 import { supabase } from "../lib/supabase";
-import StoryCard from "./StoryCard";
+import StoryCard from "../components/StoryCard";
 
 const styles = StyleSheet.create({
   container: {

@@ -1,18 +1,12 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import {
-  FlatList,
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-  StyleSheet,
-} from "react-native";
+import { FlatList, Text, StyleSheet, ScrollView } from "react-native";
 import { StackParams } from "../App";
 import { Database } from "../types/database";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import AddToStory from "../components/AddToStory";
 import Comments from "../components/Comments";
+import FullStoryCard from "../components/StoryItemCard";
 
 type Props = NativeStackScreenProps<StackParams, "FullStory">;
 const styles = StyleSheet.create({
@@ -44,24 +38,19 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
   }, []);
   return (
     <>
-      {/* <Text>{JSON.stringify(story)}</Text> */}
-      <FlatList
-        data={story}
-        renderItem={({ item }) => (
-          <View style={styles.container}>
-            <Text>{item.prompt!}</Text>
-            <Image style={styles.stretch} source={{ uri: item.image_url! }} />
-            <Text>Votes: {item.votes!}</Text>
-          </View>
-        )}
-      />
-      <TouchableOpacity
-        onPress={() => navigation.navigate("StoryComments", { story_id })}
-      >
+      <ScrollView style={styles.container}>
+        {story ? (
+          <FlatList
+            data={story}
+            renderItem={({ item: storyItem }) => (
+              <FullStoryCard storyItemData={storyItem as any} />
+            )}
+          />
+        ) : null}
         <Text>See comments</Text>
-      </TouchableOpacity>
-      <Comments story_id={story_id} />
-      <AddToStory />
+        <Comments story_id={story_id} />
+        <AddToStory />
+      </ScrollView>
     </>
   );
 };
