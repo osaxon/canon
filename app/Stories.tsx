@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import { Database } from "../database.types";
 import { supabase } from "../lib/supabase";
-import StoryCard from "./StoryCard";
+import StoryCard from "../components/StoryCard";
 
 
 const styles = StyleSheet.create({

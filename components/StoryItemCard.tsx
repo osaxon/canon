@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   text: {
     paddingLeft: 10,
   },
-  storyCard: {
+  StoryItemCard: {
     boxSixing: "border-box",
     display: "flex",
     flexDirection: "column",
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     height: "auto",
     maxheight: "100%",
     marginTop: 60,
-    marginBottom: 100,
+    marginBottom:40,
     margin: "auto",
   },
   avatarBox: {
@@ -44,8 +44,8 @@ const styles = StyleSheet.create({
   },
 });
 
-interface StoryCardProps {
-  storyData: {
+interface StoryItemCardProps {
+  storyItemData: {
     id: number;
     story_id: number;
     user_id: number | null;
@@ -53,11 +53,12 @@ interface StoryCardProps {
     image_url: string | null;
     comment_count: number | null;
     votes: number | null;
+    prompt: string | null;
   };
 }
 
-const StoryCard = ({
-  storyData: {
+const StoryItemCard = ({
+  storyItemData: {
     id,
     story_id,
     user_id,
@@ -65,20 +66,17 @@ const StoryCard = ({
     image_url,
     comment_count,
     votes,
+    prompt,
   },
-}: StoryCardProps) => {
+}: StoryItemCardProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
   return (
     <>
-      <View style={styles.storyCard}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("FullStory", { story_id })}
-        >
+      <View style={styles.StoryItemCard}>
           <Image style={styles.image} source={{ uri: image_url! }} />
-        </TouchableOpacity>
         <Text
           style={styles.text}
-        >{`${comment_count} comments, ${votes} votes`}</Text>
+        >{`${prompt}`}</Text>
         <View style={styles.avatarBox}>
           <Avatar
             size={"medium"}
@@ -99,4 +97,4 @@ const StoryCard = ({
   );
 };
 
-export default StoryCard;
+export default StoryItemCard;
