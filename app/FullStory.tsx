@@ -50,14 +50,3 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
 };
 
 export default FullStory;
-
-{/* <FlatList
-data={story}
-renderItem={({ item : storyItem }) => (
-  <View style={styles.container}>
-    <Text>{storyItem.prompt!}</Text>
-    <Image style={styles.stretch} source={{ uri: storyItem.image_url! }} />
-    <Text>Votes: {storyItem.votes!}</Text>
-  </View>
-)}
-/> */}

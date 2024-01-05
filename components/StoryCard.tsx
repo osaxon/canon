@@ -17,7 +17,9 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   text: {
+    margin: 10,
     paddingLeft: 10,
+    textAlign: "center",
   },
   storyCard: {
     boxSixing: "border-box",
@@ -38,7 +40,7 @@ const styles = StyleSheet.create({
   avatarBox: {
     flexDirection: "row",
     alignContent: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     backgroundColor: "lightgrey",
     borderRadius: 10,
   },
@@ -49,11 +51,21 @@ interface StoryCardProps {
     id: number;
     story_id: number;
     user_id: number | null;
-    created_at: string | null;
+    created_at: string;
     image_url: string | null;
     comment_count: number | null;
     votes: number | null;
   };
+  opProfile: {
+    avatar_url: string;
+    bio: string | null;
+    full_name: string | null;
+    id: string;
+    points: number | null;
+    rank: number | null;
+    updated_at: string | null;
+    username: string | null;
+  }
 }
 
 const StoryCard = ({
@@ -66,8 +78,14 @@ const StoryCard = ({
     comment_count,
     votes,
   },
+  opProfile:{
+    avatar_url,
+    username,
+  }
 }: StoryCardProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+  const createdAt = new Date(created_at)
+  const dateAdded = createdAt.toLocaleString()
   return (
     <>
       <View style={styles.storyCard}>
@@ -88,11 +106,11 @@ const StoryCard = ({
               borderStyle: "solid",
               borderWidth: 1,
             }}
-            source={defaultUser}
+            source={{ uri: avatar_url! } || defaultUser}
           />
           <Text
             style={styles.text}
-          >{`${user_id} posted on ${created_at}`}</Text>
+          >{`${username || user_id} posted on ${dateAdded}`}</Text>
         </View>
       </View>
     </>
