@@ -15,21 +15,21 @@ export interface Database {
           created_at: string | null
           id: number
           story_item_id: number | null
-          user_id: number | null
+          user_id: string | null
         }
         Insert: {
           content?: string | null
           created_at?: string | null
           id: number
           story_item_id?: number | null
-          user_id?: number | null
+          user_id?: string | null
         }
         Update: {
           content?: string | null
           created_at?: string | null
           id?: number
           story_item_id?: number | null
-          user_id?: number | null
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -43,7 +43,7 @@ export interface Database {
             foreignKeyName: "comments_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
         ]
@@ -51,25 +51,32 @@ export interface Database {
       followers: {
         Row: {
           created_at: string | null
-          follower_user_id: number | null
-          user_id: number | null
+          follower_user_id: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string | null
-          follower_user_id?: number | null
-          user_id?: number | null
+          follower_user_id?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string | null
-          follower_user_id?: number | null
-          user_id?: number | null
+          follower_user_id?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "followers_follower_user_id_fkey"
             columns: ["follower_user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "followers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
         ]
@@ -77,24 +84,72 @@ export interface Database {
       following: {
         Row: {
           created_at: string | null
-          following_user_id: number | null
-          user_id: number | null
+          following_user_id: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string | null
-          following_user_id?: number | null
-          user_id?: number | null
+          following_user_id?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string | null
-          following_user_id?: number | null
-          user_id?: number | null
+          following_user_id?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "following_following_user_id_fkey"
             columns: ["following_user_id"]
             isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "following_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          full_name: string | null
+          id: string
+          points: number | null
+          rank: number | null
+          updated_at: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          full_name?: string | null
+          id: string
+          points?: number | null
+          rank?: number | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          full_name?: string | null
+          id?: string
+          points?: number | null
+          rank?: number | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -132,7 +187,7 @@ export interface Database {
           image_url: string | null
           prompt: string | null
           story_id: number | null
-          user_id: number | null
+          user_id: string | null
           votes: number | null
         }
         Insert: {
@@ -142,7 +197,7 @@ export interface Database {
           image_url?: string | null
           prompt?: string | null
           story_id?: number | null
-          user_id?: number | null
+          user_id?: string | null
           votes?: number | null
         }
         Update: {
@@ -152,7 +207,7 @@ export interface Database {
           image_url?: string | null
           prompt?: string | null
           story_id?: number | null
-          user_id?: number | null
+          user_id?: string | null
           votes?: number | null
         }
         Relationships: [
@@ -167,40 +222,10 @@ export interface Database {
             foreignKeyName: "story_items_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
         ]
-      }
-      users: {
-        Row: {
-          created_at: string | null
-          id: number
-          points: number | null
-          profile_description: string | null
-          profile_image_url: string | null
-          rank: string | null
-          username: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id: number
-          points?: number | null
-          profile_description?: string | null
-          profile_image_url?: string | null
-          rank?: string | null
-          username?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          points?: number | null
-          profile_description?: string | null
-          profile_image_url?: string | null
-          rank?: string | null
-          username?: string | null
-        }
-        Relationships: []
       }
     }
     Views: {
