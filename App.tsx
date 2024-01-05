@@ -3,7 +3,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Session } from "@supabase/supabase-js";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import * as React from "react";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import FullStory from "./app/FullStory";
