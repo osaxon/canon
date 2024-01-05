@@ -72,7 +72,7 @@ const StoryCard = ({
     <>
       <View style={styles.storyCard}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("StoryAdd", { story_id })}
+          onPress={() => navigation.navigate("FullStory", { story_id })}
         >
           <Image style={styles.image} source={{ uri: image_url! }} />
         </TouchableOpacity>
