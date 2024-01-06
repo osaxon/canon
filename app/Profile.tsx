@@ -53,6 +53,7 @@ export default function Profile() {
   }, [session]);
 
   const defaultProfile = avatarUrl;
+  const defaultImage = require('');
   const filePath = `${session?.user.user_metadata.user_name}_avatars/${
     session?.user.user_metadata.user_name
   }_${new Date().getTime()}.jpg`;
@@ -268,7 +269,7 @@ export default function Profile() {
       <View style={styles.container}>
         <Image
           style={styles.profile}
-          source={{ uri: avatarUrl || defaultProfile }}
+          source={avatarUrl ? { uri: avatarUrl } : (defaultProfile || defaultImage)}
         />
         <TouchableOpacity
           style={styles.button}
