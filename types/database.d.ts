@@ -85,6 +85,7 @@ export interface Database {
           rank: number | null
           updated_at: string | null
           username: string | null
+          follower_count: number
         }
         Insert: {
           avatar_url?: string | null
@@ -95,6 +96,7 @@ export interface Database {
           rank?: number | null
           updated_at?: string | null
           username?: string | null
+          follower_count?: number
         }
         Update: {
           avatar_url?: string | null
@@ -105,6 +107,7 @@ export interface Database {
           rank?: number | null
           updated_at?: string | null
           username?: string | null
+          follower_count?: number
         }
         Relationships: [
           {
