@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
+  ScrollView,
   TouchableOpacity,
 } from "react-native";
 import React from "react";
@@ -21,7 +22,6 @@ export default function Profile() {
   const [isOwnProfile, setIsOwnProfile] = useState<boolean | false>(false);
 
   const userId = session?.user?.id || "";
-  console.log([userId])
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -53,7 +53,7 @@ export default function Profile() {
   }, [session]);
 
   const defaultProfile = avatarUrl;
-  const defaultImage = require('');
+  const defaultImage = require('../assets/user.png');
   const filePath = `${session?.user.user_metadata.user_name}_avatars/${
     session?.user.user_metadata.user_name
   }_${new Date().getTime()}.jpg`;
@@ -138,6 +138,7 @@ export default function Profile() {
           }
         }
       } else {
+        setAvatarUrl(avatarUrl)
         console.log("Image picking was cancelled");
       }
     } catch (error) {
@@ -215,6 +216,7 @@ export default function Profile() {
         return;
       }
 
+      console.log(data)
       const newFollowerCount = (data.follower_count || 0) + 1;
       setFollowerCount(newFollowerCount);
 

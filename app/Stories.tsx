@@ -48,7 +48,7 @@ export default function Stories() {
   }, []);
 
   useEffect(() => {
-    console.log(stories);
+    console.log(stories, '<--- stories');
   }, [stories]);
 
   return (
