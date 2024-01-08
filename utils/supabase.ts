@@ -3,9 +3,7 @@ import { decode } from "base64-arraybuffer";
 import { GenerateImageResponse, StoreImageProps } from "../types/functions";
 
 type GenerateImageParams = {
-    body: {
-        prompt?: string;
-    };
+    prompt?: string;
 };
 
 export const storeImage = async ({
@@ -13,6 +11,7 @@ export const storeImage = async ({
     fileName,
     bucketName,
 }: StoreImageProps) => {
+    console.log("storing image to supabse bucket");
     const { data, error } = await supabase.storage
         .from(bucketName)
         .upload(fileName, decode(`${base64}`), {
@@ -21,25 +20,23 @@ export const storeImage = async ({
         .catch(() => {
             throw new Error("failed to upload");
         });
-    if (error) throw error;
+    if (error) {
+        console.error(error);
+        throw error;
+    }
 
     return data;
 };
 
-export const generateImage = async (params: GenerateImageParams) => {
-    const {
-        data: {
-            data: [{ revised_prompt, base64, url }],
-        },
-        error,
-    } = (await supabase.functions.invoke("generate-image", {
+export const generateImage = async (): Promise<GenerateImageResponse> => {
+    const { data, error } = await supabase.functions.invoke("generate-image", {
         body: {},
-    })) as {
-        data: GenerateImageResponse;
-        error: any;
-    };
-    if (!base64) {
+    });
+
+    if (!data) {
         throw new Error("error generating image");
     }
-    return { revised_prompt, base64, url };
+    console.log(data, "<--- generateImage function response");
+
+    return data;
 };

@@ -53,9 +53,14 @@ Deno.serve(async (req) => {
         model: "dall-e-3",
         n: 1,
         size: "1024x1024",
+        response_format: "b64_json",
     });
 
-    return new Response(JSON.stringify(image), {
+    if (!image.data[0].b64_json) {
+        throw new Error("edge function error generating image");
+    }
+
+    return new Response(JSON.stringify({ image: image.data[0] }), {
         headers: { "Content-Type": "application/json" },
     });
 });

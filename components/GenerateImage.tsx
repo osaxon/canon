@@ -1,41 +1,34 @@
 import { Button, Card } from "@rneui/themed";
 import { useMutation } from "@tanstack/react-query";
 import React from "react";
-import { ActivityIndicator, SafeAreaView, StyleSheet } from "react-native";
+import { Image, SafeAreaView, StyleSheet } from "react-native";
 import { supabase } from "../lib/supabase";
-import { GenerateImageResponse } from "../types/functions";
 import { generateImage, storeImage } from "../utils/supabase";
 
-const generateImageFromPrompt = async () => {
-    const {
-        data: { data },
-        error,
-    } = (await supabase.functions.invoke("generate-image")) as {
-        data: GenerateImageResponse;
-        error: any;
-    };
-    return { data, error };
-};
-
 const generateAndStoreImage = async () => {
-    const fileName = `image-${new Date().toDateString()}`;
+    const fileName = `generated_images/image-${new Date().valueOf()}.jpg`;
     try {
-        const { revised_prompt, base64, url } = await generateImage({
-            body: {},
-        });
+        const { image } = await generateImage();
+
+        console.log(image, "<--- the revised prompt");
+
+        if (!image.b64_json) {
+            console.log("no base64 data");
+            throw new Error("no base 64 data to generate image");
+        }
 
         const storedImageData = await storeImage({
-            base64: base64,
+            base64: image.b64_json!,
             fileName: fileName,
-            bucketName: "DALLEImages",
+            bucketName: "openai",
         });
 
         if (!storedImageData) {
             throw new Error("error storing the image");
         }
 
-        const { data: publicImgData } = await supabase.storage
-            .from("DALLEImages")
+        const { data: publicImgData } = supabase.storage
+            .from("openai")
             .getPublicUrl(fileName);
 
         return publicImgData;
@@ -45,24 +38,29 @@ const generateAndStoreImage = async () => {
 };
 
 export default function GenerateImage() {
-    const { mutate: generate, data: image } = useMutation({
+    const {
+        mutate: generate,
+        data: image,
+        status,
+    } = useMutation({
         mutationKey: ["seed-image"],
         mutationFn: generateAndStoreImage,
     });
-
-    // return it as base64
-    // store it in storage bucket
+    // return it as base64 ✅
+    // store it in storage bucket ✅
     // update db with url from bucket
     // update the story
 
+    console.log(image);
+
     return (
         <SafeAreaView style={styles.container}>
-            <Card>
-                <Card.Image
-                    source={{ uri: image && image.publicUrl }}
-                    PlaceholderContent={<ActivityIndicator />}
-                />
-            </Card>
+            <Image
+                style={styles.image}
+                source={{
+                    uri: image && image.publicUrl,
+                }}
+            />
             <Card.FeaturedSubtitle>
                 {image && image.publicUrl}
             </Card.FeaturedSubtitle>
@@ -78,9 +76,12 @@ const styles = StyleSheet.create({
         width: "100%",
         padding: 6,
     },
-    card: {
+    image: {
+        maxWidth: "100%",
+        width: 1000,
+        maxHeight: "90%",
+        height: "auto",
+        borderRadius: 10,
         aspectRatio: 1,
-        width: "100%",
-        flex: 1,
     },
 });

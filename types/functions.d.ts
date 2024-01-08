@@ -5,6 +5,8 @@ export type StoreImageProps = {
 };
 
 export type GenerateImageResponse = {
-    created: number;
-    data: Array<{ revised_prompt: string; url?: string; base64?: string }>; // TODO will need to update with base64 as return type
+    image: {
+        b64_json?: string;
+        revised_prompt: string;
+    }; // TODO will need to update with base64 as return type
 };
