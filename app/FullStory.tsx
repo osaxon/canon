@@ -9,7 +9,8 @@ import Comments from "../components/Comments";
 import StoryItemCard from "../components/StoryItemCard";
 import { Tables } from "../types/database";
 import React from "react";
-import Collapsible from '../components/Collapsible'
+import Collapsible from "../components/Collapsible";
+import Votes from "../components/Votes";
 
 type Props = NativeStackScreenProps<StackParams, "FullStory">;
 const styles = StyleSheet.create({
@@ -24,42 +25,40 @@ const styles = StyleSheet.create({
 });
 interface Story extends Tables<"story_items"> {
   profiles: { username: string | null; avatar_url: string | null } | null;
+  stories: { comment_count: number | null; votes: number | null } | null;
 }
 
 const FullStory: React.FC<Props> = ({ route, navigation }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false)
   const { story_id } = route.params;
   const [story, setStory] = useState<Story[] | null>(null);
-
+  // const [votes, setVotes] = useState<number>(0);
   useEffect(() => {
     const getStory = async () => {
       const { data, error } = await supabase
         .from("story_items")
-        .select("*, profiles(username,avatar_url)")
+        .select("*, profiles(username,avatar_url), stories(comment_count, votes)")
         .eq("story_id", story_id);
       setStory(data);
     };
     getStory();
+    
   }, []);
   return (
     <>
-        {story ? (
-          <FlatList
-            data={story}
-            renderItem={({ item: storyItem }) => (
-              <StoryItemCard storyItemData={storyItem as any} 
-              />
-            )}
-            ListFooterComponent={<>
-                          <Text>See comments</Text>
-              <Collapsible title='comments' isCollapsed = {isCollapsed} setIsCollapsed={setIsCollapsed}>
-              <Comments story_id={story_id} />
+      {story ? (
+        <FlatList
+          data={story}
+          renderItem={({ item: storyItem }) => <StoryItemCard storyItemData={storyItem as any} />}
+          ListFooterComponent={
+            <>
+              <Collapsible title="comments">
+                <Comments story_id={story_id} />
               </Collapsible>
-
+              <Votes story_id={story_id} />
             </>
-            }
-          />
-        ) : null}
+          }
+        />
+      ) : null}
     </>
   );
 };

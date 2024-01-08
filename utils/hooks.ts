@@ -5,29 +5,23 @@ import { storeImage } from "./supabase";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useGetStories = () => {
-    return useQuery({
-        queryKey: ["stories"],
-        queryFn: async () => {
-            const { data } = await supabase
-                .from("stories")
-                .select("*")
-                .throwOnError();
-            return data || [];
-        },
-    });
+  return useQuery({
+    queryKey: ["stories"],
+    queryFn: async () => {
+      const { data } = await supabase.from("stories").select("*").throwOnError();
+      return data || [];
+    },
+  });
 };
 
 export const useGetComments = () => {
-    return useQuery({
-        queryKey: ["comments"],
-        queryFn: async () => {
-            const { data } = await supabase
-                .from("comments")
-                .select("*")
-                .throwOnError();
-            return data || [];
-        },
-    });
+  return useQuery({
+    queryKey: ["comments"],
+    queryFn: async () => {
+      const { data } = await supabase.from("comments").select("*").throwOnError();
+      return data || [];
+    },
+  });
 };
 
 /**
@@ -37,17 +31,13 @@ export const useGetComments = () => {
  * @returns array of comments
  */
 export const useGetStoryComments = (storyId: string) => {
-    return useQuery({
-        queryKey: ["story_comments", storyId],
-        queryFn: async () => {
-            const { data } = await supabase
-                .from("comments")
-                .select("*")
-                .eq("story_item_id", storyId)
-                .throwOnError();
-            return data || [];
-        },
-    });
+  return useQuery({
+    queryKey: ["story_comments", storyId],
+    queryFn: async () => {
+      const { data } = await supabase.from("comments").select("*").eq("story_item_id", storyId).throwOnError();
+      return data || [];
+    },
+  });
 };
 
 /**
@@ -60,35 +50,41 @@ export const useGetStoryComments = (storyId: string) => {
  * @returns the story item
  */
 export const useStoreImageForStory = ({
-    base64,
-    fileName,
-    filePath,
-    storyItemId,
+  base64,
+  fileName,
+  filePath,
+  storyItemId,
 }: StoreImageProps & { storyItemId: string }) => {
-    return useMutation({
-        mutationKey: ["store-image", fileName, filePath],
-        mutationFn: async () => {
-            // 1. store the image to the storage bucket
-            const img = await storeImage({ base64, fileName, filePath });
+  return useMutation({
+    mutationKey: ["store-image", fileName, filePath],
+    mutationFn: async () => {
+      // 1. store the image to the storage bucket
+      const img = await storeImage({ base64, fileName, filePath });
 
-            // 2. update the story_item in the db
-            const { data } = await supabase
-                .from("story_items")
-                .update({ image_url: img.path })
-                .eq("id", storyItemId)
-                .select("*")
-                .throwOnError();
+      // 2. update the story_item in the db
+      const { data } = await supabase
+        .from("story_items")
+        .update({ image_url: img.path })
+        .eq("id", storyItemId)
+        .select("*")
+        .throwOnError();
 
-            return data || [];
-        },
-    });
+      return data || [];
+    },
+  });
 };
 
-export const useUpvote = (storyId: string, currVotes: number) => {
-    return useMutation({
-        mutationKey: ["upvote", storyId],
-        mutationFn: async () => {
-            await supabase.from("story_items").update({ votes: currVotes + 1 });
-        },
-    });
+export const useUpvote = (storyId: number, currVotes: number) => {
+  return useMutation({
+    mutationKey: ["upvote", storyId],
+    mutationFn: async () => {
+      const {data} = await supabase
+        .from("story_items")
+        .update({ votes: currVotes + 1 })
+        .select()
+        .throwOnError();
+
+        return data || []
+    },
+  });
 };
