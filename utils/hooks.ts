@@ -1,6 +1,10 @@
 import { supabase } from "../lib/supabase";
 import { Tables } from "../types/database";
-import { GenerateImageResponse, StoreImageProps } from "../types/functions";
+import {
+    GenerateImageResponse,
+    ImageContext,
+    StoreImageProps,
+} from "../types/functions";
 import { storeImage } from "./supabase";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -40,51 +44,25 @@ export const useGetStoryComments = (storyId: string) => {
   });
 };
 
-/**
- * Uploads an image to storage and saves to a story item in the db
- *
- * @param {string} base64 the image to be stored - base64 format
- * @param {string} fileName the name of the file
- * @param {string} filePath the path to store the file
- * @param {string} storyItemId the id of the story item the image is related to
- * @returns the story item
- */
-export const useStoreImageForStory = ({
-  base64,
-  fileName,
-  filePath,
-  storyItemId,
-}: StoreImageProps & { storyItemId: string }) => {
-  return useMutation({
-    mutationKey: ["store-image", fileName, filePath],
-    mutationFn: async () => {
-      // 1. store the image to the storage bucket
-      const img = await storeImage({ base64, fileName, filePath });
 
-      // 2. update the story_item in the db
-      const { data } = await supabase
-        .from("story_items")
-        .update({ image_url: img.path })
-        .eq("id", storyItemId)
-        .select("*")
-        .throwOnError();
+export const useNewStory = ({
+    imageUrl,
+    imageContext,
+    userId,
+}: {
+    imageUrl: string;
+    imageContext: ImageContext;
+    userId: string;
+}) => {
+    return useMutation({
+        mutationKey: ["new-story", userId, imageUrl],
+        mutationFn: async () => {
+            const { data } = await supabase.from("stories").insert({
+                comment_count: 0,
+                created_at: new Date().toDateString(),
+                votes: 0,
+            });
+        },
+    });
 
-      return data || [];
-    },
-  });
-};
-
-export const useUpvote = (storyId: number, currVotes: number) => {
-  return useMutation({
-    mutationKey: ["upvote", storyId],
-    mutationFn: async () => {
-      const {data} = await supabase
-        .from("story_items")
-        .update({ votes: currVotes + 1 })
-        .select()
-        .throwOnError();
-
-        return data || []
-    },
-  });
 };
