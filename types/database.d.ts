@@ -125,6 +125,7 @@ export interface Database {
           created_at: string | null
           created_by: string | null
           id: number
+          image_context: Json | null
           theme: string | null
           votes: number
         }
@@ -133,6 +134,7 @@ export interface Database {
           created_at?: string | null
           created_by?: string | null
           id?: number
+          image_context?: Json | null
           theme?: string | null
           votes?: number
         }
@@ -141,6 +143,7 @@ export interface Database {
           created_at?: string | null
           created_by?: string | null
           id?: number
+          image_context?: Json | null
           theme?: string | null
           votes?: number
         }
