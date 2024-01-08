@@ -62,17 +62,18 @@ interface StoryCardProps {
   storyData: {
     id: number;
     story_id: number;
-    profile_id: number | null;
+    profile_id: number;
     created_at: string | number | Date;
     image_url: string | null;
     comment_count: number | null;
-    votes: number | null;
+    votes: number
     profiles: { username: string | null; avatar_url: string | null } | null;
+    stories : { votes: number | null; comment_count: number | null}
   };
 }
 
 const StoryCard = ({
-  storyData: { id, story_id, profile_id, created_at, image_url, comment_count, votes, profiles },
+  storyData: { id, story_id, profile_id, created_at, image_url, comment_count, votes, profiles, stories },
 }: StoryCardProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
 
@@ -85,13 +86,14 @@ const StoryCard = ({
 
         <View style={styles.avatarMetadataBox}>
           <Avatar
+          onPress={() => navigation.navigate("UserProfile", { user_id: profile_id })}
             size={"medium"}
             rounded
             containerStyle={{
-              borderColor: "grey",
+              marginTop: 5,
+              borderColor: "black",
               borderStyle: "solid",
               borderWidth: 1,
-              marginTop:5,
               marginLeft:5,
             }}
             source={{
@@ -102,7 +104,7 @@ const StoryCard = ({
           />
           <View style={styles.MetadataBox}>
             <Text style={styles.text}>{`${profiles?.username} posted ${timeAgo(created_at)}`}</Text>
-            <Text style={styles.text}>{`${comment_count} comments, ${votes} votes`}</Text>
+            <Text style={styles.text}>{`${stories.comment_count} comments, ${stories.votes} votes`}</Text>
           </View>
         </View>
       </View>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { View } from "react-native";
-import { Button, Input } from "react-native-elements";
+import { View, StyleSheet } from "react-native";
+import { Avatar, Button, Input } from "react-native-elements";
 import React from "react";
 import Error from "./Error";
 import { supabase } from "../lib/supabase";
@@ -16,6 +16,69 @@ interface CommentsProps {
   story_id: number;
   setComments: Dispatch<SetStateAction<Comment[] | null>>;
 }
+
+const styles = StyleSheet.create({
+  avatarBox: {
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "flex-start",
+    borderRadius: 10,
+  },
+  text: {
+    fontSize: "1em" as any,
+  },
+  addCommentBox: {
+    boxSixing: "border-box",
+    display: "flex",
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "flex-start",
+    height: "auto",
+    maxheight: "100%",
+    margin: 0,
+    marginLeft: 5,
+    width: "100%",
+    maxWidth: "82%",
+    borderRadius: 10,
+  },
+  inputBox: {
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "flex-end",
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    backgroundColor: "white",
+    border: "solid 1px silver",
+    padding: 5,
+  },
+  submitButton: {
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "flex-end",
+    borderRadius: 20,
+    marginTop: 5,
+    margin: 10,
+  },
+  InputSubmitBox: {
+    backgroundColor: "lightgrey",
+    boxSixing: "border-box",
+    display: "flex",
+    flexDirection: "column",
+    alignContent: "center",
+    justifyContent: "flex-start",
+    minWidth: "50%",
+    width: "100%",
+    maxWidth: 500,
+    height: "auto",
+    maxheight: "100%",
+    marginBottom: 20,
+    marginLeft:10,
+    margin: "auto",
+    borderRadius: 10,
+    padding: 0,
+  },
+});
 
 export default function AddComment({ story_id, setComments }: CommentsProps) {
   const [input, setInput] = useState("");
@@ -51,7 +114,11 @@ export default function AddComment({ story_id, setComments }: CommentsProps) {
       try {
         const { data, error } = await supabase
           .from("story_comments")
-          .insert({ content: input, story_id: story_id, profile_id: session.user.id })
+          .insert({
+            content: input,
+            story_id: story_id,
+            profile_id: session.user.id,
+          })
           .select("*,profiles(username,avatar_url)");
         setComments((currComments) => {
           const newComments = [];
@@ -74,12 +141,34 @@ export default function AddComment({ story_id, setComments }: CommentsProps) {
   };
 
   return (
-    <View>
-      <Input value={input} onChangeText={setInput} placeholder="add comment..." />
-      {!inputError ? null : <Error message="Please add text" />}
-      {!sessionError ? null : <Error message="Please sign-in" />}
-      {!requestFailed ? null : <Error message="Sorry request failed" />}
-      <Button title="Submit" onPress={onSubmit} />
+    <View style={styles.addCommentBox}>
+      <Avatar
+        size={"medium"}
+        rounded
+        containerStyle={{
+          borderColor: "grey",
+          borderStyle: "solid",
+          borderWidth: 1,
+          marginTop: 5,
+          marginLeft: 5,
+        }}
+        source={{
+          uri: "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
+        }}
+      />
+      <View style={styles.InputSubmitBox}>
+        <Input
+          style={styles.inputBox}
+          value={input}
+          onChangeText={setInput}
+          placeholder="add comment..."
+          multiline
+        />
+        {!inputError ? null : <Error message="Please add text" />}
+        {!sessionError ? null : <Error message="Please sign-in" />}
+        {!requestFailed ? null : <Error message="Sorry request failed" />}
+        <Button style={styles.submitButton} title="Submit" onPress={onSubmit} />
+      </View>
     </View>
   );
 }

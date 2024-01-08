@@ -9,29 +9,23 @@ import { storeImage } from "./supabase";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useGetStories = () => {
-    return useQuery({
-        queryKey: ["stories"],
-        queryFn: async () => {
-            const { data } = await supabase
-                .from("stories")
-                .select("*")
-                .throwOnError();
-            return data || [];
-        },
-    });
+  return useQuery({
+    queryKey: ["stories"],
+    queryFn: async () => {
+      const { data } = await supabase.from("stories").select("*").throwOnError();
+      return data || [];
+    },
+  });
 };
 
 export const useGetComments = () => {
-    return useQuery({
-        queryKey: ["comments"],
-        queryFn: async () => {
-            const { data } = await supabase
-                .from("comments")
-                .select("*")
-                .throwOnError();
-            return data || [];
-        },
-    });
+  return useQuery({
+    queryKey: ["comments"],
+    queryFn: async () => {
+      const { data } = await supabase.from("comments").select("*").throwOnError();
+      return data || [];
+    },
+  });
 };
 
 /**
@@ -41,27 +35,15 @@ export const useGetComments = () => {
  * @returns array of comments
  */
 export const useGetStoryComments = (storyId: string) => {
-    return useQuery({
-        queryKey: ["story_comments", storyId],
-        queryFn: async () => {
-            const { data } = await supabase
-                .from("comments")
-                .select("*")
-                .eq("story_item_id", storyId)
-                .throwOnError();
-            return data || [];
-        },
-    });
+  return useQuery({
+    queryKey: ["story_comments", storyId],
+    queryFn: async () => {
+      const { data } = await supabase.from("comments").select("*").eq("story_item_id", storyId).throwOnError();
+      return data || [];
+    },
+  });
 };
 
-export const useUpvote = (storyId: string, currVotes: number) => {
-    return useMutation({
-        mutationKey: ["upvote", storyId],
-        mutationFn: async () => {
-            await supabase.from("story_items").update({ votes: currVotes + 1 });
-        },
-    });
-};
 
 export const useNewStory = ({
     imageUrl,
@@ -82,4 +64,5 @@ export const useNewStory = ({
             });
         },
     });
+
 };
