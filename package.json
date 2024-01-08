@@ -9,7 +9,8 @@
         "web": "expo start --web",
         "test:smoke-test": "deno test --allow-all supabase/tests/smoke-test.ts --env=supabase/.env.local",
         "test:generate-image": "deno test --allow-all supabase/tests/generate-image-tests.ts --env=supabase/.env.local",
-        "supabase:serve-functions": "supabase functions serve --env-file supabase/.env"
+        "supabase:serve-functions": "supabase functions serve --env-file supabase/.env",
+        "supabase:gen-types": "npx supabase gen types typescript --project-id ykmnivylzhcxvtsjznhb --schema public > types/database.d.ts"
     },
     "dependencies": {
         "@expo/webpack-config": "^19.0.0",
