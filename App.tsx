@@ -14,7 +14,6 @@ import StoryAdd from "./components/StoryAdd";
 import StoryComments from "./components/StoryComments";
 import StoryConfirm from "./components/StoryConfirm";
 import UserProfile from "./app/UserProfile";
-import Users from "./app/Users";
 import GenerateImage from "./components/GenerateImage";
 import ProfileButton from "./components/ProfileButton";
 import { supabase } from "./lib/supabase";
