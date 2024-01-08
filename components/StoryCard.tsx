@@ -62,7 +62,7 @@ interface StoryCardProps {
   storyData: {
     id: number;
     story_id: number;
-    profile_id: number | null;
+    profile_id: number;
     created_at: string | number | Date;
     image_url: string | null;
     comment_count: number | null;
@@ -85,10 +85,12 @@ const StoryCard = ({
 
         <View style={styles.avatarMetadataBox}>
           <Avatar
+          onPress={() => navigation.navigate("UserProfile", { user_id: profile_id })}
             size={"medium"}
             rounded
             containerStyle={{
-              borderColor: "grey",
+              marginTop: 5,
+              borderColor: "black",
               borderStyle: "solid",
               borderWidth: 1,
               marginTop:5,
