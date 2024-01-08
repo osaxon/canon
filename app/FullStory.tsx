@@ -8,6 +8,8 @@ import AddToStory from "../components/AddToStory";
 import Comments from "../components/Comments";
 import StoryItemCard from "../components/StoryItemCard";
 import { Tables } from "../types/database";
+import React from "react";
+import Collapsible from '../components/Collapsible'
 
 type Props = NativeStackScreenProps<StackParams, "FullStory">;
 const styles = StyleSheet.create({
@@ -25,6 +27,7 @@ interface Story extends Tables<"story_items"> {
 }
 
 const FullStory: React.FC<Props> = ({ route, navigation }) => {
+  // const [isCollapsed, setIsCollapsed] = useState(false)
   const { story_id } = route.params;
   const [story, setStory] = useState<Story[] | null>(null);
 
@@ -49,7 +52,9 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
             )}
             ListFooterComponent={<>
                           <Text>See comments</Text>
+              <Collapsible title='comments'>
               <Comments story_id={story_id} />
+              </Collapsible>
               <AddToStory />
             </>
             }
