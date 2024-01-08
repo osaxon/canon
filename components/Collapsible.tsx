@@ -4,11 +4,13 @@ import React from "react";
 
 type CollapsibleProps = {
     children: React.ReactNode,
-    title: string
+    title: string,
+    isCollapsed: boolean,
+    setIsCollapsed: (val: boolean) => void
 }
 
-const Collapsible= ({children, title}: CollapsibleProps) => {
-    const [isCollapsed, setIsCollapsed] = useState(true)
+const Collapsible= ({children, title, isCollapsed, setIsCollapsed}: CollapsibleProps) => {
+    // const [isCollapsed, setIsCollapsed] = useState(false)
     const toggleComments = () => {
         setIsCollapsed(!isCollapsed)
     }
