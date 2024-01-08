@@ -4,6 +4,7 @@ import React from "react";
 import { ActivityIndicator, SafeAreaView, StyleSheet } from "react-native";
 import { supabase } from "../lib/supabase";
 import { GenerateImageResponse } from "../types/functions";
+import { generateImage, storeImage } from "../utils/supabase";
 
 const generateImageFromPrompt = async () => {
     const {
@@ -16,19 +17,37 @@ const generateImageFromPrompt = async () => {
     return { data, error };
 };
 
+const generateAndStoreImage = async () => {
+    const fileName = `image-${new Date().toDateString()}`;
+    try {
+        const { revised_prompt, base64, url } = await generateImage({
+            body: {},
+        });
+
+        const storedImageData = await storeImage({
+            base64: base64,
+            fileName: fileName,
+            bucketName: "DALLEImages",
+        });
+
+        if (!storedImageData) {
+            throw new Error("error storing the image");
+        }
+
+        const { data: publicImgData } = await supabase.storage
+            .from("DALLEImages")
+            .getPublicUrl(fileName);
+
+        return publicImgData;
+    } catch (error) {
+        console.log(error, "<--- catch block error");
+    }
+};
+
 export default function GenerateImage() {
     const { mutate: generate, data: image } = useMutation({
         mutationKey: ["seed-image"],
-        mutationFn: async () => {
-            const { data } = (await supabase.functions.invoke(
-                "generate-image",
-                { body: {} }
-            )) as { data?: GenerateImageResponse };
-
-            const { data: image } = data || { data: undefined };
-
-            return image?.[0] || undefined;
-        },
+        mutationFn: generateAndStoreImage,
     });
 
     // return it as base64
@@ -40,12 +59,12 @@ export default function GenerateImage() {
         <SafeAreaView style={styles.container}>
             <Card>
                 <Card.Image
-                    source={{ uri: image && image.url }}
+                    source={{ uri: image && image.publicUrl }}
                     PlaceholderContent={<ActivityIndicator />}
                 />
             </Card>
             <Card.FeaturedSubtitle>
-                {image && image.revised_prompt}
+                {image && image.publicUrl}
             </Card.FeaturedSubtitle>
             <Button color="primary" onPress={() => generate()}>
                 Generate
