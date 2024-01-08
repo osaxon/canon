@@ -51,11 +51,11 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
               />
             )}
             ListFooterComponent={<>
-                          <Text>See comments</Text>
+              <AddToStory />
               <Collapsible title='comments'>
               <Comments story_id={story_id} />
               </Collapsible>
-              <AddToStory />
+
             </>
             }
           />

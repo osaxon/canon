@@ -1,3 +1,4 @@
+import React from 'react'
 import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
