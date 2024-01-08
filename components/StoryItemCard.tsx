@@ -48,7 +48,8 @@ interface StoryItemCardProps {
   storyItemData: {
     id: number;
     story_id: number;
-    user_id: number | null;
+    user_id: number;
+    profile_id: number;
     created_at: string | number | Date;
     image_url: string | null;
     comment_count: number | null;
@@ -63,6 +64,7 @@ const StoryItemCard = ({
     id,
     story_id,
     user_id,
+    profile_id,
     created_at,
     image_url,
     comment_count,
@@ -81,6 +83,7 @@ const StoryItemCard = ({
         >{`${prompt}`}</Text>
         <View style={styles.avatarBox}>
           <Avatar
+          onPress={() => navigation.navigate("UserProfile", { user_id: profile_id })}
             size={"medium"}
             rounded
             containerStyle={{

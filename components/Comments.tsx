@@ -5,7 +5,10 @@ import { Tables } from "../types/database";
 import { supabase } from "../lib/supabase";
 import { Text } from "react-native";
 import { timeAgo } from "../utils/timeFunctions";
-
+import { useNavigation } from "@react-navigation/core";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackParams } from "../App";
+import React from "react"
 
 const defaultUser = require("../assets/user.png");
 
@@ -31,12 +34,17 @@ function Comments(props: CommentsProps) {
     getStoryComments();
   }, []);
 
+  const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+
+  console.log(comments)
+
   return (
     <FlatList
       data={comments}
       renderItem={({ item: comment }) => (
         <ListItem bottomDivider>
           <Avatar
+          onPress={() => navigation.navigate("UserProfile", {user_id: comment.profile_id})}
             rounded
             source={{
               uri: comment.profiles?.avatar_url

@@ -33,13 +33,12 @@ export type StackParams = {
     SignIn: any;
     Explore: any;
     StoriesStack: StoriesStackParams;
-    Profile: { user_id: number };
-    UserProfile: { user_id: number };
+    Profile: { user_id: any };
+    UserProfile: { user_id: any };
     StoryAdd: { story_id: number };
     StoryConfirm: { story_id: number };
     FullStory: { story_id: number };
     StoryComments: { story_id: number };
-    UsersStack: UsersStackParams;
     CreateNew: undefined; // TODO may need to add story_id as a param to make route re-usable for adding to existing story
 };
 
@@ -52,6 +51,7 @@ export type StoriesStackParams = {
     StoryConfirm: { story_id: number };
     FullStory: { story_id: number };
     StoryComments: { story_id: number };
+    UserProfile: { user_id: any };
 };
 const StoriesStack = createNativeStackNavigator<StoriesStackParams>();
 const StoriesScreenStack = () => {
@@ -78,29 +78,12 @@ const StoriesScreenStack = () => {
                 component={StoryComments}
                 options={{ title: "Comments" }}
             />
-        </StoriesStack.Navigator>
-    );
-};
-
-export type UsersStackParams = {
-    Users: any;
-    UserProfile: { user_id: number };
-};
-const UsersStack = createNativeStackNavigator<UsersStackParams>();
-const UsersScreenStack = () => {
-    return (
-        <UsersStack.Navigator>
-            <UsersStack.Screen
-                name="Users"
-                component={Users}
-                options={{ title: "Users" }}
-            />
-            <UsersStack.Screen
+            <StoriesStack.Screen
                 name="UserProfile"
                 component={UserProfile}
                 options={{ title: "Profile" }}
             />
-        </UsersStack.Navigator>
+        </StoriesStack.Navigator>
     );
 };
 
@@ -141,11 +124,6 @@ export default function App() {
                             name="Profile"
                             component={session?.access_token ? Profile : SignIn}
                             options={{ title: "Profile" }}
-                        />
-                        <Stack.Screen
-                            name="UsersStack"
-                            component={UsersScreenStack}
-                            options={{ title: "Users" }}
                         />
                         <Stack.Screen
                             name="CreateNew"
