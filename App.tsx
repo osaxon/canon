@@ -39,7 +39,7 @@ export type StackParams = {
   UserProfile: { user_id: number };
   StoryAdd: { story_id: number };
   StoryConfirm: { story_id: number };
-  FullStory: { story_id: number };
+  FullStory: { story_id: number, votes: number };
   StoryComments: { story_id: number };
   UsersStack: UsersStackParams;
   CreateNew: undefined; // TODO may need to add story_id as a param to make route re-usable for adding to existing story
@@ -52,7 +52,7 @@ export type StoriesStackParams = {
   Stories: any;
   StoryAdd: { story_id: number };
   StoryConfirm: { story_id: number };
-  FullStory: { story_id: number };
+  FullStory: { story_id: number, votes: number };
   StoryComments: { story_id: number };
 };
 const StoriesStack = createNativeStackNavigator<StoriesStackParams>();

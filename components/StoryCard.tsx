@@ -66,20 +66,21 @@ interface StoryCardProps {
     created_at: string | number | Date;
     image_url: string | null;
     comment_count: number | null;
-    votes: number | null;
+    votes: number
     profiles: { username: string | null; avatar_url: string | null } | null;
+    stories : { votes: number | null; comment_count: number | null}
   };
 }
 
 const StoryCard = ({
-  storyData: { id, story_id, profile_id, created_at, image_url, comment_count, votes, profiles },
+  storyData: { id, story_id, profile_id, created_at, image_url, comment_count, votes, profiles, stories },
 }: StoryCardProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
 
   return (
     <>
       <View style={styles.storyCard}>
-        <TouchableOpacity onPress={() => navigation.navigate("FullStory", { story_id })}>
+        <TouchableOpacity onPress={() => navigation.navigate("FullStory", { story_id, votes })}>
           <Image style={styles.image} source={{ uri: image_url! }} />
         </TouchableOpacity>
 
@@ -102,7 +103,7 @@ const StoryCard = ({
           />
           <View style={styles.MetadataBox}>
             <Text style={styles.text}>{`${profiles?.username} posted ${timeAgo(created_at)}`}</Text>
-            <Text style={styles.text}>{`${comment_count} comments, ${votes} votes`}</Text>
+            <Text style={styles.text}>{`${stories.comment_count} comments, ${stories.votes} votes`}</Text>
           </View>
         </View>
       </View>
