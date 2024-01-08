@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
-import { Button, Input, Text } from "react-native-elements";
+import { Button, Input,} from "react-native-elements";
 import { supabase } from "../lib/supabase";
 import Auth from "./Auth";
 

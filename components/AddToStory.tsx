@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View, StyleSheet,} from "react-native";
-import { Button, Input, Card, Avatar,Text } from "react-native-elements";
+import { Button, Input, Avatar,Text } from "react-native-elements";
 import React from "react";
 
 const styles = StyleSheet.create({

@@ -1,18 +1,9 @@
 import { useEffect, useState } from "react";
-import { FlatList, ScrollView, StyleSheet, View } from "react-native";
+import { FlatList,} from "react-native";
 import { Database } from "../types/database";
 import { supabase } from "../lib/supabase";
 import StoryCard from "../components/StoryCard";
 import React from "react";
-
-const styles = StyleSheet.create({
-  container: {
-    overflow: "scroll",
-    fontSize: "1em",
-    boxSizing: "border-box",
-    padding: 1,
-  },
-});
 
 export default function Stories() {
   const [stories, setStories] = useState<
@@ -47,10 +38,6 @@ export default function Stories() {
     };
     getStories();
   }, []);
-
-  useEffect(() => {
-    console.log(stories, '<--- stories');
-  }, [stories]);
 
   return (
     <>

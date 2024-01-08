@@ -94,7 +94,6 @@ const StoryItemCard = ({
     profiles
   },
 }: StoryItemCardProps) => {
-  const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
   return (
     <>
       <View style={styles.StoryItemCard}>

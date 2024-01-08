@@ -5,7 +5,6 @@ import { ThemeProvider, createTheme } from "@rneui/themed";
 import { Session } from "@supabase/supabase-js";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
 import FullStory from "./app/FullStory";
 import Profile from "./app/Profile";
 import SignIn from "./app/SignIn";
@@ -156,11 +155,3 @@ export default function App() {
     </QueryClientProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

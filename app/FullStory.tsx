@@ -1,10 +1,8 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { FlatList, Text, StyleSheet, ScrollView } from "react-native";
 import { StackParams } from "../App";
-import { Database } from "../types/database";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
-import AddToStory from "../components/AddToStory";
 import Comments from "../components/Comments";
 import StoryItemCard from "../components/StoryItemCard";
 import { Tables } from "../types/database";
@@ -12,16 +10,6 @@ import React from "react";
 import Collapsible from '../components/Collapsible'
 
 type Props = NativeStackScreenProps<StackParams, "FullStory">;
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 50,
-  },
-  stretch: {
-    width: 400,
-    height: 200,
-    alignSelf: "center",
-  },
-});
 interface Story extends Tables<"story_items"> {
   profiles: { username: string | null; avatar_url: string | null } | null;
 }
