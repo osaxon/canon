@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import { Avatar, ListItem } from "react-native-elements";
 import { Tables } from "../types/database";
 import { supabase } from "../lib/supabase";
 import { Text } from "react-native";
 import { timeAgo } from "../utils/timeFunctions";
 import React from "react";
+import AddComment from "../components/AddComment";
 
 type CommentsProps = {
   story_id: number;
@@ -16,7 +17,7 @@ interface Comment extends Tables<"story_comments"> {
 }
 
 function Comments(props: CommentsProps) {
-  const [comments, setComments] = useState<Comment[] | null>(null);
+  const [comments, setComments] = useState<Comment[] | null >(null);
   useEffect(() => {
     const getStoryComments = async () => {
       const { data, error } = await supabase
@@ -30,6 +31,7 @@ function Comments(props: CommentsProps) {
   }, []);
 
   return (
+    <View>
     <FlatList
       data={comments}
       renderItem={({ item: comment }) => (
@@ -52,6 +54,8 @@ function Comments(props: CommentsProps) {
         </ListItem>
       )}
     />
+    <AddComment story_id={props.story_id} setComments = {setComments} />
+    </View>
   );
 }
 

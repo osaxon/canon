@@ -37,10 +37,27 @@ const prompts = [
     "two birds in a tree",
 ];
 
+/*
+    {
+  location: 'a pile of rubbish',
+  subjects: [ 'rubbish', 'waste', 'garbage' ],
+  actions: [ 'piling up', 'accumulating' ],
+  mood: 'disarray'
+}
+    */
+
+type ImageContext = {
+    location: string;
+    subjects: Array<string>;
+    actions: Array<string>;
+    mood: string;
+};
+
 Deno.serve(async (req) => {
     // pass an image context object
-    let { prompt } = (await req.json()) as {
+    let { prompt, imageContext } = (await req.json()) as {
         prompt: string; // from user client side
+        imageContext: ImageContext; // pass from db
     };
 
     // imageContext passed as input
@@ -85,15 +102,36 @@ Deno.serve(async (req) => {
         throw new Error("failed to create image context");
     }
 
-    const imageContext: {
+    console.log(completion.choices[0]);
+
+    const newImageContext: {
         location: string;
         subjects: Array<string>;
         actions: Array<string>;
         mood: string;
     } = JSON.parse(completion.choices[0].message.content);
 
+    // 2. MERGE THE CONTEXT OBJECTS
+    // merged context
+    // retain old context for subjects actions
+    // replace for location and mood
+    let mergedImageContext = {
+        location: newImageContext.location,
+        subjects: [...newImageContext.subjects, ...imageContext.subjects],
+        actions: [...newImageContext.actions, ...imageContext.actions],
+        mood: newImageContext.mood,
+    };
+
+    // 3. GENERATE THE IMAGE
+    // use the image context object in prompt
+    // need to pass prompt + context
+    // A) create a string literal prompt with scene, objects etc.
+    // B) create flattened prompt using chatGPT
+    const revisedPrompt = `a ${mergedImageContext.mood} scene, in ${mergedImageContext.location} which depicts ${mergedImageContext.subjects}. ${mergedImageContext.actions} is happening in the scene.`;
+    console.log(revisedPrompt, "<---- the revised prompt");
+
     const image = await openai.images.generate({
-        prompt: prompt,
+        prompt: revisedPrompt,
         model: "dall-e-3",
         n: 1,
         size: "1024x1024",
@@ -104,8 +142,20 @@ Deno.serve(async (req) => {
         throw new Error("edge function error generating image");
     }
 
+    // 1. seed image i.e. the first one
+    // start with initial prompt
+    // generate the image
+    // create the context object
+
+    // 2. follow on images
+    // input with context + user prompt
+    // create a context from the user prompt
+
     return new Response(
-        JSON.stringify({ image: image.data[0], imageContext: imageContext }),
+        JSON.stringify({
+            image: image.data[0],
+            imageContext: mergedImageContext,
+        }),
         {
             headers: { "Content-Type": "application/json" },
         }
