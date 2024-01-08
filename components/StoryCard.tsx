@@ -16,9 +16,11 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   text: {
-    margin: 10,
-    paddingLeft: 10,
+    margin: 0,
+    marginLeft:5,
+    padding: 0,
     textAlign: "center",
+    maxWidth: "100%",
   },
   storyCard: {
     boxSixing: "border-box",
@@ -32,16 +34,27 @@ const styles = StyleSheet.create({
     maxWidth: 500,
     height: "auto",
     maxheight: "100%",
-    marginTop: 60,
-    marginBottom: 40,
+    marginTop: 45,
+    marginBottom: 50,
     margin: "auto",
   },
-  avatarBox: {
+  avatarMetadataBox: {
     flexDirection: "row",
     alignContent: "center",
     justifyContent: "flex-start",
-    backgroundColor: "lightgrey",
     borderRadius: 10,
+    overflow: "hidden", 
+  },
+  MetadataBox: {
+    backgroundColor: "lightgrey",
+    border: "solid 1px silver",
+    borderRadius: 10,
+    marginLeft:5,
+    marginTop:5,
+    padding:5,
+    marginRight:"auto",
+    width: "100%", 
+    maxWidth: "82%", 
   },
 });
 
@@ -70,7 +83,7 @@ const StoryCard = ({
           <Image style={styles.image} source={{ uri: image_url! }} />
         </TouchableOpacity>
 
-        <View style={styles.avatarBox}>
+        <View style={styles.avatarMetadataBox}>
           <Avatar
             size={"medium"}
             rounded
@@ -78,6 +91,8 @@ const StoryCard = ({
               borderColor: "grey",
               borderStyle: "solid",
               borderWidth: 1,
+              marginTop:5,
+              marginLeft:5,
             }}
             source={{
               uri: profiles?.avatar_url
@@ -85,7 +100,7 @@ const StoryCard = ({
                 : "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
             }}
           />
-          <View>
+          <View style={styles.MetadataBox}>
             <Text style={styles.text}>{`${profiles?.username} posted ${timeAgo(created_at)}`}</Text>
             <Text style={styles.text}>{`${comment_count} comments, ${votes} votes`}</Text>
           </View>
