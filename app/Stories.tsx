@@ -3,6 +3,7 @@ import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { Database } from "../types/database";
 import { supabase } from "../lib/supabase";
 import StoryCard from "../components/StoryCard";
+import React from "react";
 
 const styles = StyleSheet.create({
   container: {

@@ -18,6 +18,7 @@ import Users from "./app/Users";
 import GenerateImage from "./components/GenerateImage";
 import ProfileButton from "./components/ProfileButton";
 import { supabase } from "./lib/supabase";
+import React from "react";
 
 const theme = createTheme({
     mode: "dark",
