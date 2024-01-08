@@ -27,7 +27,7 @@ interface Story extends Tables<"story_items"> {
 }
 
 const FullStory: React.FC<Props> = ({ route, navigation }) => {
-  // const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(false)
   const { story_id } = route.params;
   const [story, setStory] = useState<Story[] | null>(null);
 
@@ -51,8 +51,8 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
               />
             )}
             ListFooterComponent={<>
-              <AddToStory />
-              <Collapsible title='comments'>
+                          <Text>See comments</Text>
+              <Collapsible title='comments' isCollapsed = {isCollapsed} setIsCollapsed={setIsCollapsed}>
               <Comments story_id={story_id} />
               </Collapsible>
 
