@@ -13,7 +13,7 @@ export type GenerateImageResponse = {
     image: {
         b64_json?: string;
         revised_prompt: string;
-    }; // TODO will need to update with base64 as return type
+    };
     imageContext: ImageContext;
 };
 

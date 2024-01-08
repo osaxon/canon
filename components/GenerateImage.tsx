@@ -10,8 +10,6 @@ const generateAndStoreImage = async () => {
     try {
         const { image } = await generateImage();
 
-        console.log(image, "<--- the revised prompt");
-
         if (!image.b64_json) {
             console.log("no base64 data");
             throw new Error("no base 64 data to generate image");
