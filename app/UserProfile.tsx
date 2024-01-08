@@ -5,6 +5,8 @@ import React from "react";
 import ProfilePic from "../components/ProfilePic";
 import UserInfo from "../components/UserInfo";
 import LatestStories from "../components/LatestStories";
+import ProfileButton from '../components/ProfileButton';
+
 
 type Props = NativeStackScreenProps<StackParams, "UserProfile">;
 

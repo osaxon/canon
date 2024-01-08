@@ -2,7 +2,8 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "jsx": "react",
-    "strict": true
+    "strict": true,
+    // "lib": ["es5", "es6", "dom", "DOM.Iterable"]
   },
   "include": [
     "**/*.ts",

@@ -18,14 +18,16 @@ import Users from "./app/Users";
 import GenerateImage from "./components/GenerateImage";
 import ProfileButton from "./components/ProfileButton";
 import { supabase } from "./lib/supabase";
+import React from "react";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const theme = createTheme({
-    mode: "dark",
-    components: {
-        Button: {
-            raised: true,
-        },
+  mode: "dark",
+  components: {
+    Button: {
+      raised: true,
     },
+  },
 });
 
 export type StackParams = {
@@ -88,20 +90,20 @@ const StoriesScreenStack = () => {
 };
 
 export default function App() {
-    const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
 
-    useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-        });
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
 
-        supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session);
-        });
-    }, []);
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
 
-    console.log(session, "<--- session");
-
+  console.log(session, "<--- session");
+  
     return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={theme}>
@@ -119,15 +121,31 @@ export default function App() {
                         <Stack.Screen
                             name="Explore"
                             component={StoriesScreenStack}
+                            options={{
+                              tabBarIcon: ({ color, size }) => (
+                                <MaterialIcons name="home" color={color} size={size} />
+                              ),
+                           }}
                         />
                         <Stack.Screen
                             name="Profile"
                             component={session?.access_token ? Profile : SignIn}
-                            options={{ title: "Profile" }}
+                            options={{ 
+                              title: "Profile",
+                              tabBarIcon: ({ color, size }) => (
+                                <MaterialIcons name="person" color={color} size={size} />
+                              ),
+                            }}
                         />
                         <Stack.Screen
                             name="CreateNew"
                             component={GenerateImage}
+                            options={{
+                              title: "New Story",
+                              tabBarIcon: ({ color, size }) => (
+                              <MaterialIcons name="add" color={color} size={size} />
+                            ),
+                          }}
                         />
                     </Stack.Navigator>
                 </NavigationContainer>
@@ -137,9 +155,9 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
+  container: {
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

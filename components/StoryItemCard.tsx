@@ -1,11 +1,10 @@
+import React from 'react'
 import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
 import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
 import { timeAgo } from "../utils/timeFunctions";
-import { Avatar } from "react-native-elements";
-
-const defaultUser = require("../assets/user.png");
+import { Avatar,  Divider } from "react-native-elements";
 
 const styles = StyleSheet.create({
   image: {
@@ -17,7 +16,20 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   text: {
-    paddingLeft: 10,
+    margin: 0,
+    marginLeft:5,
+    marginTop:5,
+    padding: 0,
+    textAlign: "left",
+    maxWidth: "100%",
+  },
+  promptText: {
+    margin: 0,
+    marginLeft:5,
+    padding: 0,
+    textAlign: "left",
+    maxWidth: "100%",
+    marginBottom:5,
   },
   StoryItemCard: {
     boxSixing: "border-box",
@@ -31,16 +43,27 @@ const styles = StyleSheet.create({
     maxWidth: 500,
     height: "auto",
     maxheight: "100%",
-    marginTop: 60,
-    marginBottom:40,
+    marginTop: 45,
+    marginBottom: 80,
     margin: "auto",
   },
-  avatarBox: {
+  avatarMetadataBox: {
     flexDirection: "row",
     alignContent: "center",
-    justifyContent: "center",
-    backgroundColor: "lightgrey",
+    justifyContent: "flex-start",
     borderRadius: 10,
+    overflow: "hidden", 
+  },
+  metadataBox: {
+    backgroundColor: "lightgrey",
+    border: "solid 1px silver",
+    borderRadius: 10,
+    marginLeft:5,
+    marginTop:5,
+    padding:5,
+    marginRight:"auto",
+    width: "100%", 
+    maxWidth: "82%", 
   },
 });
 
@@ -78,10 +101,8 @@ const StoryItemCard = ({
     <>
       <View style={styles.StoryItemCard}>
           <Image style={styles.image} source={{ uri: image_url! }} />
-        <Text
-          style={styles.text}
-        >{`${prompt}`}</Text>
-        <View style={styles.avatarBox}>
+
+        <View style={styles.avatarMetadataBox}>
           <Avatar
           onPress={() => navigation.navigate("UserProfile", { user_id: profile_id })}
             size={"medium"}
@@ -90,6 +111,8 @@ const StoryItemCard = ({
               borderColor: "grey",
               borderStyle: "solid",
               borderWidth: 1,
+              marginTop:5,
+              marginLeft:5,
             }}
             source={{
               uri: profiles?.avatar_url
@@ -97,9 +120,16 @@ const StoryItemCard = ({
                 : "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
             }}
           />
+          <View style={styles.metadataBox}>
+          <Text
+          style={styles.promptText}
+        >{`"${prompt}"`}</Text>
+        <Divider/>
           <Text
             style={styles.text}
           >{`${profiles?.username} posted ${timeAgo(created_at)}`}</Text>
+          </View>
+    
         </View>
       </View>
     </>

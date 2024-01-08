@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import { Avatar, ListItem } from "react-native-elements";
 import { Tables } from "../types/database";
 import { supabase } from "../lib/supabase";
@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
 import React from "react"
+import AddComment from "../components/AddComment";
 
 const defaultUser = require("../assets/user.png");
 
@@ -21,7 +22,7 @@ interface Comment extends Tables<"story_comments"> {
 }
 
 function Comments(props: CommentsProps) {
-  const [comments, setComments] = useState<Comment[] | null>(null);
+  const [comments, setComments] = useState<Comment[] | null >(null);
   useEffect(() => {
     const getStoryComments = async () => {
       const { data, error } = await supabase
@@ -39,6 +40,7 @@ function Comments(props: CommentsProps) {
   console.log(comments)
 
   return (
+    <View>
     <FlatList
       data={comments}
       renderItem={({ item: comment }) => (
@@ -62,6 +64,8 @@ function Comments(props: CommentsProps) {
         </ListItem>
       )}
     />
+    <AddComment story_id={props.story_id} setComments = {setComments} />
+    </View>
   );
 }
 
