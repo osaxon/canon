@@ -1,3 +1,4 @@
+import React from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { StoriesStackParams } from '../App';

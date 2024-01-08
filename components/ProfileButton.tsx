@@ -1,8 +1,10 @@
+import React from 'react'
 import { Button, View } from "react-native";
 import { StackParams } from "../App";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/core";
 import { supabase } from "../lib/supabase";
+
 
 export default function ProfileButton(props: any) {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();

@@ -55,7 +55,7 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
               <Collapsible title='comments' isCollapsed = {isCollapsed} setIsCollapsed={setIsCollapsed}>
               <Comments story_id={story_id} />
               </Collapsible>
-              <AddToStory />
+
             </>
             }
           />

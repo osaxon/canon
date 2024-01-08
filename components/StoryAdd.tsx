@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { StoriesStackParams } from '../App';
+import React from 'react'
 
 type Props = NativeStackScreenProps<StoriesStackParams, "StoryAdd">
 
