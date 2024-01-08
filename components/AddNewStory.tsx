@@ -3,14 +3,14 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { StoriesStackParams } from '../App';
 import React from 'react'
 
-type Props = NativeStackScreenProps<StoriesStackParams, "StoryAdd">
+type Props = NativeStackScreenProps<StoriesStackParams, "AddNewStory">
 
-const StoryAdd: React.FC<Props> =  ({route, navigation}) => {
+const AddNewStory: React.FC<Props> =  ({route, navigation}) => {
     const {story_id} = route.params
     return (
         <>
         <Text>Story ID: {story_id}</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('StoryConfirm', {story_id})}>
+        <TouchableOpacity onPress={() => navigation.navigate('NewStoryConfirm', {story_id})}>
           <Text>Generate</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Stories')}>
@@ -20,4 +20,4 @@ const StoryAdd: React.FC<Props> =  ({route, navigation}) => {
     )
 }
 
-export default StoryAdd;
+export default AddNewStory;

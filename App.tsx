@@ -10,9 +10,9 @@ import FullStory from "./app/FullStory";
 import Profile from "./app/Profile";
 import SignIn from "./app/SignIn";
 import Stories from "./app/Stories";
-import StoryAdd from "./components/StoryAdd";
+import AddNewStory from "./components/AddNewStory";
 import StoryComments from "./components/StoryComments";
-import StoryConfirm from "./components/StoryConfirm";
+import NewStoryConfirm from "./components/NewStoryConfirm";
 import UserProfile from "./app/UserProfile";
 import Users from "./app/Users";
 import GenerateImage from "./components/GenerateImage";
@@ -37,8 +37,8 @@ export type StackParams = {
   StoriesStack: StoriesStackParams;
   Profile: { user_id: number };
   UserProfile: { user_id: number };
-  StoryAdd: { story_id: number };
-  StoryConfirm: { story_id: number };
+  AddNewStory: { story_id: number };
+  NewStoryConfirm: { story_id: number };
   FullStory: { story_id: number };
   StoryComments: { story_id: number };
   UsersStack: UsersStackParams;
@@ -50,8 +50,8 @@ const queryClient = new QueryClient();
 
 export type StoriesStackParams = {
   Stories: any;
-  StoryAdd: { story_id: number };
-  StoryConfirm: { story_id: number };
+  AddNewStory: { story_id: number };
+  NewStoryConfirm: { story_id: number };
   FullStory: { story_id: number };
   StoryComments: { story_id: number };
 };
@@ -61,13 +61,13 @@ const StoriesScreenStack = () => {
     <StoriesStack.Navigator>
       <StoriesStack.Screen name="Stories" component={Stories} />
       <StoriesStack.Screen
-        name="StoryAdd"
-        component={StoryAdd}
+        name="AddNewStory"
+        component={AddNewStory}
         options={{ title: "Add" }}
       />
       <StoriesStack.Screen
-        name="StoryConfirm"
-        component={StoryConfirm}
+        name="NewStoryConfirm"
+        component={NewStoryConfirm}
         options={{ title: "Confirm" }}
       />
       <StoriesStack.Screen

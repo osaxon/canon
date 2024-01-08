@@ -7,9 +7,6 @@ import { Text } from "react-native";
 import { timeAgo } from "../utils/timeFunctions";
 import React from "react";
 
-
-const defaultUser = require("../assets/user.png");
-
 type CommentsProps = {
   story_id: number;
 };

@@ -9,7 +9,6 @@ const Users: React.FC<Props> =  ({route, navigation}) => {
     
     return (
         <>
-        
         <TouchableOpacity onPress={() => navigation.navigate('UserProfile', {user_id: 1})}>
           <Text>User 1</Text>
         </TouchableOpacity>
