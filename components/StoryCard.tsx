@@ -6,6 +6,7 @@ import { Avatar } from "react-native-elements";
 import { StackParams } from "../App";
 import { timeAgo } from "../utils/timeFunctions";
 import { Tables } from "../types/database";
+import { useEffect, useState } from "react";
 
 const styles = StyleSheet.create({
   image: {
@@ -65,7 +66,6 @@ interface StoryCardProps extends Tables<"stories"> {
 }
 
 const StoryCard = (props: StoryCardProps) => {
-  const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
   const {
     id,
     first_image_url,
@@ -76,11 +76,28 @@ const StoryCard = (props: StoryCardProps) => {
     comment_count,
     votes,
   } = props;
+  const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+  const [storyVotes, setStoryVotes] = useState(votes);
+  let commentText = "comments";
+  let voteText = "votes";
+  if (comment_count === 1) {
+    commentText = "comment";
+  }
+  if (storyVotes === 1) {
+    voteText = "vote";
+  }
+
   return (
     <>
       <View style={styles.storyCard}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("FullStory", { story_id: id })}
+          onPress={() =>
+            navigation.navigate("FullStory", {
+              story_id: id,
+              setStoryVotes,
+              storyVotes: votes,
+            })
+          }
         >
           <Image style={styles.image} source={{ uri: first_image_url! }} />
         </TouchableOpacity>
@@ -89,7 +106,7 @@ const StoryCard = (props: StoryCardProps) => {
           <Avatar
             onPress={() =>
               navigation.navigate("UserProfile", {
-                user_id: created_by,
+                user_id: id,
               })
             }
             size={"medium"}
@@ -120,5 +137,4 @@ const StoryCard = (props: StoryCardProps) => {
     </>
   );
 };
-
 export default StoryCard;

@@ -38,7 +38,11 @@ export type StackParams = {
   UserProfile: { user_id: any };
   StoryAdd: { story_id: number };
   StoryConfirm: { story_id: number };
-  FullStory: { story_id: number };
+  FullStory: {
+    story_id: number;
+    storyVotes: number | null;
+    setStoryVotes: any;
+  };
   StoryComments: { story_id: number };
   CreateNew: undefined; // TODO may need to add story_id as a param to make route re-usable for adding to existing story
 };
@@ -50,7 +54,11 @@ export type StoriesStackParams = {
   Stories: any;
   StoryAdd: { story_id: number };
   StoryConfirm: { story_id: number };
-  FullStory: { story_id: number };
+  FullStory: {
+    story_id: number;
+    storyVotes: number | null;
+    setStoryVotes: any;
+  };
   StoryComments: { story_id: number };
   UserProfile: { user_id: any };
 };
