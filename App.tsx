@@ -1,15 +1,15 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { ThemeProvider, createTheme } from "@rneui/themed";
-import { Session } from "@supabase/supabase-js";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { Session } from "@supabase/supabase-js";
+import React,{ useEffect, useState, createContext} from "react";
+import { supabase } from "./lib/supabase";
 import {StoriesScreenStack, StoriesStackParams} from "./screens/StoriesScreens"
 import {ProfileScreenStack, ProfileStackParams} from "./screens/ProfileScreens"
 import {CreateNewScreenStack, CreateNewStackParams} from "./screens/CreateNewScreens"
-import { supabase } from "./lib/supabase";
-import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { createClient } from '@supabase/supabase-js';
 
 const theme = createTheme({
   mode: "dark",
@@ -31,7 +31,7 @@ const queryClient = new QueryClient();
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
-
+  const SessionContext = createContext<Session | null>(null);
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -41,9 +41,9 @@ export default function App() {
       setSession(session);
     });
   }, []);
-
   return (
-    <QueryClientProvider client={queryClient}>
+    <SessionContext.Provider value={session}>
+      <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <NavigationContainer>
           <Tab.Navigator
@@ -86,6 +86,9 @@ export default function App() {
         </NavigationContainer>
       </ThemeProvider>
     </QueryClientProvider>
+    </SessionContext.Provider>
+    
   );
 }
+
 

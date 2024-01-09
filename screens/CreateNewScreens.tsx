@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GenerateImage from "../components/GenerateImage";
 import ProfileButton from "../components/ProfileButton";
@@ -10,6 +10,7 @@ type CreateNewStackParams = {
 const CreateNewStack = createNativeStackNavigator<CreateNewStackParams>();
 
 function CreateNewScreenStack() {
+  const session = useContext(SessionContext)
   return (
     <CreateNewStack.Navigator
       screenOptions={{

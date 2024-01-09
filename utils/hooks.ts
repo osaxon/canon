@@ -5,7 +5,7 @@ import { NewStoryInputs } from "../types/functions";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useContext } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { StackParams } from "../App";
+import { TabParams } from "../App";
 
 export const useGetStories = () => {
     return useQuery({
