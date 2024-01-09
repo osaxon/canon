@@ -7,6 +7,7 @@ import { StackParams } from "../App";
 import { timeAgo } from "../utils/timeFunctions";
 import { Tables } from "../types/database";
 import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
 
 const styles = StyleSheet.create({
   image: {
@@ -78,6 +79,7 @@ const StoryCard = (props: StoryCardProps) => {
   } = props;
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
   const [storyVotes, setStoryVotes] = useState(votes);
+  const [userId, setUserId] = useState(null);
   let commentText = "comments";
   let voteText = "votes";
   if (comment_count === 1) {
@@ -86,6 +88,25 @@ const StoryCard = (props: StoryCardProps) => {
   if (storyVotes === 1) {
     voteText = "vote";
   }
+
+  async function getUserId() {
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("username", username);
+
+      if (data && data.length > 0) {
+        setUserId(data[0].id);
+      }
+    } catch (error) {
+      console.error("error: ", error);
+    }
+  }
+
+  useEffect(() => {
+    getUserId();
+  }, [id]);
 
   return (
     <>
@@ -106,7 +127,7 @@ const StoryCard = (props: StoryCardProps) => {
           <Avatar
             onPress={() =>
               navigation.navigate("UserProfile", {
-                user_id: id,
+                user_id: userId,
               })
             }
             size={"medium"}
