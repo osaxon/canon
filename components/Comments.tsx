@@ -28,9 +28,6 @@ const styles = StyleSheet.create({
     border: "solid 1px silver",
     padding: 5,
   },
-  text: {
-    fontSize:"1em" as any
-  },
   avatarTextBox: {
     boxSixing: "border-box",
     display: "flex",
@@ -94,10 +91,10 @@ function Comments(props: CommentsProps) {
               }}
             />
             <View style={styles.textBox}>
-              <Text style={styles.text}>{`${comment.profiles?.username}  ${timeAgo(
+              <Text>{`${comment.profiles?.username}  ${timeAgo(
                 comment.created_at
               )}`}</Text>
-              <Text style={styles.text}>{comment.content}</Text>
+              <Text>{comment.content}</Text>
             </View>
           </View>
         )}
