@@ -110,11 +110,7 @@ export default function App() {
                     <Stack.Navigator
                         initialRouteName="Explore"
                         screenOptions={{
-                            headerRight: () => (
-                                <ProfileButton
-                                    session={session?.access_token}
-                                />
-                            ),
+                          headerShown:false,
                         }}
                     >
                         <Stack.Screen
