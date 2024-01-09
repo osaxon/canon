@@ -105,7 +105,13 @@ Deno.serve(async (req) => {
     }
 
     return new Response(
-        JSON.stringify({ image: image.data[0], imageContext: imageContext }),
+        JSON.stringify({
+            image: {
+                ...image.data[0],
+                original_prompt: prompt,
+            },
+            imageContext: imageContext,
+        }),
         {
             headers: { "Content-Type": "application/json" },
         }

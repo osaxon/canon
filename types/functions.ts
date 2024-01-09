@@ -13,6 +13,7 @@ export type GenerateImageResponse = {
     image: {
         b64_json?: string;
         revised_prompt: string;
+        original_prompt: string;
     };
     imageContext: ImageContext;
 };
@@ -27,4 +28,15 @@ export type ImageContext = {
     subjects: string[];
     actions: string[];
     mood: string;
+};
+
+export type NewStoryInputs = {
+    userId: string;
+    imageData: ImageData;
+};
+
+export type ImageData = {
+    imageContext: ImageContext | undefined;
+    imageUrl: string | undefined;
+    prompt: string | undefined;
 };
