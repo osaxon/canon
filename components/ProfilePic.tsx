@@ -18,7 +18,7 @@ const ProfilePic: React.FC<ProfilePicProps> = ({ userId }) => {
   const [isOwnProfile, setIsOwnProfile] = useState<boolean | false>(false);
   const [username, setUsername] = useState<string | null>(null);
 
-  // const userId = session?.user?.id || "";
+  // const sessionUserId = session?.user?.id || "";
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
