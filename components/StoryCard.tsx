@@ -5,6 +5,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Avatar } from "react-native-elements";
 import { StackParams } from "../App";
 import { timeAgo } from "../utils/timeFunctions";
+import { useEffect, useState } from "react";
 
 const styles = StyleSheet.create({
     image: {
@@ -68,7 +69,7 @@ interface StoryCardProps {
         comment_count: number | null;
         votes: number;
         profiles: { username: string | null; avatar_url: string | null } | null;
-        // stories : { votes: number | null; comment_count: number | null}
+        stories : { votes: number | null; comment_count: number | null}
     };
 }
 
@@ -82,55 +83,44 @@ const StoryCard = ({
         comment_count,
         votes,
         profiles,
+        stories
     },
 }: StoryCardProps) => {
-    const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+  const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+  const [storyVotes, setStoryVotes] = useState(stories.votes);
+  return (
+    <>
+      <View style={styles.storyCard}>
+        <TouchableOpacity onPress={() => navigation.navigate("FullStory", { story_id, storyVotes, setStoryVotes})}>
+          <Image style={styles.image} source={{ uri: image_url! }} />
+        </TouchableOpacity>
 
-    return (
-        <>
-            <View style={styles.storyCard}>
-                <TouchableOpacity
-                    onPress={() =>
-                        navigation.navigate("FullStory", { story_id })
-                    }
-                >
-                    <Image style={styles.image} source={{ uri: image_url! }} />
-                </TouchableOpacity>
-
-                <View style={styles.avatarMetadataBox}>
-                    <Avatar
-                        onPress={() =>
-                            navigation.navigate("UserProfile", {
-                                user_id: profile_id,
-                            })
-                        }
-                        size={"medium"}
-                        rounded
-                        containerStyle={{
-                            marginTop: 5,
-                            borderColor: "black",
-                            borderStyle: "solid",
-                            borderWidth: 1,
-                            marginLeft: 5,
-                        }}
-                        source={{
-                            uri: profiles?.avatar_url
-                                ? profiles?.avatar_url
-                                : "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
-                        }}
-                    />
-                    <View style={styles.MetadataBox}>
-                        <Text style={styles.text}>{`${
-                            profiles?.username
-                        } posted ${timeAgo(created_at)}`}</Text>
-                        <Text
-                            style={styles.text}
-                        >{`${comment_count} comments, ${votes} votes`}</Text>
-                    </View>
-                </View>
-            </View>
-        </>
-    );
+        <View style={styles.avatarMetadataBox}>
+          <Avatar
+          onPress={() => navigation.navigate("UserProfile", { user_id: profile_id })}
+            size={"medium"}
+            rounded
+            containerStyle={{
+              marginTop: 5,
+              borderColor: "black",
+              borderStyle: "solid",
+              borderWidth: 1,
+              marginLeft:5,
+            }}
+            source={{
+              uri: profiles?.avatar_url
+                ? profiles?.avatar_url
+                : "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
+            }}
+          />
+          <View style={styles.MetadataBox}>
+            <Text style={styles.text}>{`${profiles?.username} posted ${timeAgo(created_at)}`}</Text>
+            <Text style={styles.text}>{`${stories.comment_count} comments, ${storyVotes} votes`}</Text>
+          </View>
+        </View>
+      </View>
+    </>
+  );
 };
 
 export default StoryCard;
