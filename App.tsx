@@ -19,6 +19,7 @@ import ProfileButton from "./components/ProfileButton";
 import { supabase } from "./lib/supabase";
 import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Votes from "./components/Votes";
 
 const theme = createTheme({
   mode: "dark",
@@ -72,7 +73,7 @@ const StoriesScreenStack = () => {
             <StoriesStack.Screen
                 name="FullStory"
                 component={FullStory}
-                options={{ title: "Full Story" }}
+                options={{title: "Full Story"}}
             />
             <StoriesStack.Screen
                 name="StoryComments"

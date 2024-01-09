@@ -5,6 +5,7 @@ import { StackParams } from "../App";
 import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
 import { timeAgo } from "../utils/timeFunctions";
 import { Avatar,  Divider } from "react-native-elements";
+import StoryItemVotes from './StoryItemVotes';
 
 const styles = StyleSheet.create({
   image: {
@@ -128,6 +129,8 @@ const StoryItemCard = ({
           <Text
             style={styles.text}
           >{`${profiles?.username} posted ${timeAgo(created_at)}`}</Text>
+          <Divider/>
+          <StoryItemVotes story_item_id={id} story_item_votes={votes}/>
           </View>
     
         </View>

@@ -56,14 +56,14 @@ const styles = StyleSheet.create({
     
   });
 
-interface votesProps {
-  storyVotes: number | null
-  story_id: number;
-  setStoryVotes: any
+interface StoryItemVotesProps {
+  story_item_votes: number | null
+  story_item_id: number;
+//   setStoryVotes: any
 }
 
-export default function Votes({ story_id, storyVotes, setStoryVotes }: votesProps) {
-    const [votes, setVotes] = useState<number | null>(storyVotes);
+export default function StoryItemVotes({ story_item_id, story_item_votes }: StoryItemVotesProps) {
+    const [votes, setVotes] = useState<number | null>(story_item_votes);
     const [upVoted, setUpVoted] = useState(false)
     const [downVoted, setDownVoted] = useState(false)
   const vote = async (direction: string, inc: number) => {
@@ -76,12 +76,11 @@ export default function Votes({ story_id, storyVotes, setStoryVotes }: votesProp
         setDownVoted(!upVoted && !downVoted)
     }
     const { data, error } = await supabase
-      .from("stories")
+      .from("story_items")
       .update({ votes: votes! + inc })
-      .eq("id", story_id)
+      .eq("id", story_item_id)
       .select();
       setVotes(data![0].votes)
-    setStoryVotes(data![0].votes)
   };
 
   return (
