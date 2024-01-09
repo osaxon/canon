@@ -124,6 +124,7 @@ export interface Database {
           comment_count: number
           created_at: string | null
           created_by: string | null
+          first_image_url: string
           id: number
           image_context: Json | null
           theme: string | null
@@ -133,6 +134,7 @@ export interface Database {
           comment_count?: number
           created_at?: string | null
           created_by?: string | null
+          first_image_url: string
           id?: number
           image_context?: Json | null
           theme?: string | null
@@ -142,6 +144,7 @@ export interface Database {
           comment_count?: number
           created_at?: string | null
           created_by?: string | null
+          first_image_url?: string
           id?: number
           image_context?: Json | null
           theme?: string | null
