@@ -1,8 +1,14 @@
-import { Button, Card } from "@rneui/themed";
+import { useFocusEffect } from "@react-navigation/native";
 import { Session } from "@supabase/supabase-js";
 import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-import { Image, SafeAreaView, StyleSheet } from "react-native";
+import {
+    ActivityIndicator,
+    SafeAreaView,
+    StyleSheet,
+    View,
+} from "react-native";
+import { Button, Card, Image } from "react-native-elements";
 import { supabase } from "../lib/supabase";
 import { ImageData } from "../types/functions";
 import { useNewStory } from "../utils/hooks";
@@ -57,8 +63,9 @@ export default function GenerateImage() {
 
     const {
         mutate: generate,
+        reset,
         data: image,
-        status,
+        status: newImageStatus,
     } = useMutation({
         mutationKey: ["seed-image"],
         mutationFn: generateAndStoreImage,
@@ -74,28 +81,62 @@ export default function GenerateImage() {
         prompt: image?.prompt,
     };
 
-    const { mutate: share, isPending } = useNewStory({
+    const {
+        mutate: share,
+        status: newStoryStatus,
+        data: newStoryData,
+    } = useNewStory({
         imageData: imageData,
         userId: session?.user.id || "",
     });
+
+    useFocusEffect(() => {
+        if (image?.publicUrl && newStoryData) {
+            reset();
+        }
+    });
+
+    console.log(image, "<--- the image");
 
     return (
         <SafeAreaView style={styles.container}>
             <Image
                 style={styles.image}
                 source={{
-                    uri: image && image.publicUrl,
+                    uri:
+                        image && image.publicUrl
+                            ? image.publicUrl
+                            : "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
                 }}
+                PlaceholderContent={<ActivityIndicator />}
             />
             <Card.FeaturedSubtitle>
                 {image && image.publicUrl}
             </Card.FeaturedSubtitle>
-            <Button color="primary" onPress={() => generate()}>
-                Generate
-            </Button>
-            <Button color="secondary" onPress={() => share()}>
-                Share
-            </Button>
+            <View style={styles.buttons}>
+                <Button
+                    type="solid"
+                    onPress={() => generate()}
+                    containerStyle={{ padding: 5, flexGrow: 1 }}
+                    loading={newImageStatus === "pending"}
+                    title={image?.publicUrl ? "Re-generate" : "Generate"}
+                />
+                <Button
+                    type="outline"
+                    containerStyle={{ padding: 5, flexGrow: 1 }}
+                    onPress={() => share()}
+                    disabled={!image?.publicUrl}
+                    title="Share"
+                />
+            </View>
+            <View style={styles.buttons}>
+                <Button
+                    type="solid"
+                    onPress={() => reset()}
+                    containerStyle={{ padding: 5, flexGrow: 1 }}
+                    title="reset"
+                />
+            </View>
         </SafeAreaView>
     );
 }
@@ -112,5 +153,11 @@ const styles = StyleSheet.create({
         height: "auto",
         borderRadius: 10,
         aspectRatio: 1,
+    },
+    buttons: {
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+        borderWidth: 2,
     },
 });
