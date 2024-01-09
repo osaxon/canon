@@ -70,7 +70,6 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
         return;
       }
 
-      console.log(data);
       const newFollowerCount = (data.follower_count || 0) + 1;
       setFollowerCount(newFollowerCount);
 
@@ -116,7 +115,6 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
         return;
       }
 
-      console.log(data);
       const newFollowerCount = Math.max((data.follower_count || 0) - 1, 0);
       setFollowerCount(newFollowerCount);
 
@@ -155,6 +153,23 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
     const ownProfile = userId === session?.user.id;
     setIsOwnProfile(ownProfile);
   }, [userId, session?.user.id]);
+
+  async function getFollowed() {
+    try {
+      const {data, error} = await supabase 
+      .from("following")
+      .select("profile_id, following_profile_id")
+      .eq("profile_id", sessionUserId)
+
+      if (error) {
+        console.error("Error with getting data: ", error)
+      } else {
+        console.log(data)
+      }
+    } catch (error) {
+      console.error("Error getting follows: ", error)
+    }
+  }
 
   return (
     <>
