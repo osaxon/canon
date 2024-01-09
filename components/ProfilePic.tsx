@@ -6,20 +6,15 @@ import { decode } from "base64-arraybuffer";
 import { useState, useEffect } from "react";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
-
 interface ProfilePicProps {
   userId: any;
 }
-
 const ProfilePic: React.FC<ProfilePicProps> = ({ userId }) => {
-
   const [session, setSession] = useState<Session | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [isOwnProfile, setIsOwnProfile] = useState<boolean | false>(false);
   const [username, setUsername] = useState<string | null>(null);
-
   // const userId = session?.user?.id || "";
-
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -38,17 +33,16 @@ const ProfilePic: React.FC<ProfilePicProps> = ({ userId }) => {
           .select("avatar_url, username")
           .eq("id", userId)
           .single();
-
         if (error) {
           console.error("Error fetching avatar URL:", error);
         } else if (data && data.avatar_url) {
-        } setUsername(data.username)
-          setAvatarUrl(data.avatar_url);
+        }
+        setUsername(data.username);
+        setAvatarUrl(data.avatar_url);
       }
     }
     fetchAvatarUrl();
   }, [session]);
-
   const defaultProfile = avatarUrl;
   const defaultImage = require("../assets/user.png");
   const filePath = `${session?.user.user_metadata.user_name}_avatars/${
@@ -129,7 +123,7 @@ const ProfilePic: React.FC<ProfilePicProps> = ({ userId }) => {
 
   useEffect(() => {
     const ownProfile = userId === session?.user.id;
-      setIsOwnProfile(ownProfile);
+    setIsOwnProfile(ownProfile);
   }, [userId, session?.user.id]);
 
   return (
@@ -139,15 +133,17 @@ const ProfilePic: React.FC<ProfilePicProps> = ({ userId }) => {
         style={styles.profile}
         source={avatarUrl ? { uri: avatarUrl } : defaultProfile || defaultImage}
       />
-      {isOwnProfile ? <TouchableOpacity
-        style={styles.button}
-        onPress={() => pickImage("avatars", filePath)}
-      >
-        <Text style={styles.buttonText}>Edit</Text>
-      </TouchableOpacity> : null}
+      {isOwnProfile ? (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => pickImage("avatars", filePath)}
+        >
+          <Text style={styles.buttonText}>Edit</Text>
+        </TouchableOpacity>
+      ) : null}
     </>
   );
-}
+};
 
 export default ProfilePic;
 
@@ -173,6 +169,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   text: {
-    fontWeight: "bold"
-  }
+    fontWeight: "bold",
+  },
 });

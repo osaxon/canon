@@ -1,10 +1,10 @@
 import React from 'react'
 import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { StackParams } from "../App";
 import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
 import { timeAgo } from "../utils/timeFunctions";
 import { Avatar,  Divider } from "react-native-elements";
+import { StoriesStackParams } from '../screens/StoriesScreens';
 
 const styles = StyleSheet.create({
   image: {
@@ -96,7 +96,7 @@ const StoryItemCard = ({
     profiles
   },
 }: StoryItemCardProps) => {
-  const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+  const navigation = useNavigation<NativeStackNavigationProp<StoriesStackParams>>();
   return (
     <>
       <View style={styles.StoryItemCard}>

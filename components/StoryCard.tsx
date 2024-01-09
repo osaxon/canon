@@ -3,9 +3,9 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Avatar } from "react-native-elements";
-import { StackParams } from "../App";
 import { timeAgo } from "../utils/timeFunctions";
 import { useEffect, useState } from "react";
+import { StoriesStackParams } from "../screens/StoriesScreens";
 
 const styles = StyleSheet.create({
     image: {
@@ -86,7 +86,7 @@ const StoryCard = ({
         stories
     },
 }: StoryCardProps) => {
-  const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+  const navigation = useNavigation<NativeStackNavigationProp<StoriesStackParams>>();
   const [storyVotes, setStoryVotes] = useState(stories.votes);
   let commentText = "comments"
   let voteText = "votes"

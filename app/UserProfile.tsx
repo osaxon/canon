@@ -1,14 +1,14 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
-import { StackParams } from "../App";
 import React from "react";
 import ProfilePic from "../components/ProfilePic";
 import UserInfo from "../components/UserInfo";
 import LatestStories from "../components/LatestStories";
 import ProfileButton from '../components/ProfileButton';
+import { StoriesStackParams } from "../screens/StoriesScreens";
 
 
-type Props = NativeStackScreenProps<StackParams, "UserProfile">;
+type Props = NativeStackScreenProps<StoriesStackParams, "UserProfile">;
 
 const UserProfile: React.FC<Props> = ({ route }) => {
   const { user_id } = route.params as { user_id: any };

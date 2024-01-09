@@ -1,18 +1,9 @@
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList,} from "react-native";
 import StoryCard from "../components/StoryCard";
 import { supabase } from "../lib/supabase";
 import { Database, Tables } from "../types/database";
-
-const styles = StyleSheet.create({
-    container: {
-        overflow: "scroll",
-        fontSize: "1em",
-        boxSizing: "border-box",
-        padding: 1,
-    },
-});
 
 export default function Stories() {
     const [stories, setStories] = useState<
@@ -45,10 +36,6 @@ export default function Stories() {
         };
         getStories();
     });
-
-    useEffect(() => {
-        console.log(stories, "<--- stories");
-    }, [stories]);
 
     return (
         <>

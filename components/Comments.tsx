@@ -7,9 +7,9 @@ import { Text, StyleSheet } from "react-native";
 import { timeAgo } from "../utils/timeFunctions";
 import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { StackParams } from "../App";
 import React from "react";
 import AddComment from "../components/AddComment";
+import { StoriesStackParams } from "../screens/StoriesScreens";
 
 const styles = StyleSheet.create({
   avatarBox: {
@@ -69,7 +69,7 @@ function Comments(props: CommentsProps) {
     getStoryComments();
   }, []);
 
-  const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+  const navigation = useNavigation<NativeStackNavigationProp<StoriesStackParams>>();
 
   return (
     <View>
