@@ -77,41 +77,6 @@ const StoriesStack = createNativeStackNavigator<StoriesStackParams>();
 const ProfileStack = createNativeStackNavigator<ProfileStackParams>();
 const CreateNewStack = createNativeStackNavigator<CreateNewStackParams>();
 
-const StoriesScreenStack = () => {
-  return (
-    <StoriesStack.Navigator>
-      <StoriesStack.Screen name="Stories" component={Stories} />
-      <StoriesStack.Screen
-        name="StoryAdd"
-        component={StoryAdd}
-        options={{ title: "Add" }}
-      />
-      <StoriesStack.Screen
-        name="StoryConfirm"
-        component={StoryConfirm}
-        options={{ title: "Confirm" }}
-      />
-      <StoriesStack.Screen
-        name="FullStory"
-        component={FullStory}
-        options={{ title: "Full Story" }}
-      />
-      <StoriesStack.Screen
-        name="StoryComments"
-        component={StoryComments}
-        options={{ title: "Comments" }}
-      />
-      <StoriesStack.Screen
-        name="UserProfile"
-        component={UserProfile}
-        options={{ title: "Profile" }}
-      />
-    </StoriesStack.Navigator>
-  );
-};
-
-
-
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
 
@@ -125,9 +90,52 @@ export default function App() {
     });
   }, []);
 
+  const StoriesScreenStack = () => {
+    return (
+      <StoriesStack.Navigator
+      screenOptions={{
+        headerRight: () => (
+          <ProfileButton session={session?.access_token} />
+        ),
+      }}>
+        <StoriesStack.Screen name="Stories" component={Stories} />
+        <StoriesStack.Screen
+          name="StoryAdd"
+          component={StoryAdd}
+          options={{ title: "Add" }}
+        />
+        <StoriesStack.Screen
+          name="StoryConfirm"
+          component={StoryConfirm}
+          options={{ title: "Confirm" }}
+        />
+        <StoriesStack.Screen
+          name="FullStory"
+          component={FullStory}
+          options={{ title: "Full Story" }}
+        />
+        <StoriesStack.Screen
+          name="StoryComments"
+          component={StoryComments}
+          options={{ title: "Comments" }}
+        />
+        <StoriesStack.Screen
+          name="UserProfile"
+          component={UserProfile}
+          options={{ title: "Profile" }}
+        />
+      </StoriesStack.Navigator>
+    );
+  };
+
   const ProfileScreenStack = () => {
     return(
-    <ProfileStack.Navigator>
+    <ProfileStack.Navigator
+    screenOptions={{
+      headerRight: () => (
+        <ProfileButton session={session?.access_token} />
+      ),
+    }}>
       <ProfileStack.Screen
         name="Profile"
         component={session?.access_token ? Profile : SignIn}
@@ -140,7 +148,12 @@ export default function App() {
   
   const CreateNewScreenStack = () => {
     return(
-    <CreateNewStack.Navigator>
+    <CreateNewStack.Navigator
+    screenOptions={{
+      headerRight: () => (
+        <ProfileButton session={session?.access_token} />
+      ),
+    }}>
       <CreateNewStack.Screen
         name="CreateNew"
         component={GenerateImage}
