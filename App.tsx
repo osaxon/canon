@@ -176,7 +176,7 @@ export default function App() {
             }}
           >
             <Stack.Screen
-              name="Explore"
+              name="StoriesStack"
               component={StoriesScreenStack}
               options={{
                 tabBarIcon: ({ color, size }) => (
@@ -185,7 +185,7 @@ export default function App() {
               }}
             />
             <Stack.Screen
-              name="Profile"
+              name="ProfileStack"
               component={ProfileScreenStack}
               options={{
                 title: "Profile",
@@ -195,7 +195,7 @@ export default function App() {
               }}
             />
             <Stack.Screen
-              name="CreateNew"
+              name="CreateNewStack"
               component={CreateNewScreenStack}
               options={{
                 title: "New Story",

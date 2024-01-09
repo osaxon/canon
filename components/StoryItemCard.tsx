@@ -57,7 +57,9 @@ const styles = StyleSheet.create({
   },
   metadataBox: {
     backgroundColor: "lightgrey",
-    border: "solid 1px silver",
+    borderColor: "silver",
+    borderStyle: "solid",
+    borderWidth:1,
     borderRadius: 10,
     marginLeft:5,
     marginTop:5,
