@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
 interface votesProps {
   storyVotes: number | null
   story_id: number;
-  setStoryVotes: any
+  setStoryVotes: (val: number) => void;
 }
 
 export default function Votes({ story_id, storyVotes, setStoryVotes }: votesProps) {

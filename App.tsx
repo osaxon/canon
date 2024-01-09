@@ -31,62 +31,70 @@ const theme = createTheme({
 });
 
 export type StackParams = {
-    Home: any;
-    SignIn: any;
-    Explore: any;
-    StoriesStack: StoriesStackParams;
-    Profile: { user_id: any };
-    UserProfile: { user_id: any };
-    StoryAdd: { story_id: number };
-    StoryConfirm: { story_id: number };
-    FullStory: { story_id: number, storyVotes: number | null, setStoryVotes: any };
-    StoryComments: { story_id: number };
-    CreateNew: undefined; // TODO may need to add story_id as a param to make route re-usable for adding to existing story
+  Home: any;
+  SignIn: any;
+  Explore: any;
+  StoriesStack: StoriesStackParams;
+  Profile: { user_id: any };
+  UserProfile: { user_id: any };
+  StoryAdd: { story_id: number };
+  StoryConfirm: { story_id: number };
+  FullStory: {
+    story_id: number;
+    storyVotes: number | null;
+    setStoryVotes: (val: number) => void;
+  };
+  StoryComments: { story_id: number };
+  CreateNew: undefined; // TODO may need to add story_id as a param to make route re-usable for adding to existing story
 };
 
 const Stack = createBottomTabNavigator<StackParams>();
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 export type StoriesStackParams = {
-    Stories: any;
-    StoryAdd: { story_id: number };
-    StoryConfirm: { story_id: number };
-    FullStory: { story_id: number, storyVotes: number | null, setStoryVotes: any };
-    StoryComments: { story_id: number };
-    UserProfile: { user_id: any };
+  Stories: any;
+  StoryAdd: { story_id: number };
+  StoryConfirm: { story_id: number };
+  FullStory: {
+    story_id: number;
+    storyVotes: number | null;
+    setStoryVotes: (val: number) => void;
+  };
+  StoryComments: { story_id: number };
+  UserProfile: { user_id: any };
 };
 const StoriesStack = createNativeStackNavigator<StoriesStackParams>();
 const StoriesScreenStack = () => {
-    return (
-        <StoriesStack.Navigator>
-            <StoriesStack.Screen name="Stories" component={Stories} />
-            <StoriesStack.Screen
-                name="StoryAdd"
-                component={StoryAdd}
-                options={{ title: "Add" }}
-            />
-            <StoriesStack.Screen
-                name="StoryConfirm"
-                component={StoryConfirm}
-                options={{ title: "Confirm" }}
-            />
-            <StoriesStack.Screen
-                name="FullStory"
-                component={FullStory}
-                options={{title: "Full Story"}}
-            />
-            <StoriesStack.Screen
-                name="StoryComments"
-                component={StoryComments}
-                options={{ title: "Comments" }}
-            />
-            <StoriesStack.Screen
-                name="UserProfile"
-                component={UserProfile}
-                options={{ title: "Profile" }}
-            />
-        </StoriesStack.Navigator>
-    );
+  return (
+    <StoriesStack.Navigator>
+      <StoriesStack.Screen name="Stories" component={Stories} />
+      <StoriesStack.Screen
+        name="StoryAdd"
+        component={StoryAdd}
+        options={{ title: "Add" }}
+      />
+      <StoriesStack.Screen
+        name="StoryConfirm"
+        component={StoryConfirm}
+        options={{ title: "Confirm" }}
+      />
+      <StoriesStack.Screen
+        name="FullStory"
+        component={FullStory}
+        options={{ title: "Full Story" }}
+      />
+      <StoriesStack.Screen
+        name="StoryComments"
+        component={StoryComments}
+        options={{ title: "Comments" }}
+      />
+      <StoriesStack.Screen
+        name="UserProfile"
+        component={UserProfile}
+        options={{ title: "Profile" }}
+      />
+    </StoriesStack.Navigator>
+  );
 };
 
 export default function App() {
@@ -103,55 +111,53 @@ export default function App() {
   }, []);
 
   console.log(session, "<--- session");
-  
-    return (
-        <QueryClientProvider client={queryClient}>
-            <ThemeProvider theme={theme}>
-                <NavigationContainer>
-                    <Stack.Navigator
-                        initialRouteName="Explore"
-                        screenOptions={{
-                            headerRight: () => (
-                                <ProfileButton
-                                    session={session?.access_token}
-                                />
-                            ),
-                        }}
-                    >
-                        <Stack.Screen
-                            name="Explore"
-                            component={StoriesScreenStack}
-                            options={{
-                              tabBarIcon: ({ color, size }) => (
-                                <MaterialIcons name="home" color={color} size={size} />
-                              ),
-                           }}
-                        />
-                        <Stack.Screen
-                            name="Profile"
-                            component={session?.access_token ? Profile : SignIn}
-                            options={{ 
-                              title: "Profile",
-                              tabBarIcon: ({ color, size }) => (
-                                <MaterialIcons name="person" color={color} size={size} />
-                              ),
-                            }}
-                        />
-                        <Stack.Screen
-                            name="CreateNew"
-                            component={GenerateImage}
-                            options={{
-                              title: "New Story",
-                              tabBarIcon: ({ color, size }) => (
-                              <MaterialIcons name="add" color={color} size={size} />
-                            ),
-                          }}
-                        />
-                    </Stack.Navigator>
-                </NavigationContainer>
-            </ThemeProvider>
-        </QueryClientProvider>
-    );
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Explore"
+            screenOptions={{
+              headerRight: () => (
+                <ProfileButton session={session?.access_token} />
+              ),
+            }}
+          >
+            <Stack.Screen
+              name="Explore"
+              component={StoriesScreenStack}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialIcons name="home" color={color} size={size} />
+                ),
+              }}
+            />
+            <Stack.Screen
+              name="Profile"
+              component={session?.access_token ? Profile : SignIn}
+              options={{
+                title: "Profile",
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialIcons name="person" color={color} size={size} />
+                ),
+              }}
+            />
+            <Stack.Screen
+              name="CreateNew"
+              component={GenerateImage}
+              options={{
+                title: "New Story",
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialIcons name="add" color={color} size={size} />
+                ),
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
 }
 
 const styles = StyleSheet.create({
