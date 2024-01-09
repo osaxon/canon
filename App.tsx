@@ -19,6 +19,7 @@ import ProfileButton from "./components/ProfileButton";
 import { supabase } from "./lib/supabase";
 import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Votes from "./components/Votes";
 
 const theme = createTheme({
   mode: "dark",
@@ -41,7 +42,7 @@ export type StackParams = {
   FullStory: {
     story_id: number;
     storyVotes: number | null;
-    setStoryVotes: any;
+    setStoryVotes: (val: number) => void;
   };
   StoryComments: { story_id: number };
   CreateNew: undefined; // TODO may need to add story_id as a param to make route re-usable for adding to existing story
@@ -57,7 +58,7 @@ export type StoriesStackParams = {
   FullStory: {
     story_id: number;
     storyVotes: number | null;
-    setStoryVotes: any;
+    setStoryVotes: (val: number) => void;
   };
   StoryComments: { story_id: number };
   UserProfile: { user_id: any };

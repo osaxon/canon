@@ -37,16 +37,10 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
     <>
       {story ? (
         <FlatList
-          data={story}
+          data={story.sort((a,b) => {
+            return a.id - b.id
+          })}
           renderItem={({ item: storyItem }) => <StoryItemCard storyItemData={storyItem as any} />}
-          // ListFooterComponent={
-          //   <>
-          //     <Collapsible title="comments">
-          //       <Comments story_id={story_id} />
-          //     </Collapsible>
-          //     <Votes story_id={story_id} storyVotes = {storyVotes} setStoryVotes = {setStoryVotes} />
-          //   </>
-          //   }
             ListFooterComponent={<>
               <AddToStory />
               <Collapsible title='Comments' icon="chat">
