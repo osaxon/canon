@@ -22,22 +22,63 @@ const theme = createTheme({
 });
 
 export type StackParams = {
-  Home: any;
-  SignIn: any;
-  Explore: any;
-  StoriesStack: StoriesStackParams;
-  Profile: { user_id: any };
-  UserProfile: { user_id: any };
-  StoryAdd: { story_id: number };
-  StoryConfirm: { story_id: number };
-  FullStory: { story_id: number };
-  StoryComments: { story_id: number };
-  CreateNew: CreateNewStackParams; // TODO may need to add story_id as a param to make route re-usable for adding to existing story
+    Home: any;
+    SignIn: any;
+    Explore: any;
+    StoriesStack: StoriesStackParams;
+    Profile: { user_id: any };
+    UserProfile: { user_id: any };
+    StoryAdd: { story_id: number };
+    StoryConfirm: { story_id: number };
+    FullStory: { story_id: number, storyVotes: number | null, setStoryVotes: any };
+    StoryComments: { story_id: number };
+    CreateNew: undefined; // TODO may need to add story_id as a param to make route re-usable for adding to existing story
 };
 
 const Stack = createBottomTabNavigator<StackParams>();
 const queryClient = new QueryClient();
 
+export type StoriesStackParams = {
+    Stories: any;
+    StoryAdd: { story_id: number };
+    StoryConfirm: { story_id: number };
+    FullStory: { story_id: number, storyVotes: number | null, setStoryVotes: any };
+    StoryComments: { story_id: number };
+    UserProfile: { user_id: any };
+};
+const StoriesStack = createNativeStackNavigator<StoriesStackParams>();
+const StoriesScreenStack = () => {
+    return (
+        <StoriesStack.Navigator>
+            <StoriesStack.Screen name="Stories" component={Stories} />
+            <StoriesStack.Screen
+                name="StoryAdd"
+                component={StoryAdd}
+                options={{ title: "Add" }}
+            />
+            <StoriesStack.Screen
+                name="StoryConfirm"
+                component={StoryConfirm}
+                options={{ title: "Confirm" }}
+            />
+            <StoriesStack.Screen
+                name="FullStory"
+                component={FullStory}
+                options={{ title: "Full Story" }}
+            />
+            <StoriesStack.Screen
+                name="StoryComments"
+                component={StoryComments}
+                options={{ title: "Comments" }}
+            />
+            <StoriesStack.Screen
+                name="UserProfile"
+                component={UserProfile}
+                options={{ title: "Profile" }}
+            />
+        </StoriesStack.Navigator>
+    );
+};
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
