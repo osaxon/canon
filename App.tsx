@@ -50,9 +50,19 @@ export type StackParams = {
 };
 
 const Stack = createBottomTabNavigator<StackParams>();
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 export type StoriesStackParams = {
+  Stories: any;
+  StoryAdd: { story_id: number };
+  StoryConfirm: { story_id: number };
+  FullStory: {
+    story_id: number;
+    storyVotes: number | null;
+    setStoryVotes: any;
+  };
+  StoryComments: { story_id: number };
+  UserProfile: { user_id: any };
   Stories: any;
   StoryAdd: { story_id: number };
   StoryConfirm: { story_id: number };
