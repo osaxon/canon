@@ -3,6 +3,9 @@ import React from "react";
 import { supabase } from "../lib/supabase";
 import { useState, useEffect } from "react";
 import { Session } from "@supabase/supabase-js";
+import Following from "./Following";
+import Followers from "./Followers";
+import { Overlay } from "react-native-elements";
 
 interface UserInfoProps {
   userId: any;
@@ -11,8 +14,15 @@ interface UserInfoProps {
 const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [followerCount, setFollowerCount] = useState<number | null>(null);
+  const [followingCount, setFollowingCount] = useState<number | null>(null);
   const [isOwnProfile, setIsOwnProfile] = useState<boolean | false>(false);
   const [followed, setFollowed] = useState<boolean | false>(false);
+  const [isFollowingVisible, setFollowingVisible] = useState<boolean | false>(
+    false
+  );
+  const [isFollowerVisible, setFollowerVisible] = useState<boolean | false>(
+    false
+  );
 
   const sessionUserId = session?.user?.id || "";
 
@@ -26,77 +36,29 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
     });
   }, []);
 
-  async function fetchFollowCount() {
-    if (!userId) {
-      return;
-    }
-
-    try {
-      const { data, error: fetchError } = await supabase
-        .from("profiles")
-        .select("follower_count")
-        .eq("id", userId)
-        .single();
-
-      if (fetchError) {
-        console.error("Error fetching follower count: ", fetchError);
-        return;
-      } else if (data) {
-        setFollowerCount(data.follower_count);
-      }
-    } catch (error) {
-      console.error("Error: ", error);
-    }
-  }
-
-  useEffect(() => {
-    fetchFollowCount();
-  }, [userId]);
-
   async function increaseFollowCount() {
     if (!userId) {
       return;
     }
 
     try {
-      const { data, error: fetchError } = await supabase
-        .from("profiles")
-        .select("follower_count")
-        .eq("id", userId)
-        .single();
-
-      if (fetchError) {
-        console.error("Error fetching follower count: ", fetchError);
-        return;
-      }
-
-      const newFollowerCount = (data.follower_count || 0) + 1;
-      setFollowerCount(newFollowerCount);
-
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ follower_count: newFollowerCount })
-        .eq("id", userId);
-
-      if (updateError) {
-        console.error("Error: ", updateError);
-      } else {
-        console.log("Follower count updated successfully");
-      }
-    } catch (error) {
-      console.error("Error: ", error);
-    }
-
-    try {
-      const { error } = await supabase
+      const { error: followError } = await supabase
         .from("following")
         .insert({ profile_id: sessionUserId, following_profile_id: userId });
 
-      setFollowed(true);
-
-      if (error) {
-        console.error("Error following user: ", error);
+      if (followError) {
+        console.error("Error following user: ", followError);
       }
+
+      const { error: followerError } = await supabase
+        .from("followers")
+        .insert({ profile_id: userId, follower_profile_id: sessionUserId });
+
+      if (followerError) throw followerError;
+
+      await getFollowingInfo();
+      await getFollowersInfo();
+      setFollowed(true);
     } catch (error) {
       console.error("Error: ", error);
     }
@@ -104,46 +66,27 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
 
   async function decreaseFollowCount() {
     try {
-      const { data, error: fetchError } = await supabase
-        .from("profiles")
-        .select("follower_count")
-        .eq("id", userId)
-        .single();
-
-      if (fetchError) {
-        console.error("Error fetching follower count: ", fetchError);
-        return;
-      }
-
-      const newFollowerCount = Math.max((data.follower_count || 0) - 1, 0);
-      setFollowerCount(newFollowerCount);
-
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ follower_count: newFollowerCount })
-        .eq("id", userId);
-
-      if (updateError) {
-        console.error("Error: ", updateError);
-      } else {
-        console.log("Follower count updated successfully");
-      }
-    } catch (error) {
-      console.error("Error: ", error);
-    }
-
-    try {
-      const { error } = await supabase
+      const { error: unfollowError } = await supabase
         .from("following")
         .delete()
         .eq("profile_id", sessionUserId)
         .eq("following_profile_id", userId);
 
-      if (error) {
-        console.error("Error following user: ", error);
-      } else {
-        setFollowed(false);
+      if (unfollowError) {
+        console.error("Error following user: ", unfollowError);
       }
+
+      const { error: followerError } = await supabase
+        .from("followers")
+        .delete()
+        .eq("profile_id", userId)
+        .eq("follower_profile_id", sessionUserId);
+
+      if (followerError) throw followerError;
+
+      setFollowed(false);
+      await getFollowingInfo();
+      await getFollowersInfo();
     } catch (error) {
       console.error("Error: ", error);
     }
@@ -152,39 +95,135 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
   useEffect(() => {
     const ownProfile = userId === session?.user.id;
     setIsOwnProfile(ownProfile);
-  }, [userId, session?.user.id]);
+  }, [userId, sessionUserId]);
 
-  async function getFollowed() {
+  async function getFollowingInfo() {
+    if (!sessionUserId || !userId) {
+      return;
+    }
+
     try {
-      const {data, error} = await supabase 
-      .from("following")
-      .select("profile_id, following_profile_id")
-      .eq("profile_id", sessionUserId)
+      const response = await supabase
+        .from("following")
+        .select("profile_id, following_profile_id", { count: "exact" })
+        .eq("profile_id", userId);
 
-      if (error) {
-        console.error("Error with getting data: ", error)
-      } else {
-        console.log(data)
+      if (response.error) {
+        console.error("Error with getting data: ", response.error);
+        return;
       }
+
+      setFollowingCount(response.count);
     } catch (error) {
-      console.error("Error getting follows: ", error)
+      console.error("Error getting follows: ", error);
     }
   }
 
+  async function getFollowersInfo() {
+    if (!sessionUserId) {
+      return;
+    }
+
+    try {
+      const response = await supabase
+        .from("followers")
+        .select("profile_id, follower_profile_id", { count: "exact" })
+        .eq("profile_id", userId);
+
+      if (response.error) {
+        console.error("Error with getting data: ", response.error);
+        return;
+      }
+
+      setFollowerCount(response.count);
+    } catch (error) {
+      console.error("Error getting follows: ", error);
+    }
+  }
+
+  async function handleSetFollowed() {
+    if (!sessionUserId || !userId) {
+      return;
+    }
+
+    try {
+      const {data, error} = await supabase
+        .from("following")
+        .select("profile_id, following_profile_id")
+        .eq("profile_id", sessionUserId);
+
+      if (error) {
+        console.error("Error with getting data: ", error);
+        return;
+      }
+
+      const isFollowing = data.some(
+        (record) => record.following_profile_id === userId
+      );
+      setFollowed(isFollowing);
+    } catch (error) {
+      console.error("Error getting follows: ", error);
+    }
+  }
+
+  useEffect(() => {
+    getFollowersInfo();
+    getFollowingInfo();
+    handleSetFollowed();
+  }, [sessionUserId, userId]);
+
+  const hideFollowingOverlay = () => {
+    setFollowingVisible(false);
+  };
+
+  const hideFollowerOverlay = () => {
+    setFollowerVisible(false);
+  };
+
   return (
     <>
-      <View style={styles.userInfoText}>
-        <Text>{followerCount}</Text>
-        <Text>Followers</Text>
-      </View>
+      <Overlay
+        isVisible={isFollowingVisible}
+        onBackdropPress={() => setFollowingVisible(false)}
+        overlayStyle={{ width: "90%", height: "80%" }}
+      >
+        <Following
+          onHideOverlay={hideFollowingOverlay}
+          userId={userId}
+          sessionUserId={sessionUserId}
+        />
+      </Overlay>
+      <Overlay
+        isVisible={isFollowerVisible}
+        onBackdropPress={() => setFollowerVisible(false)}
+        overlayStyle={{ width: "90%", height: "80%" }}
+      >
+        <Followers
+          onHideOverlay={hideFollowerOverlay}
+          userId={userId}
+          sessionUserId={sessionUserId}
+        />
+      </Overlay>
       <View style={styles.userInfoSection}>
-        {/* <Text style={styles.userInfoText}>Story Additions</Text>
-          <Text style={styles.userInfoText}>Story Creations</Text> */}
+        <TouchableOpacity onPress={() => setFollowingVisible(true)}>
+          <View style={styles.userInfo}>
+            <Text style={styles.userInfoDigit}>{followingCount}</Text>
+            <Text style={styles.userInfoDes}>Following</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setFollowerVisible(true)}>
+          <View style={styles.userInfo}>
+            <Text style={styles.userInfoDigit}>{followerCount}</Text>
+            <Text style={styles.userInfoDes}>Followers</Text>
+          </View>
+        </TouchableOpacity>
         {!isOwnProfile ? (
           !followed ? (
             <TouchableOpacity
               style={styles.button}
-              onPress={() => increaseFollowCount()}
+              onPress={() => {
+                increaseFollowCount();
+              }}
             >
               <Text style={styles.buttonText}>Follow</Text>
             </TouchableOpacity>
@@ -224,13 +263,22 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   userInfoSection: {
+    display: "flex",
+    flexDirection: "row",
     width: "100%",
     alignItems: "flex-start",
+    justifyContent: "space-around",
     paddingHorizontal: 15,
     marginBottom: 20,
   },
-  userInfoText: {
-    margin: 3,
+  userInfoDigit: {
+    fontWeight: "bold",
+  },
+  userInfoDes: {
+    fontWeight: "200",
+  },
+  userInfo: {
+    margin: 10,
     display: "flex",
     alignItems: "center",
   },

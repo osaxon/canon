@@ -123,7 +123,7 @@ export default function App() {
                             options={{
                               tabBarIcon: ({ color, size }) => (
                                 <MaterialIcons name="home" color={color} size={size} />
-                              ),
+                              ), headerShown: false
                            }}
                         />
                         <Stack.Screen
