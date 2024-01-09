@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   text: {
-    fontSize:"20em" as any
+    fontSize:"1rem" as any
   },
   avatarTextBox: {
     boxSixing: "border-box",
