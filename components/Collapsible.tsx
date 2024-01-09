@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     })
 
 const Collapsible= ({children, title, icon}: CollapsibleProps) => {
-    const [isCollapsed, setIsCollapsed] = useState(false)
+    const [isCollapsed, setIsCollapsed] = useState(true)
     const toggleComments = () => {
         setIsCollapsed(!isCollapsed)
     }

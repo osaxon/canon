@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
-import { FlatList, ScrollView, StyleSheet, View } from "react-native";
-import { Database } from "../types/database";
-import { supabase } from "../lib/supabase";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useEffect, useState, useCallback } from "react";
+import { FlatList, StyleSheet } from "react-native";
 import StoryCard from "../components/StoryCard";
-import React from "react";
+import { supabase } from "../lib/supabase";
+import { Database, Tables } from "../types/database";
+import { useGetStories, useRefreshOnFocus } from "../utils/hooks";
+import { queryClient } from "../App";
 
 const styles = StyleSheet.create({
   container: {
@@ -15,39 +17,10 @@ const styles = StyleSheet.create({
 });
 
 export default function Stories() {
-  const [stories, setStories] = useState<
-    Database["public"]["Tables"]["story_items"]["Row"][] | null
-  >(null);
+  const { data: stories, refetch } = useGetStories();
+  console.log(stories);
 
-  useEffect(() => {
-    const getStories = async () => {
-      const { data, error } = await supabase
-        .from("story_items")
-        .select("*, profiles(username,avatar_url), stories(votes, comment_count)")
-      data?.sort((a, b) => {
-        return a.id - b.id;
-      });
-      const storyItems: Database["public"]["Tables"]["story_items"]["Row"][] =
-        [];
-      const n = data?.length || 0;
-      for (let i = 1; i <= n; i++) {
-        const story: any = data?.find((element) => {
-          return element.story_id === i;
-        });
-        if (story) {
-          storyItems.push(story);
-        }
-      }
-      setStories(() => {
-        return storyItems.reverse();
-      });
-    };
-    getStories();
-  }, []);
-
-  useEffect(() => {
-    console.log(stories, '<--- stories');
-  }, [stories]);
+  useRefreshOnFocus(refetch);
 
   return (
     <>
@@ -55,7 +28,13 @@ export default function Stories() {
         <FlatList
           data={stories}
           renderItem={({ item: story }) => {
-            return <StoryCard storyData={story as any} />;
+            return (
+              <StoryCard
+                username={story.profiles?.username!}
+                avatar_url={story.profiles?.avatar_url!}
+                {...story}
+              />
+            );
           }}
         />
       ) : null}
