@@ -95,7 +95,7 @@ function Comments(props: CommentsProps) {
               }}
             />
             <View style={styles.textBox}>
-              <Text style={styles.text}>{`${comment.profiles?.username}  ${timeAgo(
+              <Text>{`${comment.profiles?.username}  ${timeAgo(
                 comment.created_at
               )}`}</Text>
               <Text style={styles.text}>{comment.content}</Text>
