@@ -1,9 +1,28 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import { Button } from "react-native-elements";
-import { useUpvote } from "../utils/hooks";
 import { supabase } from "../lib/supabase";
 import { useEffect, useState } from "react";
+
+
+const styles = StyleSheet.create({
+    
+    text: {
+      margin: 0,
+      marginLeft:5,
+      padding: 0,
+      textAlign: "center",
+      maxWidth: "100%",
+    },
+    
+    votesBox: {
+        display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    
+  });
 
 interface votesProps {
   
@@ -34,12 +53,14 @@ export default function Votes({ story_id }: votesProps) {
   };
 
   return (
-    <View>
-      <Button title="⬆" onPress={() => {
+    <View style={styles.votesBox}>
+      <Button title="⬆" type = "clear" onPress={() => {
         vote(1)
       }} />
-      <Text>Votes: {votes}</Text>
-      <Button title="⬇" onPress={() => {
+      <View>
+      <Text style= {styles.text}>Votes: {votes}</Text>
+      </View>
+      <Button title="⬇" type = "clear" onPress={() => {
         vote(-1)
       }}/>
     </View>

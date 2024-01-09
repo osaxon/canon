@@ -37,8 +37,6 @@ function Comments(props: CommentsProps) {
 
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
 
-  console.log(comments)
-
   return (
     <View>
     <FlatList
