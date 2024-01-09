@@ -23,7 +23,7 @@ export default function Stories() {
         const getStories = async () => {
             const { data, error } = await supabase
                 .from("story_items")
-                .select("*, profiles(username,avatar_url), stories(comment_count,votes)");
+                .select("*, profiles(username,avatar_url), stories(comment_count,votes, story_comments(count))");
             data?.sort((a, b) => {
                 return a.id - b.id;
             });
@@ -35,6 +35,7 @@ export default function Stories() {
                     return element.story_id === i;
                 });
                 if (story) {
+                  story.comment_count = story.stories.story_comments[0].count
                     storyItems.push(story);
                 }
             }
