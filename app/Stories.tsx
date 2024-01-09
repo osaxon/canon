@@ -18,7 +18,7 @@ export default function Stories() {
   const [stories, setStories] = useState<
     Database["public"]["Tables"]["story_items"]["Row"][] | null
   >(null);
-
+  
   useEffect(() => {
     const getStories = async () => {
       const { data, error } = await supabase

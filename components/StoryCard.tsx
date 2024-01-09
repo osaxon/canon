@@ -5,6 +5,7 @@ import { StackParams } from "../App";
 import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
 import { timeAgo } from "../utils/timeFunctions";
 import { Avatar } from "react-native-elements";
+import { useEffect, useState } from "react";
 
 const styles = StyleSheet.create({
   image: {
@@ -76,11 +77,11 @@ const StoryCard = ({
   storyData: { id, story_id, profile_id, created_at, image_url, comment_count, votes, profiles, stories },
 }: StoryCardProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
-
+  const [storyVotes, setStoryVotes] = useState(stories.votes);
   return (
     <>
       <View style={styles.storyCard}>
-        <TouchableOpacity onPress={() => navigation.navigate("FullStory", { story_id })}>
+        <TouchableOpacity onPress={() => navigation.navigate("FullStory", { story_id, storyVotes, setStoryVotes})}>
           <Image style={styles.image} source={{ uri: image_url! }} />
         </TouchableOpacity>
 
@@ -104,7 +105,7 @@ const StoryCard = ({
           />
           <View style={styles.MetadataBox}>
             <Text style={styles.text}>{`${profiles?.username} posted ${timeAgo(created_at)}`}</Text>
-            <Text style={styles.text}>{`${stories.comment_count} comments, ${stories.votes} votes`}</Text>
+            <Text style={styles.text}>{`${stories.comment_count} comments, ${storyVotes} votes`}</Text>
           </View>
         </View>
       </View>

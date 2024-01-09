@@ -11,6 +11,7 @@ import { Tables } from "../types/database";
 import React from "react";
 import Collapsible from "../components/Collapsible";
 import Votes from "../components/Votes";
+import { Button } from "@rneui/base";
 
 type Props = NativeStackScreenProps<StackParams, "FullStory">;
 const styles = StyleSheet.create({
@@ -29,7 +30,7 @@ interface Story extends Tables<"story_items"> {
 }
 
 const FullStory: React.FC<Props> = ({ route, navigation }) => {
-  const { story_id } = route.params;
+  const { story_id, storyVotes, setStoryVotes } = route.params;
   const [story, setStory] = useState<Story[] | null>(null);
   // const [votes, setVotes] = useState<number>(0);
   useEffect(() => {
@@ -54,7 +55,7 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
               <Collapsible title="comments">
                 <Comments story_id={story_id} />
               </Collapsible>
-              <Votes story_id={story_id} />
+              <Votes story_id={story_id} storyVotes = {storyVotes} setStoryVotes = {setStoryVotes} />
             </>
           }
         />
