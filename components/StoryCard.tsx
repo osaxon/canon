@@ -97,7 +97,7 @@ const StoryCard = (props: StoryCardProps) => {
         .eq("username", username);
 
       if (data && data.length > 0) {
-        setUserId(data[0].id);
+        setUserId(data[0].id as any);
       }
     } catch (error) {
       console.error("error: ", error);

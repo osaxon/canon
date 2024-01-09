@@ -42,8 +42,9 @@ const ProfilePic: React.FC<ProfilePicProps> = ({ userId }) => {
         if (error) {
           console.error("Error fetching avatar URL:", error);
         } else if (data && data.avatar_url) {
-        } setUsername(data.username)
+         setUsername(data.username)
           setAvatarUrl(data.avatar_url);
+        }
       }
     }
     fetchAvatarUrl();
