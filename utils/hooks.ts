@@ -1,31 +1,31 @@
 import { supabase } from "../lib/supabase";
-import { Tables } from "../types/database";
-import {
-    GenerateImageResponse,
-    ImageContext,
-    StoreImageProps,
-} from "../types/functions";
-import { storeImage } from "./supabase";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { ImageContext } from "../types/functions";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 export const useGetStories = () => {
-  return useQuery({
-    queryKey: ["stories"],
-    queryFn: async () => {
-      const { data } = await supabase.from("stories").select("*").throwOnError();
-      return data || [];
-    },
-  });
+    return useQuery({
+        queryKey: ["stories"],
+        queryFn: async () => {
+            const { data } = await supabase
+                .from("stories")
+                .select("*")
+                .throwOnError();
+            return data || [];
+        },
+    });
 };
 
 export const useGetComments = () => {
-  return useQuery({
-    queryKey: ["comments"],
-    queryFn: async () => {
-      const { data } = await supabase.from("comments").select("*").throwOnError();
-      return data || [];
-    },
-  });
+    return useQuery({
+        queryKey: ["comments"],
+        queryFn: async () => {
+            const { data } = await supabase
+                .from("comments")
+                .select("*")
+                .throwOnError();
+            return data || [];
+        },
+    });
 };
 
 /**
@@ -35,15 +35,18 @@ export const useGetComments = () => {
  * @returns array of comments
  */
 export const useGetStoryComments = (storyId: string) => {
-  return useQuery({
-    queryKey: ["story_comments", storyId],
-    queryFn: async () => {
-      const { data } = await supabase.from("comments").select("*").eq("story_item_id", storyId).throwOnError();
-      return data || [];
-    },
-  });
+    return useQuery({
+        queryKey: ["story_comments", storyId],
+        queryFn: async () => {
+            const { data } = await supabase
+                .from("comments")
+                .select("*")
+                .eq("story_item_id", storyId)
+                .throwOnError();
+            return data || [];
+        },
+    });
 };
-
 
 export const useNewStory = ({
     imageUrl,
@@ -64,5 +67,24 @@ export const useNewStory = ({
             });
         },
     });
-
 };
+
+export const useGetHomeFeed = () => {
+    return useQuery({
+        queryKey: ["story-items"],
+        queryFn: async () => {
+            const { data } = await supabase
+                .from("story_items")
+                .select(
+                    "*, profiles(username,avatar_url), stories(votes, comment_count)"
+                )
+                .order("created_at", { ascending: false })
+                .throwOnError();
+        },
+    });
+};
+
+// TODO add 'latest_img_url' to 'story' schema
+// will make it easier to manage the main home feed content
+// fetch all stories rather than story_items
+// when new story_item is added to story, update story with new url
