@@ -69,7 +69,7 @@ interface StoryCardProps {
         comment_count: number | null;
         votes: number;
         profiles: { username: string | null; avatar_url: string | null } | null;
-        stories : { votes: number | null; comment_count: number | null}
+        stories : { votes: number | null; comment_count: number | null; story_comments: [] | undefined}
     };
 }
 
@@ -88,6 +88,10 @@ const StoryCard = ({
 }: StoryCardProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
   const [storyVotes, setStoryVotes] = useState(stories.votes);
+  let commentText = "comments"
+  let voteText = "votes"
+  if(comment_count === 1){ commentText="comment"}
+  if(storyVotes === 1){ voteText="vote"}
   return (
     <>
       <View style={styles.storyCard}>
@@ -115,12 +119,11 @@ const StoryCard = ({
           />
           <View style={styles.MetadataBox}>
             <Text style={styles.text}>{`${profiles?.username} posted ${timeAgo(created_at)}`}</Text>
-            <Text style={styles.text}>{`${stories.comment_count} comments, ${storyVotes} votes`}</Text>
+            <Text style={styles.text}>{`${comment_count} ${commentText}, ${storyVotes} ${voteText}`}</Text>
           </View>
         </View>
       </View>
     </>
   );
 };
-
 export default StoryCard;
