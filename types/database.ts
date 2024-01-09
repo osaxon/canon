@@ -79,35 +79,35 @@ export interface Database {
         Row: {
           avatar_url: string | null
           bio: string | null
+          follower_count: number
           full_name: string | null
           id: string
           points: number | null
           rank: number | null
           updated_at: string | null
           username: string | null
-          follower_count: number
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          follower_count?: number
           full_name?: string | null
           id: string
           points?: number | null
           rank?: number | null
           updated_at?: string | null
           username?: string | null
-          follower_count?: number
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          follower_count?: number
           full_name?: string | null
           id?: string
           points?: number | null
           rank?: number | null
           updated_at?: string | null
           username?: string | null
-          follower_count?: number
         }
         Relationships: [
           {
@@ -121,27 +121,41 @@ export interface Database {
       }
       stories: {
         Row: {
-          comment_count: number | null
+          comment_count: number
           created_at: string | null
+          created_by: string | null
           id: number
+          image_context: Json | null
           theme: string | null
-          votes: number | null
+          votes: number
         }
         Insert: {
-          comment_count?: number | null
+          comment_count?: number
           created_at?: string | null
-          id: number
+          created_by?: string | null
+          id?: number
+          image_context?: Json | null
           theme?: string | null
-          votes?: number | null
+          votes?: number
         }
         Update: {
-          comment_count?: number | null
+          comment_count?: number
           created_at?: string | null
+          created_by?: string | null
           id?: number
+          image_context?: Json | null
           theme?: string | null
-          votes?: number | null
+          votes?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "stories_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       story_comments: {
         Row: {
@@ -223,34 +237,34 @@ export interface Database {
       }
       story_items: {
         Row: {
-          comment_count: number | null
+          comment_count: number
           created_at: string | null
           id: number
-          image_url: string | null
+          image_url: string
           profile_id: string | null
-          prompt: string | null
-          story_id: number | null
-          votes: number | null
+          prompt: string
+          story_id: number
+          votes: number
         }
         Insert: {
-          comment_count?: number | null
-          created_at?: string | null
-          id: number
-          image_url?: string | null
-          profile_id?: string | null
-          prompt?: string | null
-          story_id?: number | null
-          votes?: number | null
-        }
-        Update: {
-          comment_count?: number | null
+          comment_count?: number
           created_at?: string | null
           id?: number
-          image_url?: string | null
+          image_url: string
           profile_id?: string | null
-          prompt?: string | null
-          story_id?: number | null
-          votes?: number | null
+          prompt: string
+          story_id: number
+          votes?: number
+        }
+        Update: {
+          comment_count?: number
+          created_at?: string | null
+          id?: number
+          image_url?: string
+          profile_id?: string | null
+          prompt?: string
+          story_id?: number
+          votes?: number
         }
         Relationships: [
           {
@@ -274,7 +288,20 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment: {
+        Args: {
+          x: number
+          row_id: number
+        }
+        Returns: undefined
+      }
+      incrementstoryvotes: {
+        Args: {
+          x: number
+          row_id: number
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "center",
     justifyContent: "flex-end",
-    borderRadius: 10,
+    borderRadius: 20,
     marginTop: 5,
     margin: 10,
   },
@@ -97,7 +97,7 @@ export default function AddToStory() {
           style={styles.inputBox}
           value={input}
           onChangeText={setInput}
-          placeholder="Add to story..."
+          placeholder="Write what you think should happen next..."
           multiline
         />
         <Button style={styles.submitButton} title="Submit" onPress={onSubmit} />
