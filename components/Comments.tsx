@@ -10,6 +10,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
 import React from "react";
 import AddComment from "../components/AddComment";
+import DeleteComment from "./DeleteComment";
 
 const styles = StyleSheet.create({
   avatarBox: {
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   text: {
-    fontSize:"1em" as any
+    fontSize:"20em" as any
   },
   avatarTextBox: {
     boxSixing: "border-box",
@@ -98,6 +99,7 @@ function Comments(props: CommentsProps) {
                 comment.created_at
               )}`}</Text>
               <Text style={styles.text}>{comment.content}</Text>
+              <DeleteComment profile_id = {comment.profile_id} comment_id = {comment.id} setComments={setComments}/>
             </View>
           </View>
         )}
