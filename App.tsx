@@ -41,8 +41,7 @@ export type StackParams = {
   StoryConfirm: { story_id: number };
   FullStory: {
     story_id: number;
-    storyVotes: number | null;
-    setStoryVotes: (val: number) => void;
+    votes: number;
   };
   StoryComments: { story_id: number };
   CreateNew: undefined; // TODO may need to add story_id as a param to make route re-usable for adding to existing story
@@ -60,8 +59,7 @@ export type StoriesStackParams = {
   StoryConfirm: { story_id: number };
   FullStory: {
     story_id: number;
-    storyVotes: number | null;
-    setStoryVotes: (val: number) => void;
+    votes: number;
   };
   StoryComments: { story_id: number };
 };
