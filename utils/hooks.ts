@@ -197,7 +197,7 @@ export const useNewStory = ({ imageData, userId }: NewStoryInputs) => {
 
       return { story, storyItem } || [];
     },
-    onSuccess: () => navigation?.navigate("Explore"),
+    onSuccess: () => navigation?.navigate("StoriesStack", {screen: "Stories"}),
     onError: (error) => console.error(error),
   });
 };
