@@ -65,6 +65,7 @@ export default function StoryItemVotes({ story_item_id, story_item_votes }: Stor
     const [votes, setVotes] = useState<number | null>(null);
     const [upVoted, setUpVoted] = useState(false)
     const [downVoted, setDownVoted] = useState(false)
+    
   const vote = async (direction: string, inc: number) => {
     if(direction === "up"){
         setUpVoted(!upVoted && !downVoted)
@@ -101,7 +102,7 @@ export default function StoryItemVotes({ story_item_id, story_item_votes }: Stor
         }
       }} />
       <View>
-      <Text style= {styles.text}>{votes? votes : story_item_votes}</Text>
+      <Text style= {styles.text}>{votes || votes === 0? votes : story_item_votes}</Text>
       </View>
       <Button  icon={<Icon name="thumb-down-alt" size={20}  />} style={downVoted ? styles.downVoteOn : styles.downVoteOff} type = {"clear"} onPress={() => {
         if(downVoted){

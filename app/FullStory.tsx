@@ -88,7 +88,6 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
       )}
       ListFooterComponent={
         <>
-          {/* THE PREVIEW OF THE NEXT IMAGE IN THE SCENE */}
           <AddToStory
             generate={generate}
             nextImage={nextImage}

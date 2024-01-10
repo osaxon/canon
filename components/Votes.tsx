@@ -102,7 +102,7 @@ export default function Votes({ story_id, storyVotes }: votesProps) {
         }
       }} />
       <View>
-      <Text style= {styles.text}>{votes ? votes : storyVotes}</Text>
+      <Text style= {styles.text}>{votes || votes === 0 ? votes : storyVotes}</Text>
       </View>
       <Button  icon={<Icon name="thumb-down-alt" size={20}  />} style={downVoted ? styles.downVoteOn : styles.downVoteOff} type = {"clear"} onPress={() => {
         if(downVoted){
