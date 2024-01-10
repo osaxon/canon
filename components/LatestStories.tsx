@@ -74,7 +74,7 @@ const LatestStories: React.FC<LatestStoriesProps> = ({ userId }) => {
         <View style={styles.storyContainer}>
           {images.map((item) => (
             <TouchableOpacity 
-            onPress={() => navigation.navigate("FullStory", {story_id: item.id, storyVotes: item.votes, setStoryVotes: item.votes})}
+            onPress={() => navigation.navigate("FullStory", {story_id: item.id, votes: item.votes})}
             >
               <Image
                 key={item.first_image_url}

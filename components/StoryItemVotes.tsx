@@ -59,11 +59,10 @@ const styles = StyleSheet.create({
 interface StoryItemVotesProps {
   story_item_votes: number | null
   story_item_id: number;
-//   setStoryVotes: any
 }
 
 export default function StoryItemVotes({ story_item_id, story_item_votes }: StoryItemVotesProps) {
-    const [votes, setVotes] = useState<number | null>(story_item_votes);
+    const [votes, setVotes] = useState<number | null>(null);
     const [upVoted, setUpVoted] = useState(false)
     const [downVoted, setDownVoted] = useState(false)
   const vote = async (direction: string, inc: number) => {
@@ -75,12 +74,21 @@ export default function StoryItemVotes({ story_item_id, story_item_votes }: Stor
         setUpVoted(false)
         setDownVoted(!upVoted && !downVoted)
     }
+    if(votes){
     const { data, error } = await supabase
       .from("story_items")
       .update({ votes: votes! + inc })
       .eq("id", story_item_id)
       .select();
       setVotes(data![0].votes)
+    } else {
+      const { data, error } = await supabase
+        .from("story_items")
+        .update({ votes: story_item_votes! + inc })
+        .eq("id", story_item_id)
+        .select();
+        setVotes(data![0].votes)
+      }
   };
 
   return (
@@ -93,7 +101,7 @@ export default function StoryItemVotes({ story_item_id, story_item_votes }: Stor
         }
       }} />
       <View>
-      <Text style= {styles.text}>{votes}</Text>
+      <Text style= {styles.text}>{votes? votes : story_item_votes}</Text>
       </View>
       <Button  icon={<Icon name="thumb-down-alt" size={20}  />} style={downVoted ? styles.downVoteOn : styles.downVoteOff} type = {"clear"} onPress={() => {
         if(downVoted){
