@@ -36,7 +36,6 @@ export default function Votes({ story_id, storyVotes }: votesProps) {
       marginLeft: "38%",
       marginRight: "38%",
       borderRadius: 10,
-      borderWidth:2,
       backgroundColor: theme.colors?.grey2,
       padding: 0
     },

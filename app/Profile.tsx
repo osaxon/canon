@@ -9,6 +9,7 @@ import { supabase } from "../lib/supabase";
 import ProfilePic from "../components/ProfilePic";
 import UserInfo from "../components/UserInfo";
 import LatestStories from "../components/LatestStories";
+import ScreenBackground from "../components/ScreenBackground";
 
 export default function Profile() {
 
@@ -24,16 +25,12 @@ export default function Profile() {
     });
   }, []);
 
-  console.log(session, '<-- session from profile')
-
   return (
-    <>
       <View style={styles.container}>
         <ProfilePic userId={session?.user.id}/>
         <UserInfo userId={session?.user.id} />
         <LatestStories userId={session?.user.id} />
       </View>
-    </>
   );
 }
 

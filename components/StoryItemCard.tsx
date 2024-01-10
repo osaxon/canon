@@ -1,13 +1,11 @@
-import React from 'react'
+import React from "react";
 import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
 import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
 import { timeAgo } from "../utils/timeFunctions";
-import { Avatar,  Divider, useTheme } from "@rneui/themed";
-import StoryItemVotes from './StoryItemVotes';
-
-
+import { Avatar, Divider, useTheme } from "@rneui/themed";
+import StoryItemVotes from "./StoryItemVotes";
 
 interface StoryItemCardProps {
   storyItemData: {
@@ -35,12 +33,12 @@ const StoryItemCard = ({
     comment_count,
     votes,
     prompt,
-    profiles
+    profiles,
   },
 }: StoryItemCardProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
-  
-  const { theme, updateTheme } = useTheme()
+
+  const { theme, updateTheme } = useTheme();
 
   const styles = StyleSheet.create({
     image: {
@@ -52,23 +50,23 @@ const StoryItemCard = ({
     },
     text: {
       margin: 0,
-      marginLeft:5,
-      marginTop:5,
+      marginLeft: 5,
+      marginTop: 5,
       padding: 0,
       textAlign: "left",
       maxWidth: "100%",
     },
     promptText: {
       margin: 0,
-      marginLeft:5,
+      marginLeft: 5,
       padding: 0,
       textAlign: "left",
       maxWidth: "100%",
-      marginBottom:5,
+      marginBottom: 5,
     },
     StoryItemCard: {
       boxSixing: "border-box",
-      flex:1,
+      flex: 1,
       flexDirection: "column",
       alignContent: "center",
       justifyContent: "center",
@@ -77,8 +75,8 @@ const StoryItemCard = ({
       width: "100%",
       maxWidth: 540,
       height: "auto",
-      marginTop: 45,
-      marginBottom: 70,
+      marginTop: 55,
+      marginBottom: 100,
       margin: "auto",
     },
     avatarMetadataBox: {
@@ -89,69 +87,69 @@ const StoryItemCard = ({
       borderColor: theme.colors?.grey2,
       borderStyle: "solid",
       backgroundColor: theme.colors?.grey4,
-      borderWidth:1,
+      borderWidth: 1,
     },
     metadataVotesBox: {
       flexDirection: "row",
       alignContent: "center",
       justifyContent: "flex-start",
-      overflow: "hidden", 
+      overflow: "hidden",
     },
-   votesContainer: {
-    padding:0,
-    margin:5,
-    marginLeft:"auto",
-    marginRight:"auto",
+    votesContainer: {
+      padding: 0,
+      margin: 5,
+      marginLeft: "auto",
+      marginRight: "auto",
     },
     metadataBox: {
-      marginLeft:5,
-      padding:5,
-      marginRight:"auto",
-      width: "100%", 
-      maxWidth: "82%", 
+      marginLeft: 5,
+      padding: 5,
+      marginRight: "auto",
+      width: "100%",
+      maxWidth: "82%",
     },
   });
-  
+
   return (
     <>
       <View style={styles.StoryItemCard}>
-          <Image style={styles.image} source={{ uri: image_url! }} />
+        <Image style={styles.image} source={{ uri: image_url! }} />
 
         <View style={styles.avatarMetadataBox}>
           <Avatar
-          onPress={() => navigation.navigate("UserProfile", { user_id: profile_id })}
+            onPress={() =>
+              navigation.navigate("UserProfile", { user_id: profile_id })
+            }
             size={"medium"}
             rounded
             containerStyle={{
               borderColor: "slategrey",
               borderStyle: "solid",
               borderWidth: 2,
-              marginTop:5,
-              marginBottom:5,
-              marginLeft:5,
-              backgroundColor:"white",
+              marginTop: 5,
+              marginBottom: 5,
+              marginLeft: 5,
+              backgroundColor: "white",
             }}
             source={{
               uri: profiles?.avatar_url
                 ? profiles?.avatar_url
                 : "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
-              }}
+            }}
           />
           <View style={styles.metadataBox}>
-          <Text
-          style={styles.promptText}
-        >{`"${prompt}"`}</Text>
-        <Divider/>
-        <View style={styles.metadataVotesBox}>
-          <Text
-            style={styles.text}
-          >{`${profiles?.username} posted ${timeAgo(created_at)}`}</Text>
-          <Divider/>
-          <View style={styles.votesContainer}>
-            <StoryItemVotes  story_item_id={id} story_item_votes={votes}/>
+            <Text style={styles.promptText}>{`"${prompt}"`}</Text>
+            <Divider />
+            <View style={styles.metadataVotesBox}>
+              <Text style={styles.text}>{`${
+                profiles?.username
+              } posted ${timeAgo(created_at)}`}</Text>
+              <Divider />
+              <View style={styles.votesContainer}>
+                <StoryItemVotes story_item_id={id} story_item_votes={votes} />
+              </View>
+            </View>
           </View>
-          </View>
-                </View>
         </View>
       </View>
     </>

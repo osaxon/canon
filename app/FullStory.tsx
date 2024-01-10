@@ -13,6 +13,8 @@ import { Json, Tables } from "../types/database";
 import { useFullStory } from "../utils/hooks";
 import { generateNextImage, storeImage } from "../utils/supabase";
 import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
+import { StyleSheet, View } from "react-native";
+import { useTheme } from "@rneui/themed";
 
 type Props = NativeStackScreenProps<StackParams, "FullStory">;
 
@@ -67,7 +69,21 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
   const { story_id, votes } = route.params;
 
   const { data: fullStory, refetch } = useFullStory(story_id);
-
+  const { theme, updateTheme } = useTheme();
+  const styles = StyleSheet.create({
+    votesContainer: {
+      flex:1,
+      alignItems:"center",
+      justifyContent:"center",
+      padding: "auto",
+      borderColor: theme.colors?.grey4,
+      borderStyle: "solid",
+      marginLeft: "auto",
+      marginRight: "auto",
+      paddingBottom: 5,
+      backgroundColor: theme.colors?.grey4,
+    },
+  })
   const {
     mutate: generate,
     data: nextImage,
@@ -92,6 +108,12 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
         renderItem={({ item: storyItem }) => (
           <StoryItemCard storyItemData={storyItem as any} />
         )}
+        ListHeaderComponent={
+          <View style={styles.votesContainer}>
+            <Votes story_id={story_id} storyVotes={votes} />
+          </View>
+
+        }
         ListFooterComponent={
           <>
             <AddToStory
@@ -105,7 +127,6 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
             <Collapsible title="Comments" icon="chat">
               <Comments story_id={story_id} />
             </Collapsible>
-            <Votes story_id={story_id} storyVotes={votes} />
           </>
         }
       />

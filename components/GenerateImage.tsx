@@ -2,17 +2,13 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Session } from "@supabase/supabase-js";
 import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  StyleSheet,
-  View,
-} from "react-native";
-import { Button, Card, Image, Text } from "@rneui/themed";
+import { ActivityIndicator, View, StyleSheet } from "react-native";
+import { Button, Card, Image, Text, useTheme } from "react-native-elements";
 import { supabase } from "../lib/supabase";
 import { ImageData } from "../types/functions";
 import { useNewStory } from "../utils/hooks";
 import { generateImage, storeImage } from "../utils/supabase";
+import ScreenBackground from "./ScreenBackground";
 
 const generateAndStoreImage = async () => {
   const fileName = `generated_images/image-${new Date().valueOf()}.jpg`;
@@ -49,8 +45,74 @@ const generateAndStoreImage = async () => {
 };
 
 export default function GenerateImage() {
+  const { theme, updateTheme } = useTheme();
   const [session, setSession] = useState<Session | null>(null);
-
+  const styles = StyleSheet.create({
+    generatorCard: {
+      boxSixing: "border-box",
+      flex: 1,
+      flexDirection: "column",
+      alignContent: "center",
+      justifyContent: "center",
+      minWidth: "auto",
+      width: "auto",
+      maxWidth: 1080,
+      height: "auto",
+      maxheight: "100%",
+      margin: "auto",
+      padding: 10,
+      
+    },
+    imageContainer: {
+      maxWidth: "100%",
+      maxHeight: "100%",
+      margin: 0,
+      backgroundColor: theme.colors?.grey4,
+      borderStyle:"solid",
+      borderLeftWidth:1,
+      borderLeftColor:theme.colors?.grey2,
+      borderRightWidth:1,
+      borderRightColor:theme.colors?.grey2,
+    },
+    image: {
+      maxWidth: "100%",
+      maxHeight: "100%",
+      aspectRatio: 1,
+      margin: 0,
+    },
+    buttons: {
+      display: "flex",
+      flexDirection: "row",
+      width: "100%",
+      backgroundColor: theme.colors?.grey4,
+      borderStyle:"solid",
+      borderBottomWidth:1,
+      borderBottomColor:theme.colors?.grey2,
+    },
+    text: {
+      fontWeight:"bold",
+      fontSize:16,
+      overflow:"scroll",
+      color: theme.colors?.black,
+      textAlign: "center",
+      maxWidth: 540,
+      padding:5,
+    },
+    textContainer: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems:"center",
+      justifyContent: "flex-start",
+      marginBottom:50,
+      paddingTop:50,
+      paddingLeft:20,
+      paddingRight:20,
+      backgroundColor: theme.colors?.grey4,
+      borderStyle:"solid",
+      borderTopWidth:1,
+      borderTopColor:theme.colors?.grey2,
+        }
+  });
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -99,74 +161,52 @@ export default function GenerateImage() {
   console.log(image, "<--- the image");
 
   return (
-    <SafeAreaView style={styles.container}>
-      {image ? (
-        <Image
-          style={styles.image}
-          source={{
-            cache: "reload",
-            uri: image && image.publicUrl,
-          }}
-          PlaceholderContent={<ActivityIndicator />}
-        />
-      ) : (
-        <Card.FeaturedSubtitle style={styles.image}>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 20,
-              justifyContent: "center",
-            }}
-          >
-            <Text h2 style={{ textAlign: "center", opacity: 0.5 }}>
-              Click generate to create a unique image using AI to start a new
-              story!
-            </Text>
-            <Text h2 style={{ textAlign: "center", opacity: 0.5 }}>
-              Share the generated image as a starting point and invite friends
-              to contibute to the story.
-            </Text>
-          </View>
-        </Card.FeaturedSubtitle>
-      )}
+    <ScreenBackground>
+      <View style={styles.generatorCard}>
+        <View style={styles.imageContainer}>
+          {image ? (
+            <Image
+              style={styles.image}
+              source={{
+                cache: "reload",
+                uri: image && image.publicUrl,
+              }}
+              PlaceholderContent={<ActivityIndicator />}
+            />
+          ) : (
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>
+                  Click generate to create a unique image using AI to start a
+                  new story!
+                </Text>
+                <Text style={styles.text}>
+                  Share the generated image as a starting point and invite
+                  friends to contibute to the story.
+                </Text>
+              </View>
+          )}
+        </View>
 
-      <Card.FeaturedSubtitle>{image && image.publicUrl}</Card.FeaturedSubtitle>
-      <View style={styles.buttons}>
-        <Button
-          type="solid"
-          onPress={() => generate()}
-          containerStyle={{ padding: 5, flexGrow: 1 }}
-          loading={newImageStatus === "pending"}
-          title={image?.publicUrl ? "Re-generate" : "Generate"}
-        />
-        <Button
-          type="outline"
-          containerStyle={{ padding: 5, flexGrow: 1 }}
-          onPress={() => share()}
-          disabled={!image?.publicUrl}
-          title="Share"
-        />
+        <View>
+          {image && image.publicUrl}
+        </View>
+        <View style={styles.buttons}>
+          <Button
+            type="solid"
+            onPress={() => generate()}
+            containerStyle={{ padding: 5, flexGrow: 1 }}
+            loading={newImageStatus === "pending"}
+            title={image?.publicUrl ? "Re-generate" : "Generate"}
+          />
+          <Button
+            type="outline"
+            containerStyle={{ padding: 5, flexGrow: 1 }}
+            onPress={() => share()}
+            disabled={!image?.publicUrl}
+            title="Share"
+          />
+        </View>
       </View>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    padding: 6,
-  },
-  image: {
-    maxWidth: "100%",
-    maxHeight: "100%",
-    borderRadius: 10,
-    aspectRatio: 1,
-    margin: 0,
-  },
-  buttons: {
-    display: "flex",
-    flexDirection: "row",
-    width: "100%",
-  },
-});

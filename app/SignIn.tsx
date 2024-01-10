@@ -3,6 +3,7 @@ import { Alert, StyleSheet, View } from "react-native";
 import { Button, Input, Text } from "@rneui/themed";
 import { supabase } from "../lib/supabase";
 import Auth from "./Auth";
+import ScreenBackground from "../components/ScreenBackground";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -37,6 +38,7 @@ export default function SignIn() {
   }
 
   return (
+    <ScreenBackground>
     <View style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
@@ -75,6 +77,7 @@ export default function SignIn() {
       </View>
       <Auth />
     </View>
+    </ScreenBackground>
   );
 }
 

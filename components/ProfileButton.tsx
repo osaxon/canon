@@ -6,7 +6,6 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/core";
 import { supabase } from "../lib/supabase";
 
-StyleSheet;
 export default function ProfileButton(props: any) {
   const { theme, updateTheme } = useTheme();
   const styles = StyleSheet.create({
