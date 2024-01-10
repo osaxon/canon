@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, View } from "react-native";
+import { Button } from '@rneui/themed';
 import { StackParams } from "../App";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/core";

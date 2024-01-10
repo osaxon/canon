@@ -6,6 +6,7 @@ import { supabase } from "../lib/supabase";
 import { Database, Tables } from "../types/database";
 import { useGetStories, useRefreshOnFocus } from "../utils/hooks";
 import { queryClient } from "../App";
+import ScreenBackground from "../components/ScreenBackground";
 
 const styles = StyleSheet.create({
   container: {
@@ -23,7 +24,7 @@ export default function Stories() {
   useRefreshOnFocus(refetch);
 
   return (
-    <>
+    <ScreenBackground>
       {stories ? (
         <FlatList
           data={stories}
@@ -38,6 +39,6 @@ export default function Stories() {
           }}
         />
       ) : null}
-    </>
+    </ScreenBackground>
   );
 }

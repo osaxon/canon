@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Avatar } from "react-native-elements";
+import { Avatar } from "@rneui/themed";
 import { StackParams } from "../App";
 import { timeAgo } from "../utils/timeFunctions";
 import { Tables } from "../types/database";
@@ -12,29 +12,28 @@ import { supabase } from "../lib/supabase";
 const styles = StyleSheet.create({
   image: {
     maxWidth: "100%",
-    width: 1000,
+    width: 1080,
     maxHeight: "100%",
     height: "auto",
-    // borderRadius: 10,
     aspectRatio: 1,
   },
   text: {
     margin: 0,
     marginLeft: 5,
     padding: 0,
-    textAlign: "center",
+    textAlign: "left",
     maxWidth: "100%",
   },
   storyCard: {
     boxSixing: "border-box",
-    display: "flex",
+    flex:1,
     flexDirection: "column",
     alignContent: "center",
     justifyContent: "center",
     aspectRatio: 1,
     minWidth: "50%",
     width: "100%",
-    maxWidth: 500,
+    maxWidth: 540,
     height: "auto",
     maxheight: "100%",
     marginTop: 45,
@@ -49,11 +48,10 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   MetadataBox: {
-    // backgroundColor: "lightgrey",
     borderColor: "silver",
     borderStyle: "solid",
+    backgroundColor:"darkgrey",
     borderWidth:1,
-    // borderRadius: 10,
     marginLeft: 5,
     marginTop: 5,
     padding: 5,

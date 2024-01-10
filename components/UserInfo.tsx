@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { Session } from "@supabase/supabase-js";
 import Following from "./Following";
 import Followers from "./Followers";
-import { Overlay } from "react-native-elements";
+import { Overlay } from "@rneui/themed";
 
 interface UserInfoProps {
   userId: any;

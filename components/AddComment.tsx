@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import { Avatar, Button, Input } from "react-native-elements";
+import { Avatar, Button, Input } from "@rneui/themed";
 import React from "react";
 import Error from "./Error";
 import { supabase } from "../lib/supabase";

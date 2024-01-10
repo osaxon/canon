@@ -1,4 +1,4 @@
-import { Text } from "react-native-elements";
+import { Text } from "@rneui/themed";
 import React from "react";
 
 type ErrorProps = {

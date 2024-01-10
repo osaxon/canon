@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from "react";
 import { View } from "react-native";
-import { Text } from "react-native-elements";
+import { Text } from "@rneui/themed";
 import { supabase } from "../lib/supabase";
 
 export default function HelloWorld() {

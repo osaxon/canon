@@ -4,16 +4,15 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
 import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
 import { timeAgo } from "../utils/timeFunctions";
-import { Avatar,  Divider } from "react-native-elements";
+import { Avatar,  Divider } from "@rneui/themed";
 import StoryItemVotes from './StoryItemVotes';
 
 const styles = StyleSheet.create({
   image: {
     maxWidth: "100%",
-    width: 1000,
+    width: 1080,
     maxHeight: "100%",
     height: "auto",
-    borderRadius: 10,
     aspectRatio: 1,
   },
   text: {
@@ -34,16 +33,15 @@ const styles = StyleSheet.create({
   },
   StoryItemCard: {
     boxSixing: "border-box",
-    display: "flex",
+    flex:1,
     flexDirection: "column",
     alignContent: "center",
     justifyContent: "center",
     aspectRatio: 1,
     minWidth: "50%",
     width: "100%",
-    maxWidth: 500,
+    maxWidth: 540,
     height: "auto",
-    maxheight: "100%",
     marginTop: 45,
     marginBottom: 80,
     margin: "auto",
@@ -52,15 +50,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "center",
     justifyContent: "flex-start",
-    borderRadius: 10,
     overflow: "hidden", 
   },
+  metadataVotesBox: {
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "flex-start",
+    overflow: "hidden", 
+  },
+ votesContainer: {
+  padding:0,
+  margin:5,
+  marginLeft:"auto",
+  marginRight:"auto",
+  },
   metadataBox: {
-    backgroundColor: "lightgrey",
+    backgroundColor:"lightgrey",
     borderColor: "silver",
     borderStyle: "solid",
     borderWidth:1,
-    borderRadius: 10,
     marginLeft:5,
     marginTop:5,
     padding:5,
@@ -121,20 +129,24 @@ const StoryItemCard = ({
               uri: profiles?.avatar_url
                 ? profiles?.avatar_url
                 : "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
-            }}
+              }}
           />
           <View style={styles.metadataBox}>
           <Text
           style={styles.promptText}
         >{`"${prompt}"`}</Text>
         <Divider/>
+        <View style={styles.metadataVotesBox}>
           <Text
             style={styles.text}
           >{`${profiles?.username} posted ${timeAgo(created_at)}`}</Text>
           <Divider/>
-          <StoryItemVotes story_item_id={id} story_item_votes={votes}/>
+          <View style={styles.votesContainer}>
+            <StoryItemVotes  story_item_id={id} story_item_votes={votes}/>
+
           </View>
-    
+          </View>
+                </View>
         </View>
       </View>
     </>

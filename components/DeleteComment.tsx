@@ -1,4 +1,4 @@
-import { Text, Button, Icon } from "react-native-elements";
+import { Text, Button, Icon } from "@rneui/themed";
 import { View, StyleSheet } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";

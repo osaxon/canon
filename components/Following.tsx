@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { supabase } from "../lib/supabase";
-import { Avatar } from "react-native-elements";
+import { Avatar } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";

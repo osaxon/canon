@@ -8,7 +8,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { Button, Card, Image, Text } from "react-native-elements";
+import { Button, Card, Image, Text } from "@rneui/themed";
 import { supabase } from "../lib/supabase";
 import { ImageData } from "../types/functions";
 import { useNewStory } from "../utils/hooks";

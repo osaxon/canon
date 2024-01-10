@@ -18,6 +18,10 @@ const styles = StyleSheet.create({
         padding:0,
         borderRadius: 20,
       },
+      buttonContainer:{
+        padding:0,
+        borderRadius:10,
+      },
       textAndButton: {
         margin:"auto",
         marginBottom:10,
@@ -45,18 +49,20 @@ const styles = StyleSheet.create({
     })
 
 const Collapsible= ({children, title, icon}: CollapsibleProps) => {
-    const [isCollapsed, setIsCollapsed] = useState(true)
+    const [isCollapsed, setIsCollapsed] = useState(false)
     const toggleComments = () => {
         setIsCollapsed(!isCollapsed)
     }
     return (<>
         <View style={styles.textAndButton}>
         <Text style={styles.text}>{title+" "}<MaterialIcons name={icon} color={"white"} size={18} /></Text>
+        <View style={styles.buttonContainer}>
         <Button size={"sm"} style={styles.showCommentButton} onPress={toggleComments} >
         {isCollapsed ? 
         <MaterialIcons name={"expand-more"} color={"white"} size={22} />: 
         <MaterialIcons name={"expand-less"} color={"white"} size={22} />}
         </Button>
+        </View>
         </View>
         {isCollapsed ? null : children}
     </>)

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
-import { Avatar } from "react-native-elements";
+import { Avatar } from "@rneui/themed";
 import { Tables } from "../types/database";
 import { supabase } from "../lib/supabase";
 import { Text, StyleSheet } from "react-native";

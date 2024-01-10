@@ -1,11 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ThemeProvider, createTheme } from "@rneui/themed";
 import { Session } from "@supabase/supabase-js";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
 import FullStory from "./app/FullStory";
 import Profile from "./app/Profile";
 import SignIn from "./app/SignIn";
@@ -20,15 +18,8 @@ import { supabase } from "./lib/supabase";
 import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Votes from "./components/Votes";
-
-const theme = createTheme({
-  mode: "dark",
-  components: {
-    Button: {
-      raised: true,
-    },
-  },
-});
+import NavigationThemer from "./theme/NavigationThemer";
+import RneuiThemer from "./theme/RneuiThemer";
 
 export type StackParams = {
   Home: any;
@@ -92,6 +83,8 @@ export default function App() {
   }, []);
 
   const StoriesScreenStack = () => {
+   
+
     return (
       <StoriesStack.Navigator
       screenOptions={{
@@ -99,7 +92,9 @@ export default function App() {
           <ProfileButton session={session?.access_token} />
         ),
       }}>
+
         <StoriesStack.Screen name="Stories" component={Stories} />
+
         <StoriesStack.Screen
           name="StoryAdd"
           component={StoryAdd}
@@ -167,14 +162,16 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <NavigationContainer>
+      <RneuiThemer>
+        <NavigationThemer>
           <Stack.Navigator
             initialRouteName="Explore"
             screenOptions={{
               headerShown: false,
             }}
+            
           >
+
             <Stack.Screen
               name="StoriesStack"
               component={StoriesScreenStack}
@@ -185,6 +182,7 @@ export default function App() {
                 ),
               }}
             />
+
             <Stack.Screen
               name="ProfileStack"
               component={ProfileScreenStack}
@@ -206,16 +204,11 @@ export default function App() {
               }}
             />
           </Stack.Navigator>
-        </NavigationContainer>
-      </ThemeProvider>
+        </NavigationThemer>
+      </RneuiThemer>
     </QueryClientProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+
+
