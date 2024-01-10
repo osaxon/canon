@@ -85,19 +85,6 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
             }),
     });
 
-    // useEffect(() => {
-    //     const getStory = async () => {
-    //         const { data, error } = await supabase
-    //             .from("story_items")
-    //             .select(
-    //                 "*, profiles(username,avatar_url), stories(comment_count, votes)"
-    //             )
-    //             .eq("story_id", story_id);
-    //         setStory(data);
-    //     };
-    //     getStory();
-    // }, []);
-
     return (
         <FlatList
             data={fullStory?.storyItems.sort((a,b) => {
