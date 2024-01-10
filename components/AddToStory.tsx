@@ -194,39 +194,43 @@ export default function AddToStory({
             </>
           )}
           <View style={styles.buttons}>
-            {nextImage && (
+            {nextImage ? (
+              <>
+                <Button
+                  style={styles.cancelButton}
+                  title="Cancel"
+                  buttonStyle={{ backgroundColor: "red" }}
+                  onPress={reset}
+                />
+                <Button
+                  style={styles.generateSubmitButton}
+                  title={"Submit"}
+                  onPress={() => {
+                    addNewStoryItem(
+                      nextImage.prompt,
+                      nextImage.publicUrl,
+                      session?.user.id!,
+                      story_id
+                    )
+                      .then(() => reset())
+                      .then(() => {
+                        refetch();
+                      });
+                  }}
+                />
+              </>
+            ) : (
               <Button
-                style={styles.cancelButton}
-                title="Cancel"
-                buttonStyle={{ backgroundColor: "red" }}
-                onPress={reset}
+                style={styles.generateSubmitButton}
+                title={"Generate"}
+                onPress={() => {
+                  generate({ prompt: input });
+                  setInput("");
+                }}
+                disabled={!session || !input || nextImageStatus === "pending"}
+                loading={nextImageStatus === "pending"}
               />
             )}
-            <Button
-              style={styles.generateSubmitButton}
-              title={nextImage && session ? "Submit" : "Generate"}
-              onPress={
-                nextImage && session
-                  ? () => {
-                      addNewStoryItem(
-                        nextImage.prompt,
-                        nextImage.publicUrl,
-                        session?.user.id!,
-                        story_id
-                      )
-                        .then(() => reset())
-                        .then(() => {
-                          refetch();
-                        });
-                    }
-                  : () => {
-                      generate({ prompt: input });
-                      setInput("");
-                    }
-              }
-              disabled={!session || !input || nextImageStatus === "pending"}
-              loading={nextImageStatus === "pending"}
-            />
           </View>
         </View>
       </View>
