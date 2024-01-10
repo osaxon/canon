@@ -8,19 +8,19 @@ import { Session } from "@supabase/supabase-js";
 import { Tables } from "../types/database";
 import { Dispatch, SetStateAction } from "react";
 import { useTheme } from "@rneui/themed";
+import { Comment } from "./Comments";
 
-interface Comment extends Tables<"story_comments"> {
-  profiles: { username: string | null; avatar_url: string | null } | null;
-}
+// interface Comment extends Tables<"story_comments"> {
+//   profiles: { username: string | null; avatar_url: string | null } | null;
+// }
 
 interface CommentsProps {
   story_id: number;
+  comments: Comment [] | null
   setComments: Dispatch<SetStateAction<Comment[] | null>>;
 }
 
-
-
-export default function AddComment({ story_id, setComments }: CommentsProps) {
+export default function AddComment({ story_id, comments, setComments }: CommentsProps) {
   const [input, setInput] = useState("");
   const [inputError, setInputError] = useState(false);
   const [sessionError, setSessionError] = useState(false);
@@ -60,6 +60,11 @@ export default function AddComment({ story_id, setComments }: CommentsProps) {
             profile_id: session.user.id,
           })
           .select("*,profiles(username,avatar_url)");
+         await supabase
+        .from("stories")
+        .update({ comment_count: comments!.length + 1 })
+        .eq("id", story_id)
+        .select();
         setComments((currComments) => {
           const newComments = [];
           if (data !== null) {
@@ -98,6 +103,7 @@ export default function AddComment({ story_id, setComments }: CommentsProps) {
       justifyContent: "flex-start",
       height: "auto",
       maxheight: "100%",
+      marginTop:20,
       margin: 0,
       marginLeft: 5,
       width: "100%",
@@ -173,8 +179,8 @@ export default function AddComment({ story_id, setComments }: CommentsProps) {
         {!inputError ? null : <Error message="Please add text" />}
         {!sessionError ? null : <Error message="Please sign-in" />}
         {!requestFailed ? null : <Error message="Sorry request failed" />}
-        <View style={styles.submitButtonContainer} >
-        <Button title="Submit" onPress={onSubmit} />
+        <View style={styles.submitButtonContainer}>
+        <Button title={`Submit ${comments?.length ? comments?.length : 0 }` } onPress={onSubmit} />
         </View>
       </View>
     </View>

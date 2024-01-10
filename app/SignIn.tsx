@@ -1,11 +1,34 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
-import { Button, Input, Text } from "@rneui/themed";
+import { Button, Input, Text, useTheme } from "@rneui/themed";
 import { supabase } from "../lib/supabase";
 import Auth from "./Auth";
 import ScreenBackground from "../components/ScreenBackground";
 
 export default function SignIn() {
+  const { theme, updateTheme } = useTheme()
+  const styles = StyleSheet.create({
+    container: {
+      marginTop: 40,
+      padding: 14,
+      backgroundColor:theme.colors?.grey4
+    },
+    verticallySpaced: {
+      paddingTop: 4,
+      paddingBottom: 4,
+      alignSelf: "stretch",
+    },
+    signOut: {
+      paddingTop: 4,
+      paddingBottom: 8,
+      textAlign: "center",
+    },
+    mt20: {
+      marginTop: 10,
+    },
+  });
+
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -80,23 +103,3 @@ export default function SignIn() {
     </ScreenBackground>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 14,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch",
-  },
-  signOut: {
-    paddingTop: 4,
-    paddingBottom: 8,
-    textAlign: "center",
-  },
-  mt20: {
-    marginTop: 10,
-  },
-});
