@@ -4,79 +4,10 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
 import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
 import { timeAgo } from "../utils/timeFunctions";
-import { Avatar,  Divider } from "@rneui/themed";
+import { Avatar,  Divider, useTheme } from "@rneui/themed";
 import StoryItemVotes from './StoryItemVotes';
 
-const styles = StyleSheet.create({
-  image: {
-    maxWidth: "100%",
-    width: 1080,
-    maxHeight: "100%",
-    height: "auto",
-    aspectRatio: 1,
-  },
-  text: {
-    margin: 0,
-    marginLeft:5,
-    marginTop:5,
-    padding: 0,
-    textAlign: "left",
-    maxWidth: "100%",
-  },
-  promptText: {
-    margin: 0,
-    marginLeft:5,
-    padding: 0,
-    textAlign: "left",
-    maxWidth: "100%",
-    marginBottom:5,
-  },
-  StoryItemCard: {
-    boxSixing: "border-box",
-    flex:1,
-    flexDirection: "column",
-    alignContent: "center",
-    justifyContent: "center",
-    aspectRatio: 1,
-    minWidth: "50%",
-    width: "100%",
-    maxWidth: 540,
-    height: "auto",
-    marginTop: 45,
-    marginBottom: 80,
-    margin: "auto",
-  },
-  avatarMetadataBox: {
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "flex-start",
-    overflow: "hidden", 
-  },
-  metadataVotesBox: {
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "flex-start",
-    overflow: "hidden", 
-  },
- votesContainer: {
-  padding:0,
-  margin:5,
-  marginLeft:"auto",
-  marginRight:"auto",
-  },
-  metadataBox: {
-    backgroundColor:"lightgrey",
-    borderColor: "silver",
-    borderStyle: "solid",
-    borderWidth:1,
-    marginLeft:5,
-    marginTop:5,
-    padding:5,
-    marginRight:"auto",
-    width: "100%", 
-    maxWidth: "82%", 
-  },
-});
+
 
 interface StoryItemCardProps {
   storyItemData: {
@@ -108,6 +39,79 @@ const StoryItemCard = ({
   },
 }: StoryItemCardProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+  
+  const { theme, updateTheme } = useTheme()
+
+  const styles = StyleSheet.create({
+    image: {
+      maxWidth: "100%",
+      width: 1080,
+      maxHeight: "100%",
+      height: "auto",
+      aspectRatio: 1,
+    },
+    text: {
+      margin: 0,
+      marginLeft:5,
+      marginTop:5,
+      padding: 0,
+      textAlign: "left",
+      maxWidth: "100%",
+    },
+    promptText: {
+      margin: 0,
+      marginLeft:5,
+      padding: 0,
+      textAlign: "left",
+      maxWidth: "100%",
+      marginBottom:5,
+    },
+    StoryItemCard: {
+      boxSixing: "border-box",
+      flex:1,
+      flexDirection: "column",
+      alignContent: "center",
+      justifyContent: "center",
+      aspectRatio: 1,
+      minWidth: "50%",
+      width: "100%",
+      maxWidth: 540,
+      height: "auto",
+      marginTop: 45,
+      marginBottom: 70,
+      margin: "auto",
+    },
+    avatarMetadataBox: {
+      flexDirection: "row",
+      alignContent: "center",
+      justifyContent: "flex-start",
+      overflow: "hidden",
+      borderColor: theme.colors?.grey2,
+      borderStyle: "solid",
+      backgroundColor: theme.colors?.grey4,
+      borderWidth:1,
+    },
+    metadataVotesBox: {
+      flexDirection: "row",
+      alignContent: "center",
+      justifyContent: "flex-start",
+      overflow: "hidden", 
+    },
+   votesContainer: {
+    padding:0,
+    margin:5,
+    marginLeft:"auto",
+    marginRight:"auto",
+    },
+    metadataBox: {
+      marginLeft:5,
+      padding:5,
+      marginRight:"auto",
+      width: "100%", 
+      maxWidth: "82%", 
+    },
+  });
+  
   return (
     <>
       <View style={styles.StoryItemCard}>
@@ -119,11 +123,13 @@ const StoryItemCard = ({
             size={"medium"}
             rounded
             containerStyle={{
-              borderColor: "grey",
+              borderColor: "slategrey",
               borderStyle: "solid",
-              borderWidth: 1,
+              borderWidth: 2,
               marginTop:5,
+              marginBottom:5,
               marginLeft:5,
+              backgroundColor:"white",
             }}
             source={{
               uri: profiles?.avatar_url
@@ -143,7 +149,6 @@ const StoryItemCard = ({
           <Divider/>
           <View style={styles.votesContainer}>
             <StoryItemVotes  story_item_id={id} story_item_votes={votes}/>
-
           </View>
           </View>
                 </View>

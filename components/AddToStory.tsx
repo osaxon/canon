@@ -1,93 +1,12 @@
 import { UseMutateFunction } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Avatar, Button, Input, Text, Image } from "react-native-elements";
+import { Avatar, Button, Input, Text, Image, useTheme } from "react-native-elements";
 import { ImageContext } from "../types/functions";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
 
-const styles = StyleSheet.create({
-  text: {
-    marginTop: 5,
-    paddingLeft: 10,
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-  addToStoryBox: {
-    boxSixing: "border-box",
-    display: "flex",
-    flexDirection: "column",
-    alignContent: "center",
-    justifyContent: "center",
-    height: "auto",
-    maxheight: "100%",
-    margin: 0,
-    marginLeft: 5,
-    width: "100%",
-    maxWidth: "82%",
-    backgroundColor: "lightgrey",
-    borderRadius: 10,
-  },
-  avatarBox: {
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "flex-start",
-    borderRadius: 10,
-  },
-  inputBox: {
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "flex-end",
-    borderRadius: 10,
-    marginTop: 10,
-    marginBottom: 10,
-    backgroundColor: "white",
-    borderColor: "silver",
-    borderStyle: "solid",
-    borderWidth: 1,
-    padding: 5,
-  },
-  buttons: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  generateSubmitButton: {
-    flexDirection: "row",
-    borderRadius: 20,
-    marginTop: 5,
-    margin: 5,
-  },
-  cancelButton: {
-    flexDirection: "row",
-    borderRadius: 20,
-    marginTop: 5,
-    margin: 5,
-  },
-  avatarInputSubmitBox: {
-    boxSixing: "border-box",
-    display: "flex",
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "flex-start",
-    minWidth: "50%",
-    width: "100%",
-    maxWidth: 500,
-    height: "auto",
-    maxheight: "100%",
-    marginBottom: 20,
-    margin: "auto",
-    borderRadius: 10,
-    padding: 0,
-  },
-  image: {
-    maxWidth: "100%",
-    maxHeight: "100%",
-    borderRadius: 10,
-    aspectRatio: 1,
-    margin: 0,
-  },
-});
+
 
 export default function AddToStory({
   generate,
@@ -155,6 +74,90 @@ export default function AddToStory({
 
     return storyItem || [];
   };
+  const { theme, updateTheme } = useTheme()
+  const styles = StyleSheet.create({
+    text: {
+      marginTop: 5,
+      paddingLeft: 10,
+      textAlign: "center",
+      fontWeight: "bold",
+    },
+    addToStoryBox: {
+      boxSixing: "border-box",
+      display: "flex",
+      flexDirection: "column",
+      alignContent: "center",
+      justifyContent: "center",
+      height: "auto",
+      maxheight: "100%",
+      margin: 0,
+      marginLeft: 5,
+      width: "100%",
+      maxWidth: "82%",
+      backgroundColor: theme.colors?.grey4,
+      borderColor:theme.colors?.grey2,
+      borderRadius: 10,
+    },
+    avatarBox: {
+      flexDirection: "row",
+      alignContent: "center",
+      justifyContent: "flex-start",
+      borderRadius: 10,
+    },
+    inputBox: {
+      flexDirection: "row",
+      alignContent: "center",
+      justifyContent: "flex-end",
+      borderRadius: 10,
+      marginTop: 10,
+      marginBottom: 10,
+      backgroundColor: "white",
+      borderColor: theme.colors?.grey3,
+      borderStyle: "solid",
+      borderWidth: 1,
+      padding: 5,
+    },
+    buttons: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "flex-end",
+    },
+    generateSubmitButton: {
+      flexDirection: "row",
+      borderRadius: 20,
+      marginTop: 5,
+      margin: 5,
+    },
+    cancelButton: {
+      flexDirection: "row",
+      borderRadius: 20,
+      marginTop: 5,
+      margin: 5,
+    },
+    avatarInputSubmitBox: {
+      boxSixing: "border-box",
+      display: "flex",
+      flexDirection: "row",
+      alignContent: "center",
+      justifyContent: "flex-start",
+      minWidth: "50%",
+      width: "100%",
+      maxWidth: 500,
+      height: "auto",
+      maxheight: "100%",
+      marginBottom: 20,
+      margin: "auto",
+      borderRadius: 10,
+      padding: 0,
+    },
+    image: {
+      maxWidth: "100%",
+      maxHeight: "100%",
+      borderRadius: 10,
+      aspectRatio: 1,
+      margin: 0,
+    },
+  });
 
   return (
     <View>
@@ -164,11 +167,12 @@ export default function AddToStory({
             size={"medium"}
             rounded
             containerStyle={{
-              borderColor: "grey",
+              borderColor: "slategrey",
               borderStyle: "solid",
-              borderWidth: 1,
-              marginTop: 5,
-              marginLeft: 5,
+              borderWidth: 2,
+              marginTop:5,
+              marginLeft:5,
+              backgroundColor:"white",
             }}
             source={{
               uri: "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",

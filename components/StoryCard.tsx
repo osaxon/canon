@@ -7,61 +7,9 @@ import { StackParams } from "../App";
 import { supabase } from "../lib/supabase";
 import { Tables } from "../types/database";
 import { timeAgo } from "../utils/timeFunctions";
+import { useTheme } from "@rneui/themed";
 
-const styles = StyleSheet.create({
-  image: {
-    maxWidth: "100%",
-    width: 1080,
-    maxHeight: "100%",
-    height: "auto",
-    aspectRatio: 1,
-  },
-  text: {
-    margin: 0,
-    marginLeft: 5,
-    padding: 0,
-    textAlign: "left",
-    maxWidth: "100%",
-  },
-  storyCard: {
-    boxSixing: "border-box",
-    flex:1,
-    flexDirection: "column",
-    alignContent: "center",
-    justifyContent: "center",
-    aspectRatio: 1,
-    minWidth: "50%",
-    width: "100%",
-    maxWidth: 540,
-    height: "auto",
-    maxheight: "100%",
-    marginTop: 45,
-    marginBottom: 50,
-    margin: "auto",
-  },
-  avatarMetadataBox: {
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "flex-start",
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  MetadataBox: {
-    borderColor: "silver",
-    borderStyle: "solid",
-    backgroundColor:"darkgrey",
-    borderWidth:1,
-    marginLeft: 5,
-    marginTop: 5,
-    padding: 5,
-    marginRight: "auto",
-    width: "100%",
-    maxWidth: "82%",
-    display: "flex",
-    // justifyContent: "flex-start",
-    alignItems: "flex-start",
-  },
-});
+
 
 interface StoryCardProps extends Tables<"stories"> {
     username: string;
@@ -69,6 +17,60 @@ interface StoryCardProps extends Tables<"stories"> {
 }
 
 const StoryCard = (props: StoryCardProps) => {
+  const { theme, updateTheme } = useTheme()
+
+  const styles = StyleSheet.create({
+    image: {
+      maxWidth: "100%",
+      width: 1080,
+      maxHeight: "100%",
+      height: "auto",
+      aspectRatio: 1,
+    },
+    text: {
+      margin: 0,
+      marginLeft: 5,
+      padding: 0,
+      textAlign: "left",
+      maxWidth: "100%",
+    },
+    storyCard: {
+      boxSixing: "border-box",
+      flex:1,
+      flexDirection: "column",
+      alignContent: "center",
+      justifyContent: "center",
+      aspectRatio: 1,
+      minWidth: "50%",
+      width: "100%",
+      maxWidth: 540,
+      height: "auto",
+      maxheight: "100%",
+      marginTop: 45,
+      marginBottom: 70,
+      margin: "auto",
+    },
+    avatarMetadataBox: {
+      flexDirection: "row",
+      alignContent: "center",
+      justifyContent: "flex-start",
+      overflow: "hidden",
+      borderColor: theme.colors?.grey2,
+      borderStyle: "solid",
+      borderWidth:1,
+      backgroundColor: theme.colors?.grey4,
+    },
+    MetadataBox: {
+      marginLeft: 5,
+      padding: 5,
+      marginRight: "auto",
+      width: "100%",
+      maxWidth: "82%",
+      display: "flex",
+      // justifyContent: "flex-start",
+      alignItems: "flex-start",
+    },
+  });
     const {
         id,
         first_image_url,
@@ -135,11 +137,13 @@ const StoryCard = (props: StoryCardProps) => {
             size={"medium"}
             rounded
             containerStyle={{
-              marginTop: 5,
-              borderColor: "grey",
+              borderColor: "slategrey",
               borderStyle: "solid",
               borderWidth: 2,
-              marginLeft: 5,
+              marginTop:5,
+              marginBottom:5,
+              marginLeft:5,
+              backgroundColor:"white",
             }}
             source={{
               uri: avatar_url

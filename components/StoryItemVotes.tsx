@@ -1,60 +1,11 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
-import { Button, Icon } from "react-native-elements";
+import { Button, Icon, useTheme } from "react-native-elements";
 import { supabase } from "../lib/supabase";
 import { useEffect, useState } from "react";
 
 
-const styles = StyleSheet.create({
-    
-    text: {
-      margin: 0,
-      marginLeft:5,
-      padding: 0,
-      textAlign: "center",
-      maxWidth: "100%",
-      marginRight: 5
-    },
-    
-    votesBox: {
-        display: "flex",
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: "2%",
-      marginLeft: "38%",
-      marginRight: "38%",
-      borderRadius: 20,
-      backgroundColor: "lightgrey",
-      padding: 0
-    },
 
-    upVoteOn: {
-      borderRadius: 20,
-      marginLeft: 0,
-      marginRight: 5,
-      backgroundColor: "lightgreen",
-    },
-    downVoteOn: {
-      borderRadius: 20,
-      marginLeft: 5,
-      marginRight: 0,
-      backgroundColor: "lightcoral",
-    },
-    upVoteOff: {
-      borderRadius: 20,
-      marginLeft: 0,
-      marginRight: 5,
-      
-    },
-    downVoteOff: {
-      borderRadius: 20,
-      marginLeft: 5,
-      marginRight: 0,
-      
-    }
-    
-  });
 
 interface StoryItemVotesProps {
   story_item_votes: number | null
@@ -65,7 +16,58 @@ export default function StoryItemVotes({ story_item_id, story_item_votes }: Stor
     const [votes, setVotes] = useState<number | null>(null);
     const [upVoted, setUpVoted] = useState(false)
     const [downVoted, setDownVoted] = useState(false)
+    const { theme, updateTheme } = useTheme()
+
+    const styles = StyleSheet.create({
     
+      text: {
+        margin: 0,
+        marginLeft:5,
+        padding: 0,
+        textAlign: "center",
+        maxWidth: "100%",
+        marginRight: 5
+      },
+      
+      votesBox: {
+          display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: "2%",
+        marginLeft: "38%",
+        marginRight: "38%",
+        borderRadius: 20,
+        backgroundColor: theme.colors?.grey3,
+        padding: 0
+      },
+  
+      upVoteOn: {
+        borderRadius: 20,
+        marginLeft: 0,
+        marginRight: 5,
+        backgroundColor: theme.colors?.success,
+      },
+      downVoteOn: {
+        borderRadius: 20,
+        marginLeft: 5,
+        marginRight: 0,
+        backgroundColor: theme.colors?.error,
+      },
+      upVoteOff: {
+        borderRadius: 20,
+        marginLeft: 0,
+        marginRight: 5,
+        
+      },
+      downVoteOff: {
+        borderRadius: 20,
+        marginLeft: 5,
+        marginRight: 0,
+        
+      }
+      
+    });
   const vote = async (direction: string, inc: number) => {
     if(direction === "up"){
         setUpVoted(!upVoted && !downVoted)

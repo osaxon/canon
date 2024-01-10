@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList, StyleSheet } from "react-native";
-import { Button } from "react-native-elements";
+import { Button } from "@rneui/themed";
 import StoryCard from "../components/StoryCard";
 import { useHomeFeed, useRefreshOnFocus } from "../utils/hooks";
 import ScreenBackground from "../components/ScreenBackground";
@@ -45,7 +45,6 @@ export default function Stories() {
                             <Button
                                 loading={isFetchingNextPage}
                                 onPress={() => fetchNextPage()}
-                                type="outline"
                                 title="Load More"
                             />
                         </>

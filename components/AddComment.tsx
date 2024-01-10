@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import { Avatar, Button, Input } from "@rneui/themed";
+import { Avatar, Button, Input } from "react-native-elements";
 import React from "react";
 import Error from "./Error";
 import { supabase } from "../lib/supabase";
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     borderWidth:1,
     padding: 5,
   },
-  submitButton: {
+  submitButtonContainer: {
     flexDirection: "row",
     alignContent: "center",
     justifyContent: "flex-end",
@@ -148,11 +148,11 @@ export default function AddComment({ story_id, setComments }: CommentsProps) {
         size={"medium"}
         rounded
         containerStyle={{
-          borderColor: "silver",
+          borderColor: "slategrey",
           borderStyle: "solid",
-          borderWidth: 10,
-          marginTop: 5,
-          marginLeft: 5,
+          borderWidth: 2,
+          marginTop:5,
+          marginLeft:5,
           backgroundColor:"white",
         }}
         source={{
@@ -170,7 +170,9 @@ export default function AddComment({ story_id, setComments }: CommentsProps) {
         {!inputError ? null : <Error message="Please add text" />}
         {!sessionError ? null : <Error message="Please sign-in" />}
         {!requestFailed ? null : <Error message="Sorry request failed" />}
-        <Button style={styles.submitButton} title="Submit" onPress={onSubmit} />
+        <View style={styles.submitButtonContainer} >
+        <Button title="Submit" onPress={onSubmit} />
+        </View>
       </View>
     </View>
   );

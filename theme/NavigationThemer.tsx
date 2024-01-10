@@ -1,7 +1,6 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useTheme } from "@rneui/themed";
-import ScreenBackground from "../components/ScreenBackground";
 
 const NavigationThemer = ({ children }: any) => {
   const { theme, updateTheme } = useTheme()
@@ -9,8 +8,8 @@ const NavigationThemer = ({ children }: any) => {
     dark: true,
     colors: {
       primary: theme.colors?.primary,
-      background: theme.colors?.background,
-      card: theme.colors?.white,
+      background: theme.colors?.grey4,
+      card: theme.colors?.grey5,
       text: theme.colors?.black,
       border: theme.colors?.divider,
       notification: 'rgb(255, 69, 58)',

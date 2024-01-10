@@ -3,9 +3,20 @@ import React from "react";
 import { Button, Icon } from "react-native-elements";
 import { supabase } from "../lib/supabase";
 import { useEffect, useState } from "react";
+import { useTheme } from "@rneui/themed";
 
 
-const styles = StyleSheet.create({
+
+
+interface votesProps {
+  storyVotes: number | null;
+  story_id: number;
+}
+
+export default function Votes({ story_id, storyVotes }: votesProps) {
+  const { theme, updateTheme } = useTheme()
+
+  const styles = StyleSheet.create({
     
     text: {
       margin: 0,
@@ -24,8 +35,9 @@ const styles = StyleSheet.create({
       marginTop: "2%",
       marginLeft: "38%",
       marginRight: "38%",
-      borderRadius: 20,
-      backgroundColor: "lightgrey",
+      borderRadius: 10,
+      borderWidth:2,
+      backgroundColor: theme.colors?.grey2,
       padding: 0
     },
 
@@ -33,13 +45,13 @@ const styles = StyleSheet.create({
       borderRadius: 20,
       marginLeft: 0,
       marginRight: 5,
-      backgroundColor: "lightgreen",
+      backgroundColor: theme.colors?.success,
     },
     downVoteOn: {
       borderRadius: 20,
       marginLeft: 5,
       marginRight: 0,
-      backgroundColor: "lightcoral",
+      backgroundColor: theme.colors?.error,
     },
     upVoteOff: {
       borderRadius: 20,
@@ -55,13 +67,6 @@ const styles = StyleSheet.create({
     }
     
   });
-
-interface votesProps {
-  storyVotes: number | null;
-  story_id: number;
-}
-
-export default function Votes({ story_id, storyVotes }: votesProps) {
     const [votes, setVotes] = useState<number | null>(storyVotes);
     const [upVoted, setUpVoted] = useState(false)
     const [downVoted, setDownVoted] = useState(false)

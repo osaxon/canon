@@ -1,3 +1,4 @@
+import { useTheme } from '@rneui/themed';
 import { Button } from '@rneui/themed';
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -9,7 +10,11 @@ type CollapsibleProps = {
     icon: string
 }
 
-const styles = StyleSheet.create({
+
+
+const Collapsible= ({children, title, icon}: CollapsibleProps) => {
+  const { theme, updateTheme } = useTheme()
+  const styles = StyleSheet.create({
     showCommentButton: {
         flexDirection: "row",
         alignContent: "center",
@@ -23,19 +28,18 @@ const styles = StyleSheet.create({
       },
       textAndButton: {
         margin:"auto",
-        marginBottom:10,
         flexDirection: "row",
         alignContent: "center",
         justifyContent: "flex-start",
-        borderColor: "silver",
+        borderColor: theme.colors?.grey2,
         borderStyle: "solid",
         borderWidth:1,
         width:"100%",
         padding:0,
-        backgroundColor:"grey",
+        backgroundColor:theme.colors?.grey3,
       },
       text: {
-        color:"white",
+        color:theme.colors?.white,
         flexDirection: "row",
         alignContent: "center",
         justifyContent: "flex-start",
@@ -45,8 +49,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
       },
     })
-
-const Collapsible= ({children, title, icon}: CollapsibleProps) => {
     const [isCollapsed, setIsCollapsed] = useState(false)
     const toggleComments = () => {
         setIsCollapsed(!isCollapsed)
@@ -57,8 +59,8 @@ const Collapsible= ({children, title, icon}: CollapsibleProps) => {
         <View style={styles.buttonContainer}>
         <Button size={"sm"} style={styles.showCommentButton} onPress={toggleComments} >
         {isCollapsed ? 
-        <MaterialIcons name={"expand-more"} color={"white"} size={22} />: 
-        <MaterialIcons name={"expand-less"} color={"white"} size={22} />}
+        <MaterialIcons name={"expand-more"} color={theme.colors?.white} size={22} />: 
+        <MaterialIcons name={"expand-less"} color={theme.colors?.white} size={22} />}
         </Button>
         </View>
         </View>

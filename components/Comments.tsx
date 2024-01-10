@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
-import { Avatar } from "@rneui/themed";
+import { Avatar, useTheme } from "@rneui/themed";
 import { Tables } from "../types/database";
 import { supabase } from "../lib/supabase";
 import { Text, StyleSheet } from "react-native";
@@ -12,46 +12,7 @@ import React from "react";
 import AddComment from "../components/AddComment";
 import DeleteComment from "./DeleteComment";
 
-const styles = StyleSheet.create({
-  avatarBox: {
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "flex-start",
-    borderRadius: 10,
-  },
-  textBox: {
-    flexDirection: "column",
-    alignContent: "center",
-    justifyContent: "flex-start",
-    borderRadius: 10,
-    marginLeft:10,
-    backgroundColor: "white",
-    borderColor: "silver",
-    borderStyle: "solid",
-    borderWidth:1,
-    padding: 5,
-  },
-  text: {
-    fontSize:16
-  },
-  avatarTextBox: {
-    boxSixing: "border-box",
-    display: "flex",
-    flexDirection: "row",
-    alignContent: "flex-start",
-    justifyContent: "flex-start",
-    minWidth: "50%",
-    width: "100%",
-    maxWidth: 500,
-    height: "auto",
-    maxheight: "100%",
-    marginLeft:10,
-    marginBottom: 10,
-    margin:0,
-    borderRadius: 10,
-    padding: 0,
-  },
-});
+
 
 type CommentsProps = {
   story_id: number;
@@ -77,8 +38,54 @@ function Comments(props: CommentsProps) {
 
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
 
+  const { theme, updateTheme } = useTheme()
+  const styles = StyleSheet.create({
+    avatarBox: {
+      flexDirection: "row",
+      alignContent: "center",
+      justifyContent: "flex-start",
+      borderRadius: 10,
+    },
+    textBox: {
+      flexDirection: "column",
+      alignContent: "center",
+      justifyContent: "flex-start",
+      borderRadius: 10,
+      marginLeft:10,
+      backgroundColor: theme.colors?.white,
+      borderColor: theme.colors?.grey2,
+      borderStyle: "solid",
+      borderWidth:1,
+      padding: 5,
+    },
+    text: {
+      fontSize:16
+    },
+    avatarTextBox: {
+      boxSixing: "border-box",
+      display: "flex",
+      flexDirection: "row",
+      alignContent: "flex-start",
+      justifyContent: "flex-start",
+      minWidth: "50%",
+      width: "100%",
+      maxWidth: 500,
+      height: "auto",
+      maxheight: "100%",
+      marginTop:10,
+      marginLeft:10,
+      marginBottom: 10,
+      margin:0,
+      borderRadius: 10,
+      padding: 0,
+    },
+    background: {
+      backgroundColor:"rgba(150,150,150,0.4)"
+    }
+  });
+
   return (
-    <View>
+    <View style={styles.background}>
       <FlatList
         data={comments}
         renderItem={({ item: comment }) => (
