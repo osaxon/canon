@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, NavigatorScreenParams } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ThemeProvider, createTheme } from "@rneui/themed";
 import { Session } from "@supabase/supabase-js";
@@ -34,7 +34,7 @@ export type StackParams = {
   Home: any;
   SignIn: any;
   Explore: any;
-  StoriesStack: StoriesStackParams;
+  StoriesStack: NavigatorScreenParams<StoriesStackParams>;
   Profile: { user_id: any };
   UserProfile: { user_id: any };
   StoryAdd: { story_id: number };
