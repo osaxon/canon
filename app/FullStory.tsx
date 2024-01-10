@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { FlatList } from "react-native";
-import { Image, Text } from "react-native-elements";
+import { Image } from "react-native-elements";
 import { StackParams } from "../App";
 import AddToStory from "../components/AddToStory";
 import Collapsible from "../components/Collapsible";
@@ -109,7 +109,6 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
                     {nextImageStatus === "success" && (
                         <Image source={{ uri: nextImage?.publicUrl }} />
                     )}
-                    <Text>{JSON.stringify(fullStory?.image_context)}</Text>
                     <AddToStory generate={generate} />
                     <Collapsible title="Comments" icon="chat">
                         <Comments story_id={story_id} />
