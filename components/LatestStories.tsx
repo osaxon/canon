@@ -118,6 +118,6 @@ const styles = StyleSheet.create({
     height: 124,
     borderColor: "#333",
     borderWidth: 1,
-    // margin: 1,
+    margin: 1,
   },
 });
