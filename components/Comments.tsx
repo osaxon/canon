@@ -57,7 +57,7 @@ type CommentsProps = {
   story_id: number;
 };
 
-interface Comment extends Tables<"story_comments"> {
+ export interface Comment extends Tables<"story_comments"> {
   profiles: { username: string | null; avatar_url: string | null } | null;
 }
 
@@ -101,13 +101,13 @@ function Comments(props: CommentsProps) {
                 comment.created_at
               )}`}</Text>
               <Text style={styles.text}>{comment.content}</Text>
-              <DeleteComment profile_id = {comment.profile_id} comment_id = {comment.id} setComments={setComments}/>
+              <DeleteComment story_id={props.story_id} profile_id = {comment.profile_id} comment_id = {comment.id} comments ={comments} setComments={setComments}/>
             </View>
           </View>
         )}
         ListFooterComponent={
           <>
-            <AddComment story_id={props.story_id} setComments={setComments} />
+            <AddComment story_id={props.story_id} comments ={comments} setComments={setComments} />
           </>
         }
       />

@@ -5,10 +5,13 @@ import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { Dispatch, SetStateAction } from "react";
+import { Comment } from "./Comments";
 
 interface DeleteCommentProps {
+  story_id: number;
   profile_id: string | null;
   comment_id: number;
+  comments: Comment[] | null;
   setComments: any;
 }
 
@@ -20,11 +23,20 @@ const styles = StyleSheet.create({
     margin: 5,
   },
 });
-export default function DeleteComment({ profile_id, comment_id, setComments }: DeleteCommentProps) {
+export default function DeleteComment({ story_id, profile_id, comment_id, comments, setComments }: DeleteCommentProps) {
   const [session, setSession] = useState<Session | null>(null);
   const onSubmit = async () => {
     try {
-      const { data, error } = await supabase.from("story_comments").delete().eq("id", comment_id).select();
+      const { data, error } = await supabase
+      .from("story_comments")
+      .delete()
+      .eq("id", comment_id)
+      .select();
+      await supabase
+        .from("stories")
+        .update({ comment_count: comments!.length - 1 })
+        .eq("id", story_id)
+        .select();
       setComments((currComments: Comment[]) => {
         const index = currComments.findIndex((comment: any) => {
           return comment.id === comment_id;
