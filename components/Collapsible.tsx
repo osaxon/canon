@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { Button} from '@rneui/themed';
-import {StyleSheet, View,Text} from "react-native"
-import React from "react";
+import { Button } from '@rneui/themed';
+import React, { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 type CollapsibleProps = {

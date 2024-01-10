@@ -32,8 +32,7 @@ export type StackParams = {
   StoryConfirm: { story_id: number };
   FullStory: {
     story_id: number;
-    storyVotes: number | null;
-    setStoryVotes: (val: number) => void;
+    votes: number | null;
   };
   StoryComments: { story_id: number };
   CreateNew: undefined; // TODO may need to add story_id as a param to make route re-usable for adding to existing story
@@ -45,20 +44,24 @@ const Stack = createBottomTabNavigator<StackParams>();
 export const queryClient = new QueryClient();
 
 export type StoriesStackParams = {
-  UserProfile: { user_id: any };
+  
   Stories: any;
   StoryAdd: { story_id: number };
   StoryConfirm: { story_id: number };
   FullStory: {
     story_id: number;
-    storyVotes: number | null;
-    setStoryVotes: (val: number) => void;
+    votes: number | null;
   };
   StoryComments: { story_id: number };
 };
 
 export type ProfileStackParams = {
   Profile: { user_id: any };
+  UserProfile: { user_id: any };
+  FullStory: {
+    story_id: number;
+    votes: number;
+  };
 };
 
 export type CreateNewStackParams = {
@@ -115,11 +118,6 @@ export default function App() {
           component={StoryComments}
           options={{ title: "Comments" }}
         />
-        <StoriesStack.Screen
-          name="UserProfile"
-          component={UserProfile}
-          options={{ title: "Profile" }}
-        />
       </StoriesStack.Navigator>
     );
   };
@@ -139,6 +137,16 @@ export default function App() {
           title: "Profile",
         }}
       />
+      <ProfileStack.Screen
+          name="UserProfile"
+          component={UserProfile}
+          options={{ title: "Profile" }}
+        />
+        <StoriesStack.Screen
+          name="FullStory"
+          component={FullStory}
+          options={{ title: "Full Story" }}
+        />
     </ProfileStack.Navigator>)
   };
   

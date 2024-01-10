@@ -1,14 +1,12 @@
 import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Avatar } from "@rneui/themed";
 import { StackParams } from "../App";
-import { timeAgo } from "../utils/timeFunctions";
-import { Tables } from "../types/database";
-import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
-import { useTheme } from "@rneui/themed";
+import { Tables } from "../types/database";
+import { timeAgo } from "../utils/timeFunctions";
 
 const styles = StyleSheet.create({
   image: {
@@ -60,57 +58,58 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: "82%",
     display: "flex",
-    // justifyContent: "flex-start", 
+    // justifyContent: "flex-start",
     alignItems: "flex-start",
   },
 });
 
 interface StoryCardProps extends Tables<"stories"> {
-  username: string;
-  avatar_url: string;
+    username: string;
+    avatar_url: string;
 }
 
 const StoryCard = (props: StoryCardProps) => {
-  const {
-    id,
-    first_image_url,
-    created_by,
-    username,
-    avatar_url,
-    created_at,
-    comment_count,
-    votes,
-  } = props;
-  const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
-  const [storyVotes, setStoryVotes] = useState(votes);
-  const [userId, setUserId] = useState(null);
-  let commentText = "comments";
-  let voteText = "votes";
-  if (comment_count === 1) {
-    commentText = "comment";
-  }
-  if (storyVotes === 1) {
-    voteText = "vote";
-  }
+    const {
+        id,
+        first_image_url,
+        created_by,
+        username,
+        avatar_url,
+        created_at,
+        comment_count,
+        votes,
+    } = props;
 
-  async function getUserId() {
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("username", username);
-
-      if (data && data.length > 0) {
-        setUserId(data[0].id as any);
-      }
-    } catch (error) {
-      console.error("error: ", error);
+    const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+    const [storyVotes, setStoryVotes] = useState(votes);
+    const [userId, setUserId] = useState(null);
+    let commentText = "comments";
+    let voteText = "votes";
+    if (comment_count === 1) {
+        commentText = "comment";
     }
-  }
+    if (storyVotes === 1) {
+        voteText = "vote";
+    }
 
-  useEffect(() => {
-    getUserId();
-  }, [id]);
+    async function getUserId() {
+        try {
+            const { data, error } = await supabase
+                .from("profiles")
+                .select("id")
+                .eq("username", username);
+
+            if (data && data.length > 0) {
+                setUserId(data[0].id as any);
+            }
+        } catch (error) {
+            console.error("error: ", error);
+        }
+    }
+
+    useEffect(() => {
+        getUserId();
+    }, [id]);
 
   return (
     <>
@@ -119,8 +118,7 @@ const StoryCard = (props: StoryCardProps) => {
           onPress={() =>
             navigation.navigate("FullStory", {
               story_id: id,
-              setStoryVotes,
-              storyVotes: votes,
+              votes: votes
             })
           }
         >
@@ -150,12 +148,8 @@ const StoryCard = (props: StoryCardProps) => {
             }}
           />
           <View style={styles.MetadataBox}>
-            <Text style={styles.text}>{`${username} posted ${
-              created_at && timeAgo(created_at)
-            }`}</Text>
-            <Text
-              style={styles.text}
-            >{`${comment_count} comments: ${votes} votes`}</Text>
+            <Text style={styles.text}>{`${username} posted ${created_at && timeAgo(created_at)}`}</Text>
+            <Text style={styles.text}>{`${comment_count} comments: ${votes} votes`}</Text>
           </View>
         </View>
       </View>

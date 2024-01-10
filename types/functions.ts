@@ -1,3 +1,5 @@
+import { Json } from "./database";
+
 export enum EdgeFunctions {
     GENERATE_IMAGE = "generate-image",
     NEXT_IMAGE = "generate-next-image",
@@ -20,7 +22,7 @@ export type GenerateImageResponse = {
 
 export type GenerateNextImageParams = {
     prompt: string;
-    imageContext: ImageContext;
+    imageContext: Json;
 };
 
 export type ImageContext = {

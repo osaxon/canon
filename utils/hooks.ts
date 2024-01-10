@@ -1,12 +1,14 @@
 import { supabase } from "../lib/supabase";
 import { useNavigation } from "@react-navigation/core";
 import { ImageContext } from "../types/functions";
+import { QueryResult, QueryData, QueryError } from "@supabase/supabase-js";
 import { NewStoryInputs } from "../types/functions";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useInfiniteQuery } from "@tanstack/react-query";
 import { useCallback, useContext, useRef } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
 import { useFocusEffect } from "@react-navigation/native";
+import { Tables } from "../types/supabase";
 
 export function useRefreshOnFocus<T>(refetch: () => Promise<T>) {
   const firstTimeRef = useRef(true);
@@ -33,6 +35,80 @@ export const useGetStories = () => {
         .order("created_at", { ascending: false })
         .throwOnError();
       return data || [];
+    },
+  });
+};
+
+const storiesQuery = supabase
+    .from("stories")
+    .select("*,profiles(username,avatar_url)")
+    .order("created_at", { ascending: false });
+
+export type StoriesWithProfileData = QueryData<typeof storiesQuery>;
+
+const fetchStories = async ({ pageParam }: { pageParam: number }) => {
+    console.log(pageParam, "<--- the page param");
+    const { data } = await supabase
+        .from("stories")
+        .select("*,profiles(username,avatar_url)")
+        .order("created_at", { ascending: false })
+        .range(pageParam * 4, pageParam + 1 * 2 - 1)
+        .limit(3)
+        .throwOnError();
+    console.log(JSON.stringify(data, null, 2), "<--- the returned data");
+    return (data as StoriesWithProfileData) || [];
+};
+
+export const useHomeFeed = () => {
+    return useInfiniteQuery({
+        queryKey: ["home-feed"],
+        queryFn: fetchStories,
+        initialPageParam: 0,
+        getNextPageParam: (
+            lastPage,
+            allPages,
+            lastPageParam
+        ): number | undefined => {
+            console.log(lastPage.length, "<--- last page length");
+            console.log(lastPageParam, "<--- last page param");
+            if (lastPage.length === 0) {
+                return undefined;
+            }
+            console.log(lastPageParam + 1, "<--- next page param");
+            return lastPageParam + 1;
+        },
+    });
+};
+
+/**
+ * Fetches all story items that match the given storyId
+ *
+ * @param {string} storyId the id of the story
+ * @returns the story items and related data for story and profiles
+ */
+export const useFullStory = (storyId: number) => {
+  return useQuery({
+    queryKey: ["story", storyId],
+    queryFn: async () => {
+      const [storyItemsResponse, storyResponse] = await Promise.all([
+        supabase
+          .from("story_items")
+          .select("*, profiles(username, avatar_url)")
+          .eq("story_id", storyId)
+          .order("id")
+          .throwOnError(),
+        supabase.from("stories").select("*").eq("id", storyId),
+      ]);
+
+      const storyItems = storyItemsResponse.data;
+      const story = storyResponse.data;
+
+      if (!storyItems || !story) throw new Error("no story found");
+      const fullStory = {
+        ...story[0],
+        storyItems,
+      };
+      return fullStory;
     },
   });
 };
