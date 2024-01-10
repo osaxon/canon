@@ -1,13 +1,12 @@
 import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Avatar } from "react-native-elements";
 import { StackParams } from "../App";
-import { timeAgo } from "../utils/timeFunctions";
-import { Tables } from "../types/database";
-import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
+import { Tables } from "../types/database";
+import { timeAgo } from "../utils/timeFunctions";
 
 const styles = StyleSheet.create({
   image: {
@@ -67,38 +66,52 @@ const styles = StyleSheet.create({
 });
 
 interface StoryCardProps extends Tables<"stories"> {
-  username: string;
-  avatar_url: string;
+    username: string;
+    avatar_url: string;
 }
 
 const StoryCard = (props: StoryCardProps) => {
-  const { id, first_image_url, created_by, username, avatar_url, created_at, comment_count, votes } = props;
-  const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
-  const [userId, setUserId] = useState(null);
-  let commentText = "comments";
-  let voteText = "votes";
-  if (comment_count === 1) {
-    commentText = "comment";
-  }
-  if (votes === 1) {
-    voteText = "vote";
-  }
+    const {
+        id,
+        first_image_url,
+        created_by,
+        username,
+        avatar_url,
+        created_at,
+        comment_count,
+        votes,
+    } = props;
 
-  async function getUserId() {
-    try {
-      const { data, error } = await supabase.from("profiles").select("id").eq("username", username);
-
-      if (data && data.length > 0) {
-        setUserId(data[0].id as any);
-      }
-    } catch (error) {
-      console.error("error: ", error);
+    const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
+    const [storyVotes, setStoryVotes] = useState(votes);
+    const [userId, setUserId] = useState(null);
+    let commentText = "comments";
+    let voteText = "votes";
+    if (comment_count === 1) {
+        commentText = "comment";
     }
-  }
+    if (storyVotes === 1) {
+        voteText = "vote";
+    }
 
-  useEffect(() => {
-    getUserId();
-  }, [id]);
+    async function getUserId() {
+        try {
+            const { data, error } = await supabase
+                .from("profiles")
+                .select("id")
+                .eq("username", username);
+
+            if (data && data.length > 0) {
+                setUserId(data[0].id as any);
+            }
+        } catch (error) {
+            console.error("error: ", error);
+        }
+    }
+
+    useEffect(() => {
+        getUserId();
+    }, [id]);
 
   return (
     <>
