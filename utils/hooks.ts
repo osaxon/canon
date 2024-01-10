@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/core";
 import { ImageContext } from "../types/functions";
 import { QueryResult, QueryData, QueryError } from "@supabase/supabase-js";
 import { NewStoryInputs } from "../types/functions";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useInfiniteQuery } from "@tanstack/react-query";
 import { useCallback, useContext, useRef } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
@@ -34,6 +34,47 @@ export const useGetStories = () => {
                 .order("created_at", { ascending: false })
                 .throwOnError();
             return data || [];
+        },
+    });
+};
+
+const storiesQuery = supabase
+    .from("stories")
+    .select("*,profiles(username,avatar_url)")
+    .order("created_at", { ascending: false });
+
+export type StoriesWithProfileData = QueryData<typeof storiesQuery>;
+
+const fetchStories = async ({ pageParam }: { pageParam: number }) => {
+    console.log(pageParam, "<--- the page param");
+    const { data } = await supabase
+        .from("stories")
+        .select("*,profiles(username,avatar_url)")
+        .order("created_at", { ascending: false })
+        .range(pageParam * 4, pageParam + 1 * 2 - 1)
+        .limit(3)
+        .throwOnError();
+    console.log(JSON.stringify(data, null, 2), "<--- the returned data");
+    return (data as StoriesWithProfileData) || [];
+};
+
+export const useHomeFeed = () => {
+    return useInfiniteQuery({
+        queryKey: ["home-feed"],
+        queryFn: fetchStories,
+        initialPageParam: 0,
+        getNextPageParam: (
+            lastPage,
+            allPages,
+            lastPageParam
+        ): number | undefined => {
+            console.log(lastPage.length, "<--- last page length");
+            console.log(lastPageParam, "<--- last page param");
+            if (lastPage.length === 0) {
+                return undefined;
+            }
+            console.log(lastPageParam + 1, "<--- next page param");
+            return lastPageParam + 1;
         },
     });
 };
