@@ -188,7 +188,7 @@ export default function GenerateImage() {
         </View>
 
         <View>
-          {image && image.publicUrl}
+          <Text>{image && image.publicUrl}</Text>
         </View>
         <View style={styles.buttons}>
           <Button
