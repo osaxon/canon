@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     width: 1000,
     maxHeight: "100%",
     height: "auto",
-    borderRadius: 10,
+    // borderRadius: 10,
     aspectRatio: 1,
   },
   text: {
@@ -49,17 +49,18 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   MetadataBox: {
-    backgroundColor: "lightgrey",
-    borderColor: "silver",
-    borderStyle: "solid",
-    borderWidth:1,
-    borderRadius: 10,
+    // backgroundColor: "lightgrey",
+    border: "solid 1px silver",
+    // borderRadius: 10,
     marginLeft: 5,
     marginTop: 5,
     padding: 5,
     marginRight: "auto",
     width: "100%",
     maxWidth: "82%",
+    display: "flex",
+    // justifyContent: "flex-start", 
+    alignItems: "flex-start",
   },
 });
 
@@ -153,7 +154,7 @@ const StoryCard = (props: StoryCardProps) => {
             }`}</Text>
             <Text
               style={styles.text}
-            >{`${comment_count} comments, ${votes} votes`}</Text>
+            >{`${comment_count} comments: ${votes} votes`}</Text>
           </View>
         </View>
       </View>
