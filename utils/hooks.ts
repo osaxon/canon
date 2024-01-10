@@ -40,44 +40,44 @@ export const useGetStories = () => {
 };
 
 const storiesQuery = supabase
-    .from("stories")
-    .select("*,profiles(username,avatar_url)")
-    .order("created_at", { ascending: false });
+  .from("stories")
+  .select("*,profiles(username,avatar_url)")
+  .order("created_at", { ascending: false });
 
 export type StoriesWithProfileData = QueryData<typeof storiesQuery>;
 
 const fetchStories = async ({ pageParam }: { pageParam: number }) => {
-    console.log(pageParam, "<--- the page param");
-    const { data } = await supabase
-        .from("stories")
-        .select("*,profiles(username,avatar_url)")
-        .order("created_at", { ascending: false })
-        .range(pageParam * 4, pageParam + 1 * 2 - 1)
-        .limit(3)
-        .throwOnError();
-    console.log(JSON.stringify(data, null, 2), "<--- the returned data");
-    return (data as StoriesWithProfileData) || [];
+  console.log(pageParam, "<--- the page param");
+  const { data } = await supabase
+    .from("stories")
+    .select("*,profiles(username,avatar_url)")
+    .order("created_at", { ascending: false })
+    .range(pageParam * 4, pageParam + 1 * 2 - 1)
+    .limit(3)
+    .throwOnError();
+  // console.log(JSON.stringify(data, null, 2), "<--- the returned data");
+  return (data as StoriesWithProfileData) || [];
 };
 
 export const useHomeFeed = () => {
-    return useInfiniteQuery({
-        queryKey: ["home-feed"],
-        queryFn: fetchStories,
-        initialPageParam: 0,
-        getNextPageParam: (
-            lastPage,
-            allPages,
-            lastPageParam
-        ): number | undefined => {
-            console.log(lastPage.length, "<--- last page length");
-            console.log(lastPageParam, "<--- last page param");
-            if (lastPage.length === 0) {
-                return undefined;
-            }
-            console.log(lastPageParam + 1, "<--- next page param");
-            return lastPageParam + 1;
-        },
-    });
+  return useInfiniteQuery({
+    queryKey: ["home-feed"],
+    queryFn: fetchStories,
+    initialPageParam: 0,
+    getNextPageParam: (
+      lastPage,
+      allPages,
+      lastPageParam
+    ): number | undefined => {
+      // console.log(lastPage.length, "<--- last page length");
+      // console.log(lastPageParam, "<--- last page param");
+      if (lastPage.length === 0) {
+        return undefined;
+      }
+      // console.log(lastPageParam + 1, "<--- next page param");
+      return lastPageParam + 1;
+    },
+  });
 };
 
 /**
@@ -151,7 +151,7 @@ export const useNewStory = ({ imageData, userId }: NewStoryInputs) => {
   return useMutation({
     mutationKey: ["new-story", userId, imageData.imageUrl],
     mutationFn: async () => {
-      console.log("saving story");
+      // console.log("saving story");
       // 1. create the story record
       const { data: story } = await supabase
         .from("stories")
@@ -163,7 +163,7 @@ export const useNewStory = ({ imageData, userId }: NewStoryInputs) => {
         .select("*")
         .throwOnError();
 
-      console.log(story, "<--- the new story");
+      // console.log(story, "<--- the new story");
 
       if (!story) {
         console.error("failed to create the story");
@@ -193,7 +193,7 @@ export const useNewStory = ({ imageData, userId }: NewStoryInputs) => {
         throw new Error("failed to create new story item");
       }
 
-      console.log(storyItem, "<--- the new story item");
+      // console.log(storyItem, "<--- the new story item");
 
       return { story, storyItem } || [];
     },
@@ -221,3 +221,15 @@ export const useGetHomeFeed = () => {
 // will make it easier to manage the main home feed content
 // fetch all stories rather than story_items
 // when new story_item is added to story, update story with new url
+
+export const getLogo = async () => {
+  try {
+    const { data } = await supabase.storage
+      .from("avatars")
+      .getPublicUrl("logo/canon.png");
+
+    return data?.publicUrl;
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -77,7 +77,7 @@ const LatestStories: React.FC<LatestStoriesProps> = ({ userId }) => {
             onPress={() => navigation.navigate("FullStory", {story_id: item.id, votes: item.votes})}
             >
               <Image
-                key={item.first_image_url}
+                key={item.id}
                 style={styles.stories}
                 source={{ uri: item.first_image_url }}
               />

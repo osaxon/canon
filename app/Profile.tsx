@@ -24,8 +24,6 @@ export default function Profile() {
     });
   }, []);
 
-  console.log(session, '<-- session from profile')
-
   return (
     <>
       <View style={styles.container}>
