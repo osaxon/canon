@@ -64,12 +64,13 @@ const generateAndStoreImage = async ({
 };
 
 const FullStory: React.FC<Props> = ({ route, navigation }) => {
-    const { story_id, storyVotes, setStoryVotes } = route.params;
+    const { story_id, votes } = route.params;
     const [story, setStory] = useState<Story[] | null>(null);
 
     const queryClient = useQueryClient();
 
     const { data: fullStory } = useFullStory(story_id);
+    console.log(votes, "<<-- fullstory");
 
     const {
         mutate: generate,
@@ -115,8 +116,8 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
                     </Collapsible>
                     <Votes
                         story_id={story_id}
-                        storyVotes={storyVotes}
-                        setStoryVotes={setStoryVotes}
+                        storyVotes={votes}
+                        
                     />
                 </>
             }

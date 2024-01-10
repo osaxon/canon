@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "lightgrey",
     borderColor: "silver",
     borderStyle: "solid",
-    borderWidth:1,
+    borderWidth: 1,
     // borderRadius: 10,
     marginLeft: 5,
     marginTop: 5,
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: "82%",
     display: "flex",
-    // justifyContent: "flex-start", 
+    // justifyContent: "flex-start",
     alignItems: "flex-start",
   },
 });
@@ -72,34 +72,21 @@ interface StoryCardProps extends Tables<"stories"> {
 }
 
 const StoryCard = (props: StoryCardProps) => {
-  const {
-    id,
-    first_image_url,
-    created_by,
-    username,
-    avatar_url,
-    created_at,
-    comment_count,
-    votes,
-  } = props;
+  const { id, first_image_url, created_by, username, avatar_url, created_at, comment_count, votes } = props;
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
-  const [storyVotes, setStoryVotes] = useState(votes);
   const [userId, setUserId] = useState(null);
   let commentText = "comments";
   let voteText = "votes";
   if (comment_count === 1) {
     commentText = "comment";
   }
-  if (storyVotes === 1) {
+  if (votes === 1) {
     voteText = "vote";
   }
 
   async function getUserId() {
     try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("username", username);
+      const { data, error } = await supabase.from("profiles").select("id").eq("username", username);
 
       if (data && data.length > 0) {
         setUserId(data[0].id as any);
@@ -120,8 +107,7 @@ const StoryCard = (props: StoryCardProps) => {
           onPress={() =>
             navigation.navigate("FullStory", {
               story_id: id,
-              setStoryVotes,
-              storyVotes: votes,
+              votes: votes
             })
           }
         >
@@ -151,12 +137,8 @@ const StoryCard = (props: StoryCardProps) => {
             }}
           />
           <View style={styles.MetadataBox}>
-            <Text style={styles.text}>{`${username} posted ${
-              created_at && timeAgo(created_at)
-            }`}</Text>
-            <Text
-              style={styles.text}
-            >{`${comment_count} comments: ${votes} votes`}</Text>
+            <Text style={styles.text}>{`${username} posted ${created_at && timeAgo(created_at)}`}</Text>
+            <Text style={styles.text}>{`${comment_count} comments: ${votes} votes`}</Text>
           </View>
         </View>
       </View>
