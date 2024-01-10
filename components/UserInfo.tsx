@@ -120,7 +120,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
   }
 
   async function getFollowersInfo() {
-    if (!sessionUserId) {
+    if (!sessionUserId || !userId) {
       return;
     }
 
