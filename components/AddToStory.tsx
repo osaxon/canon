@@ -224,7 +224,7 @@ export default function AddToStory({
                       setInput("");
                     }
               }
-              disabled={nextImageStatus === "pending"}
+              disabled={!session || !input || nextImageStatus === "pending"}
               loading={nextImageStatus === "pending"}
             />
           </View>
