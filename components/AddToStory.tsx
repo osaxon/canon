@@ -41,8 +41,10 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
         backgroundColor: "white",
-        border: "solid 1px silver",
-        padding: 5,
+        borderColor: "silver",
+        borderStyle: "solid",
+    borderWidth:1,
+    padding: 5,
     },
     submitButton: {
         flexDirection: "row",

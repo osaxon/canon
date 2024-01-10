@@ -1,57 +1,80 @@
-import { Image, StyleSheet, Text, View, ScrollView } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  ImageSourcePropType,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase";
+import { Session } from "@supabase/supabase-js";
+import { useNavigation } from "@react-navigation/core";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackParams } from "../App";
 
 interface LatestStoriesProps {
   userId: any;
 }
 
 const LatestStories: React.FC<LatestStoriesProps> = ({ userId }) => {
-  // const [images, setImages] = useState<object | null>([]);
+  const [session, setSession] = useState<Session | null>(null);
 
-  // async function getStory() {
-  //   try {
-  //     const { data, error } = await supabase.storage
-  //       .from("DALLEImages")
-  //       .list("", {
-  //         limit: 100,
-  //         offset: 0,
-  //         sortBy: { column: "created_at", order: "asc" },
-  //       });
+  const sessionUserId = session?.user?.id || "";
 
-  //     if (error) {
-  //       console.error("Error getting story: ", error);
-  //     } else if (data) {
-  //       setImages(data);
-  //       console.log(data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error getting story: ", error);
-  //   }
-  // }
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
 
-  // useEffect(() => {
-  //   getStory();
-  // }, []);
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
 
-  const fauxImages = [
-    require("../assets/icon.png"),
-    require("../assets/icon.png"),
-    require("../assets/icon.png"),
-    require("../assets/icon.png"),
-    require("../assets/icon.png"),
-    require("../assets/icon.png"),
-    require("../assets/icon.png"),
-    require("../assets/icon.png"),
-    require("../assets/icon.png"),
-  ];
+  const [images, setImages] = useState<{ first_image_url: string }[]>([]);
+
+  async function getStory() {
+    try {
+      const { data, error } = await supabase
+        .from("stories")
+        .select("*")
+        .eq("created_by", userId || sessionUserId);
+
+      if (error) {
+        console.error("Error getting story: ", error);
+      } else if (data) {
+        setImages(data);
+        console.log(data);
+      }
+    } catch (error) {
+      console.error("Error getting story: ", error);
+    }
+  }
+
+  useEffect(() => {
+    getStory();
+  }, []);
+
+  const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
 
   return (
     <>
-      <Text style={styles.titleText}>Latest Stories</Text>
+      <Text style={styles.titleText}>Your Latest Stories</Text>
       <ScrollView>
         <View style={styles.storyContainer}>
-          {fauxImages.map((source, index) => (
-            <Image key={index} style={styles.stories} source={source} />
+          {images.map((item, index) => (
+            <TouchableOpacity 
+            // onPress={() => navigation.navigate("FullStory", item.story_id)}
+            >
+              <Image
+                key={index}
+                style={styles.stories}
+                source={{ uri: item.first_image_url }}
+              />
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
@@ -70,21 +93,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 20,
     marginTop: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "black",
   },
   storyContainer: {
+    display: "flex",
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "flex-start",
+    alignItems: "flex-start",
+    alignContent: "flex-start",
     width: "100%",
-    paddingHorizontal: 10,
   },
   stories: {
-    width: 122,
-    height: 122,
-    borderRadius: 3,
+    width: 124,
+    height: 124,
     borderColor: "#333",
     borderWidth: 1,
-    margin: 0,
+    margin: 1,
   },
 });

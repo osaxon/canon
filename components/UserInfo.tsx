@@ -131,7 +131,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
         .eq("profile_id", userId);
 
       if (response.error) {
-        console.error("Error with getting data: ", response.error);
+        console.log("Error with getting data: ", response.error);
         return;
       }
 

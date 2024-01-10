@@ -18,7 +18,7 @@ const ProfilePic: React.FC<ProfilePicProps> = ({ userId }) => {
   const [isOwnProfile, setIsOwnProfile] = useState<boolean | false>(false);
   const [username, setUsername] = useState<string | null>(null);
 
-  // const sessionUserId = session?.user?.id || "";
+  // const userId = session?.user?.id || "";
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -42,8 +42,9 @@ const ProfilePic: React.FC<ProfilePicProps> = ({ userId }) => {
         if (error) {
           console.error("Error fetching avatar URL:", error);
         } else if (data && data.avatar_url) {
-        } setUsername(data.username)
+         setUsername(data.username)
           setAvatarUrl(data.avatar_url);
+        }
       }
     }
     fetchAvatarUrl();

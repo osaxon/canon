@@ -7,6 +7,7 @@ import { StackParams } from "../App";
 import { timeAgo } from "../utils/timeFunctions";
 import { Tables } from "../types/database";
 import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
 
 const styles = StyleSheet.create({
   image: {
@@ -14,7 +15,7 @@ const styles = StyleSheet.create({
     width: 1000,
     maxHeight: "100%",
     height: "auto",
-    borderRadius: 10,
+    // borderRadius: 10,
     aspectRatio: 1,
   },
   text: {
@@ -48,15 +49,18 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   MetadataBox: {
-    backgroundColor: "lightgrey",
+    // backgroundColor: "lightgrey",
     border: "solid 1px silver",
-    borderRadius: 10,
+    // borderRadius: 10,
     marginLeft: 5,
     marginTop: 5,
     padding: 5,
     marginRight: "auto",
     width: "100%",
     maxWidth: "82%",
+    display: "flex",
+    // justifyContent: "flex-start", 
+    alignItems: "flex-start",
   },
 });
 
@@ -78,6 +82,7 @@ const StoryCard = (props: StoryCardProps) => {
   } = props;
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
   const [storyVotes, setStoryVotes] = useState(votes);
+  const [userId, setUserId] = useState(null);
   let commentText = "comments";
   let voteText = "votes";
   if (comment_count === 1) {
@@ -86,6 +91,25 @@ const StoryCard = (props: StoryCardProps) => {
   if (storyVotes === 1) {
     voteText = "vote";
   }
+
+  async function getUserId() {
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("username", username);
+
+      if (data && data.length > 0) {
+        setUserId(data[0].id as any);
+      }
+    } catch (error) {
+      console.error("error: ", error);
+    }
+  }
+
+  useEffect(() => {
+    getUserId();
+  }, [id]);
 
   return (
     <>
@@ -106,7 +130,7 @@ const StoryCard = (props: StoryCardProps) => {
           <Avatar
             onPress={() =>
               navigation.navigate("UserProfile", {
-                user_id: id,
+                user_id: userId,
               })
             }
             size={"medium"}
@@ -130,7 +154,7 @@ const StoryCard = (props: StoryCardProps) => {
             }`}</Text>
             <Text
               style={styles.text}
-            >{`${comment_count} comments, ${votes} votes`}</Text>
+            >{`${comment_count} comments: ${votes} votes`}</Text>
           </View>
         </View>
       </View>
