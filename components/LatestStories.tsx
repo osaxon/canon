@@ -14,6 +14,7 @@ import { Session } from "@supabase/supabase-js";
 import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
+import { useFocusEffect } from '@react-navigation/native'
 
 interface LatestStoriesProps {
   userId: any;
@@ -37,6 +38,10 @@ const LatestStories: React.FC<LatestStoriesProps> = ({ userId }) => {
   const [images, setImages] = useState<{ first_image_url: string }[]>([]);
 
   async function getStory() {
+    if (!userId || !sessionUserId) {
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from("stories")
@@ -47,16 +52,15 @@ const LatestStories: React.FC<LatestStoriesProps> = ({ userId }) => {
         console.error("Error getting story: ", error);
       } else if (data) {
         setImages(data);
-        console.log(data);
       }
     } catch (error) {
       console.error("Error getting story: ", error);
     }
   }
 
-  useEffect(() => {
+  useFocusEffect(() => {
     getStory();
-  }, []);
+  });
 
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
 
@@ -65,12 +69,12 @@ const LatestStories: React.FC<LatestStoriesProps> = ({ userId }) => {
       <Text style={styles.titleText}>Your Latest Stories</Text>
       <ScrollView>
         <View style={styles.storyContainer}>
-          {images.map((item, index) => (
+          {images.map((item) => (
             <TouchableOpacity 
             // onPress={() => navigation.navigate("FullStory", item.story_id)}
             >
               <Image
-                key={index}
+                key={item.first_image_url}
                 style={styles.stories}
                 source={{ uri: item.first_image_url }}
               />
