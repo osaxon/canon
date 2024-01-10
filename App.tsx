@@ -93,7 +93,7 @@ export default function App() {
         ),
       }}>
 
-        <StoriesStack.Screen name="Stories" component={Stories} />
+        <StoriesStack.Screen name="Stories" component={Stories} options={{ title: "Stories" }}/>
 
         <StoriesStack.Screen
           name="StoryAdd"

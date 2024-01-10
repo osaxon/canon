@@ -8,6 +8,7 @@ import { timeAgo } from "../utils/timeFunctions";
 import { Tables } from "../types/database";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
+import { useTheme } from "@rneui/themed";
 
 const styles = StyleSheet.create({
   image: {
@@ -137,9 +138,9 @@ const StoryCard = (props: StoryCardProps) => {
             rounded
             containerStyle={{
               marginTop: 5,
-              borderColor: "black",
+              borderColor: "grey",
               borderStyle: "solid",
-              borderWidth: 1,
+              borderWidth: 2,
               marginLeft: 5,
             }}
             source={{

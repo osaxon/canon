@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
-import { Button, Icon } from "@rneui/themed";
+import { Button, Icon } from "react-native-elements";
 import { supabase } from "../lib/supabase";
 import { useEffect, useState } from "react";
 

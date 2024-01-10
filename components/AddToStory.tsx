@@ -87,6 +87,7 @@ export default function AddToStory() {
             borderWidth: 1,
             marginTop: 5,
             marginLeft: 5,
+            backgroundColor:"white",
           }}
           source={{
             uri: "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",

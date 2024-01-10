@@ -6,6 +6,7 @@ import * as WebBrowser from "expo-web-browser";
 import { View, StyleSheet } from "react-native";
 import { SocialIcon } from "@rneui/themed";
 import { supabase } from "../lib/supabase";
+import ScreenBackground from '../components/ScreenBackground';
 
 WebBrowser.maybeCompleteAuthSession(); // required for web only
 const redirectTo = makeRedirectUri();
@@ -99,17 +100,17 @@ export default function Auth() {
           title="Sign In With Google"
           button
           type="google"
-        />
+          />
         <SocialIcon
           onPress={performGithubOAuth}
           title="Sign In With Github"
           button
           type="github"
-        />
+          />
       </View>
 
       {/* <Button onPress={sendMagicLink} title="Send Magic Link" /> */}
-    </>
+          </>
   );
 }
 

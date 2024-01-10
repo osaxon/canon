@@ -1,14 +1,12 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { ThemeProvider, createTheme } from "@rneui/themed";
 
-const elementsTheme = createTheme({
+const theme = createTheme({
   lightColors: {
-    primary: "red",
   },
   darkColors: {
-    primary: "blue",
   },
+  mode:"light",
   components: {
     Button: {
       raised: true,
@@ -16,10 +14,12 @@ const elementsTheme = createTheme({
   },
 });
 
+
+
 const RneuiThemer = ({ children }: any) => {
   return (
     <>
-      <ThemeProvider theme={elementsTheme}>{children}</ThemeProvider>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </>
   );
 };

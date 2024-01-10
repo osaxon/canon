@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
         borderColor: "silver",
         borderStyle: "solid",
         borderWidth:1,
-        borderRadius: 10,
         width:"100%",
         padding:0,
         backgroundColor:"grey",

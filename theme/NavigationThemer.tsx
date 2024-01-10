@@ -1,6 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useTheme } from "@rneui/themed";
+import ScreenBackground from "../components/ScreenBackground";
 
 const NavigationThemer = ({ children }: any) => {
   const { theme, updateTheme } = useTheme()

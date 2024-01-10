@@ -148,11 +148,12 @@ export default function AddComment({ story_id, setComments }: CommentsProps) {
         size={"medium"}
         rounded
         containerStyle={{
-          borderColor: "grey",
+          borderColor: "silver",
           borderStyle: "solid",
-          borderWidth: 1,
+          borderWidth: 10,
           marginTop: 5,
           marginLeft: 5,
+          backgroundColor:"white",
         }}
         source={{
           uri: "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
