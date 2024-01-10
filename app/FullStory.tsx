@@ -70,8 +70,8 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
     const queryClient = useQueryClient();
 
     const { data: fullStory } = useFullStory(story_id);
-    console.log(votes, "<<-- fullstory");
-
+    // console.log(fullStory, "<<-- fullstory");
+    
     const {
         mutate: generate,
         data: nextImage,
