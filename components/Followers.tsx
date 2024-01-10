@@ -84,7 +84,7 @@ const Followers: React.FC<FollowerProps> = ({ onHideOverlay, userId }) => {
   const handleUserPress = (userId: any) => {
     onHideOverlay();
     setTimeout(() => {
-      navigation.navigate("UserProfile", { user_id: userId });
+      navigation.push("UserProfile", { user_id: userId });
     }, 0);
   };
 

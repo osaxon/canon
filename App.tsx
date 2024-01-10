@@ -53,7 +53,7 @@ const Stack = createBottomTabNavigator<StackParams>();
 export const queryClient = new QueryClient();
 
 export type StoriesStackParams = {
-  UserProfile: { user_id: any };
+  
   Stories: any;
   StoryAdd: { story_id: number };
   StoryConfirm: { story_id: number };
@@ -66,6 +66,7 @@ export type StoriesStackParams = {
 
 export type ProfileStackParams = {
   Profile: { user_id: any };
+  UserProfile: { user_id: any };
 };
 
 export type CreateNewStackParams = {
@@ -118,11 +119,6 @@ export default function App() {
           component={StoryComments}
           options={{ title: "Comments" }}
         />
-        <StoriesStack.Screen
-          name="UserProfile"
-          component={UserProfile}
-          options={{ title: "Profile" }}
-        />
       </StoriesStack.Navigator>
     );
   };
@@ -142,6 +138,11 @@ export default function App() {
           title: "Profile",
         }}
       />
+      <ProfileStack.Screen
+          name="UserProfile"
+          component={UserProfile}
+          options={{ title: "Profile" }}
+        />
     </ProfileStack.Navigator>)
   };
   
