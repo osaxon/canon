@@ -65,7 +65,7 @@ export default function Votes({ story_id, storyVotes }: votesProps) {
     const [votes, setVotes] = useState<number | null>(storyVotes);
     const [upVoted, setUpVoted] = useState(false)
     const [downVoted, setDownVoted] = useState(false)
-console.log(votes, "<--votes", storyVotes,"<--storyVotes");
+
   const vote = async (direction: string, inc: number) => {
     if(direction === "up"){
         setUpVoted(!upVoted && !downVoted)
