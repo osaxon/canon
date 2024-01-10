@@ -1,14 +1,12 @@
 import { supabase } from "../lib/supabase";
 import { useNavigation } from "@react-navigation/core";
-import { ImageContext } from "../types/functions";
-import { QueryResult, QueryData, QueryError } from "@supabase/supabase-js";
+import { QueryData } from "@supabase/supabase-js";
 import { NewStoryInputs } from "../types/functions";
 import { useQuery, useMutation, useInfiniteQuery } from "@tanstack/react-query";
 import { useCallback, useContext, useRef } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
 import { useFocusEffect } from "@react-navigation/native";
-import { Tables } from "../types/supabase";
 
 export function useRefreshOnFocus<T>(refetch: () => Promise<T>) {
   const firstTimeRef = useRef(true);
@@ -197,7 +195,8 @@ export const useNewStory = ({ imageData, userId }: NewStoryInputs) => {
 
       return { story, storyItem } || [];
     },
-    onSuccess: () => navigation?.navigate("StoriesStack", {screen: "Stories"}),
+    onSuccess: () =>
+      navigation?.navigate("StoriesStack", { screen: "Stories" }),
     onError: (error) => console.error(error),
   });
 };
@@ -215,21 +214,4 @@ export const useGetHomeFeed = () => {
         .throwOnError();
     },
   });
-};
-
-// TODO add 'latest_img_url' to 'story' schema
-// will make it easier to manage the main home feed content
-// fetch all stories rather than story_items
-// when new story_item is added to story, update story with new url
-
-export const getLogo = async () => {
-  try {
-    const { data } = await supabase.storage
-      .from("avatars")
-      .getPublicUrl("logo/canon.png");
-
-    return data?.publicUrl;
-  } catch (error) {
-    console.error(error);
-  }
 };

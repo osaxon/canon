@@ -14,7 +14,7 @@ import { Session } from "@supabase/supabase-js";
 import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect } from "@react-navigation/native";
 
 interface LatestStoriesProps {
   userId: any;
@@ -35,10 +35,13 @@ const LatestStories: React.FC<LatestStoriesProps> = ({ userId }) => {
     });
   }, []);
 
-  const [images, setImages] = useState<{
-    votes: number | null;
-    id: number; first_image_url: string 
-}[]>([]);
+  const [images, setImages] = useState<
+    {
+      votes: number | null;
+      id: number;
+      first_image_url: string;
+    }[]
+  >([]);
 
   async function getStory() {
     if (!userId || !sessionUserId) {
@@ -73,8 +76,14 @@ const LatestStories: React.FC<LatestStoriesProps> = ({ userId }) => {
       <ScrollView>
         <View style={styles.storyContainer}>
           {images.map((item) => (
-            <TouchableOpacity 
-            onPress={() => navigation.navigate("FullStory", {story_id: item.id, votes: item.votes})}
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("FullStory", {
+                  story_id: item.id,
+                  votes: item.votes,
+                })
+              }
+              key={item.id}
             >
               <Image
                 key={item.id}
