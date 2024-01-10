@@ -6,6 +6,7 @@ import { decode } from "base64-arraybuffer";
 import { useState, useEffect } from "react";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
+import { useFocusEffect } from '@react-navigation/native'
 
 interface ProfilePicProps {
   userId: any;
@@ -30,8 +31,12 @@ const ProfilePic: React.FC<ProfilePicProps> = ({ userId }) => {
     });
   }, []);
 
-  useEffect(() => {
+  useFocusEffect(() => {
     async function fetchAvatarUrl() {
+      if (!userId) {
+        return;
+      }
+
       if (userId) {
         const { data, error } = await supabase
           .from("profiles")
@@ -48,7 +53,7 @@ const ProfilePic: React.FC<ProfilePicProps> = ({ userId }) => {
       }
     }
     fetchAvatarUrl();
-  }, [session]);
+  });
 
   const defaultProfile = avatarUrl;
   const defaultImage = require("../assets/user.png");

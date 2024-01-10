@@ -59,7 +59,7 @@ const generateAndStoreImage = async ({
 };
 
 const FullStory: React.FC<Props> = ({ route, navigation }) => {
-  const { story_id, storyVotes, setStoryVotes } = route.params;
+  const { story_id, votes } = route.params;
 
   const { data: fullStory, refetch } = useFullStory(story_id);
 
@@ -98,11 +98,7 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
           <Collapsible title="Comments" icon="chat">
             <Comments story_id={story_id} />
           </Collapsible>
-          <Votes
-            story_id={story_id}
-            storyVotes={storyVotes}
-            setStoryVotes={setStoryVotes}
-          />
+          <Votes story_id={story_id} storyVotes={votes} />
         </>
       }
     />
