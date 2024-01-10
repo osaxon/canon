@@ -179,6 +179,7 @@ export default function App() {
               name="StoriesStack"
               component={StoriesScreenStack}
               options={{
+                title: "Stories",
                 tabBarIcon: ({ color, size }) => (
                   <MaterialIcons name="home" color={color} size={size} />
                 ),
