@@ -35,7 +35,10 @@ const LatestStories: React.FC<LatestStoriesProps> = ({ userId }) => {
     });
   }, []);
 
-  const [images, setImages] = useState<{ first_image_url: string }[]>([]);
+  const [images, setImages] = useState<{
+    votes: number | null;
+    id: number; first_image_url: string 
+}[]>([]);
 
   async function getStory() {
     if (!userId || !sessionUserId) {
@@ -45,7 +48,7 @@ const LatestStories: React.FC<LatestStoriesProps> = ({ userId }) => {
     try {
       const { data, error } = await supabase
         .from("stories")
-        .select("*")
+        .select("first_image_url, id, votes")
         .eq("created_by", userId || sessionUserId);
 
       if (error) {
@@ -71,7 +74,7 @@ const LatestStories: React.FC<LatestStoriesProps> = ({ userId }) => {
         <View style={styles.storyContainer}>
           {images.map((item) => (
             <TouchableOpacity 
-            // onPress={() => navigation.navigate("FullStory", item.story_id)}
+            onPress={() => navigation.navigate("FullStory", {story_id: item.id, storyVotes: item.votes, setStoryVotes: item.votes})}
             >
               <Image
                 key={item.first_image_url}
