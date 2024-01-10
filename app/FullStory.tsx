@@ -80,7 +80,9 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
   return (
     <KeyboardAwareFlatList
       extraHeight={180}
-      data={fullStory?.storyItems}
+      data={fullStory?.storyItems.sort((a,b) => {
+        return a.id - b.id
+      })}
       renderItem={({ item: storyItem }) => (
         <StoryItemCard storyItemData={storyItem as any} />
       )}
