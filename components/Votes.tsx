@@ -57,15 +57,15 @@ const styles = StyleSheet.create({
   });
 
 interface votesProps {
-  storyVotes: number | null
+  storyVotes: number;
   story_id: number;
-  setStoryVotes: (val: number) => void;
 }
 
-export default function Votes({ story_id, storyVotes, setStoryVotes }: votesProps) {
-    const [votes, setVotes] = useState<number | null>(storyVotes);
+export default function Votes({ story_id, storyVotes }: votesProps) {
+    const [votes, setStoryVotes] = useState<number>(storyVotes);
     const [upVoted, setUpVoted] = useState(false)
     const [downVoted, setDownVoted] = useState(false)
+
   const vote = async (direction: string, inc: number) => {
     if(direction === "up"){
         setUpVoted(!upVoted && !downVoted)
@@ -80,8 +80,7 @@ export default function Votes({ story_id, storyVotes, setStoryVotes }: votesProp
       .update({ votes: votes! + inc })
       .eq("id", story_id)
       .select();
-      setVotes(data![0].votes)
-    setStoryVotes(data![0].votes)
+      setStoryVotes(data![0].votes)
   };
 
   return (
