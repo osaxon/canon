@@ -1,11 +1,14 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer, NavigatorScreenParams } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  NavigatorScreenParams,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ThemeProvider, createTheme } from "@rneui/themed";
 import { Session } from "@supabase/supabase-js";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import FullStory from "./app/FullStory";
 import Profile from "./app/Profile";
 import SignIn from "./app/SignIn";
@@ -19,7 +22,6 @@ import ProfileButton from "./components/ProfileButton";
 import { supabase } from "./lib/supabase";
 import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Votes from "./components/Votes";
 
 const theme = createTheme({
   mode: "dark",
@@ -53,7 +55,6 @@ const Stack = createBottomTabNavigator<StackParams>();
 export const queryClient = new QueryClient();
 
 export type StoriesStackParams = {
-  
   Stories: any;
   StoryAdd: { story_id: number };
   StoryConfirm: { story_id: number };
@@ -97,12 +98,22 @@ export default function App() {
   const StoriesScreenStack = () => {
     return (
       <StoriesStack.Navigator
-      screenOptions={{
-        headerRight: () => (
-          <ProfileButton session={session?.access_token} />
-        ),
-      }}>
-        <StoriesStack.Screen name="Stories" component={Stories} />
+        screenOptions={{
+          headerRight: () => <ProfileButton session={session?.access_token} />,
+        }}
+      >
+        <StoriesStack.Screen
+          name="Stories"
+          component={Stories}
+          options={{
+            headerLeft: () => (
+              <Image
+                source={require("./assets/canon.png")}
+                style={{ height: 50, width: 50 }}
+              />
+            ),
+          }}
+        />
         <StoriesStack.Screen
           name="StoryAdd"
           component={StoryAdd}
@@ -128,21 +139,20 @@ export default function App() {
   };
 
   const ProfileScreenStack = () => {
-    return(
-    <ProfileStack.Navigator
-    screenOptions={{
-      headerRight: () => (
-        <ProfileButton session={session?.access_token} />
-      ),
-    }}>
-      <ProfileStack.Screen
-        name="Profile"
-        component={session?.access_token ? Profile : SignIn}
-        options={{
-          title: "Profile",
+    return (
+      <ProfileStack.Navigator
+        screenOptions={{
+          headerRight: () => <ProfileButton session={session?.access_token} />,
         }}
-      />
-      <ProfileStack.Screen
+      >
+        <ProfileStack.Screen
+          name="Profile"
+          component={session?.access_token ? Profile : SignIn}
+          options={{
+            title: "Profile",
+          }}
+        />
+        <ProfileStack.Screen
           name="UserProfile"
           component={UserProfile}
           options={{ title: "Profile" }}
@@ -152,25 +162,26 @@ export default function App() {
           component={FullStory}
           options={{ title: "Full Story" }}
         />
-    </ProfileStack.Navigator>)
+      </ProfileStack.Navigator>
+    );
   };
-  
+
   const CreateNewScreenStack = () => {
-    return(
-    <CreateNewStack.Navigator
-    screenOptions={{
-      headerRight: () => (
-        <ProfileButton session={session?.access_token} />
-      ),
-    }}>
-      <CreateNewStack.Screen
-        name="CreateNew"
-        component={GenerateImage}
-        options={{
-          title: "New Story",
+    return (
+      <CreateNewStack.Navigator
+        screenOptions={{
+          headerRight: () => <ProfileButton session={session?.access_token} />,
         }}
-      />
-    </CreateNewStack.Navigator>)
+      >
+        <CreateNewStack.Screen
+          name="CreateNew"
+          component={GenerateImage}
+          options={{
+            title: "New Story",
+          }}
+        />
+      </CreateNewStack.Navigator>
+    );
   };
 
   return (
