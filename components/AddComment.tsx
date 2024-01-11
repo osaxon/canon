@@ -209,8 +209,8 @@ export default function AddComment({ story_id, comments, setComments }: Comments
         {!inputError ? null : <Error message="Please add text" />}
         {!sessionError ? null : <Error message="Please sign-in" />}
         {!requestFailed ? null : <Error message="Sorry request failed" />}
-        <View style={styles.submitButtonContainer}> 
-        <Button title={`Submit`} onPress={onSubmit} />
+        <View style={styles.submitButtonContainer}>
+        <Button title={`Submit` } onPress={onSubmit} />
         </View>
       </View>
     </View>

@@ -6,6 +6,7 @@ import { Session } from "@supabase/supabase-js";
 import Following from "./Following";
 import Followers from "./Followers";
 import { Overlay } from "@rneui/themed";
+import { useFocusEffect } from "@react-navigation/native";
 
 interface UserInfoProps {
   userId: any;
@@ -59,6 +60,8 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
       await getFollowingInfo();
       await getFollowersInfo();
       setFollowed(true);
+      await fetchUserCounts(sessionUserId);
+      await fetchUserCounts(userId);
     } catch (error) {
       console.error("Error: ", error);
     }
@@ -87,17 +90,19 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
       setFollowed(false);
       await getFollowingInfo();
       await getFollowersInfo();
+      await fetchUserCounts(sessionUserId);
+      await fetchUserCounts(userId);
     } catch (error) {
       console.error("Error: ", error);
     }
   }
 
-  useEffect(() => {
+  useFocusEffect(() => {
     const ownProfile = userId === session?.user.id;
     setIsOwnProfile(ownProfile);
-  }, [userId, sessionUserId]);
+  });
 
-  async function getFollowingInfo() {
+  async function getFollowingInfo(userToFetch: string) {
     if (!sessionUserId || !userId) {
       return;
     }
@@ -106,10 +111,10 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
       const response = await supabase
         .from("following")
         .select("profile_id, following_profile_id", { count: "exact" })
-        .eq("profile_id", userId);
+        .eq("profile_id", userToFetch);
 
       if (response.error) {
-        console.error("Error with getting data: ", response.error);
+        // console.error("Error with getting data: ", response.error);
         return;
       }
 
@@ -119,8 +124,8 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
     }
   }
 
-  async function getFollowersInfo() {
-    if (!sessionUserId || !userId) {
+  async function getFollowersInfo(userToFetch: string) {
+    if (!sessionUserId || !userId || !userToFetch) {
       return;
     }
 
@@ -128,10 +133,10 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
       const response = await supabase
         .from("followers")
         .select("profile_id, follower_profile_id", { count: "exact" })
-        .eq("profile_id", userId);
+        .eq("profile_id", userToFetch);
 
       if (response.error) {
-        console.log("Error with getting data: ", response.error);
+        // console.log("Error with getting data: ", response.error);
         return;
       }
 
@@ -147,7 +152,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
     }
 
     try {
-      const {data, error} = await supabase
+      const { data, error } = await supabase
         .from("following")
         .select("profile_id, following_profile_id")
         .eq("profile_id", sessionUserId);
@@ -166,11 +171,22 @@ const UserInfo: React.FC<UserInfoProps> = ({ userId }) => {
     }
   }
 
-  useEffect(() => {
-    getFollowersInfo();
-    getFollowingInfo();
+  async function fetchUserCounts(userToFetch: string) {
+    await getFollowingInfo(userToFetch);
+    await getFollowersInfo(userToFetch);
+  }
+
+  useFocusEffect(() => {
+    getFollowersInfo(userId);
+    getFollowingInfo(userId);
     handleSetFollowed();
-  }, [sessionUserId, userId]);
+  });
+
+  useFocusEffect(() => {
+    if (userId === sessionUserId) {
+      fetchUserCounts(sessionUserId);
+    }
+  });
 
   const hideFollowingOverlay = () => {
     setFollowingVisible(false);
