@@ -110,7 +110,7 @@ const StoryItemCard = ({
       maxWidth: "82%",
     },
   });
-  console.log(profile_id, show, "storyItemCard");
+
   return ( !show ? null :
     <>
       <View style={styles.StoryItemCard}>
@@ -139,7 +139,7 @@ const StoryItemCard = ({
             }}
           />
           <View style={styles.metadataBox}>
-            <Text style={styles.promptText}>{`"${prompt}" show: ${show}`}</Text>
+            <Text style={styles.promptText}>{`"${prompt}"`}</Text>
             <Divider />
             <View style={styles.metadataVotesBox}>
               <Text style={styles.text}>{`${

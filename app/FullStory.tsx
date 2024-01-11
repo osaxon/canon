@@ -115,7 +115,7 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
     if(storyItem.profile_id === session?.user.id) {show = true}
   })
   
-  console.log(filteredStoryItems, "<--filteredStoryItems", show)
+  
 
   
   return (
