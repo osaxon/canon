@@ -41,7 +41,7 @@ export type StackParams = {
   };
   StoryComments: { story_id: number };
   CreateNew: undefined; // TODO may need to add story_id as a param to make route re-usable for adding to existing story
-  ProfileStack: ProfileStackParams;
+  ProfileStack: NavigatorScreenParams<ProfileStackParams>;
   CreateNewStack: CreateNewStackParams;
 };
 
@@ -64,7 +64,7 @@ export type ProfileStackParams = {
   UserProfile: { user_id: any };
   FullStory: {
     story_id: number;
-    votes: number;
+    votes: number | null;
   };
 };
 
@@ -153,7 +153,7 @@ export default function App() {
           component={UserProfile}
           options={{ title: "Profile" }}
         />
-        <StoriesStack.Screen
+        <ProfileStack.Screen
           name="FullStory"
           component={FullStory}
           options={{ title: "Full Story" }}

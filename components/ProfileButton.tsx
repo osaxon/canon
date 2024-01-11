@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, useTheme } from "react-native-elements";
-import { StackParams } from "../App";
+import { ProfileStackParams, StackParams } from "../App";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/core";
 import { supabase } from "../lib/supabase";
@@ -25,7 +25,7 @@ export default function ProfileButton(props: any) {
       {!props.session ? (
           <Button
             title="Sign-In"
-            onPress={() => navigation.navigate("Profile", { user_id: -1 })}
+            onPress={() => navigation.navigate("ProfileStack", { screen: "Profile", params: {user_id: -1} })}
           />
       ) : (
           <Button title="Sign-Out" onPress={signout} />
