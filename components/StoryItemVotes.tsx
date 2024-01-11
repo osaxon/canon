@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Icon, useTheme } from "react-native-elements";
 import { supabase } from "../lib/supabase";
+import { Session } from "@supabase/supabase-js";
+import Error from "./Error";
 
 interface StoryItemVotesProps {
     story_item_votes: number | null;
@@ -16,6 +18,8 @@ export default function StoryItemVotes({
     const [upVoted, setUpVoted] = useState(false);
     const [downVoted, setDownVoted] = useState(false);
     const { theme, updateTheme } = useTheme();
+    const [sessionError, setSessionError] = useState(false);
+    const [session, setSession] = useState<Session | null>(null);
 
     const styles = StyleSheet.create({
         text: {
@@ -30,6 +34,15 @@ export default function StoryItemVotes({
             alignItems: "center",
             borderRadius: 20,
             backgroundColor: theme.colors?.grey5,
+        },
+        error: {
+            display: "flex",
+            flexDirection: "row",
+            maxWidth: 150,
+            marginLeft: 20,
+            justifyContent: "space-between",
+            alignItems: "center",
+            borderRadius: 20,
         },
 
         upVoteOn: {
@@ -47,7 +60,23 @@ export default function StoryItemVotes({
             borderRadius: 20,
         },
     });
+
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          setSession(session);
+        });
+    
+        supabase.auth.onAuthStateChange((_event, session) => {
+          setSession(session);
+        });
+      }, []);
     const vote = async (direction: string, inc: number) => {
+        if (!session) {
+            setSessionError(true);
+            setTimeout(() => {
+              setSessionError(false);
+            }, 3000);
+          } else {
         if (direction === "up") {
             setUpVoted(!upVoted && !downVoted);
             setDownVoted(false);
@@ -70,7 +99,8 @@ export default function StoryItemVotes({
                 .select();
             setVotes(data![0].votes);
         }
-    };
+    }
+};
 
     return (
         <View style={styles.votesBox}>
@@ -103,6 +133,7 @@ export default function StoryItemVotes({
                     }
                 }}
             />
+            <View style={styles.error}>{!sessionError ? null : <Error message="Please sign-in" />}</View>
         </View>
     );
 }

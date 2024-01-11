@@ -93,7 +93,7 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
       borderStyle: "solid",
       marginLeft: "auto",
       marginRight: "auto",
-      paddingBottom: 10,
+      paddingBottom: 15,
       backgroundColor: theme.colors?.grey4,
     },
   })
@@ -161,7 +161,7 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
               refetch={refetch}
             />
             <Collapsible title="Comments" icon="chat">
-              <Comments story_id={story_id} />
+              <Comments story_id={story_id}/>
             </Collapsible>
           </>
         }
