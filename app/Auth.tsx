@@ -98,12 +98,14 @@ export default function Auth() {
                     title="Sign In With Google"
                     button
                     type="google"
+                    style={{ width: "auto" }}
                 />
                 <SocialIcon
                     onPress={performGithubOAuth}
                     title="Sign In With Github"
                     button
                     type="github"
+                    style={{ width: "auto" }}
                 />
             </View>
 
@@ -115,7 +117,7 @@ export default function Auth() {
 const styles = StyleSheet.create({
     container: {
         marginTop: 20,
-        padding: 12,
-        borderWidth: 2,
+        padding: 36,
+        marginHorizontal: "auto",
     },
 });
