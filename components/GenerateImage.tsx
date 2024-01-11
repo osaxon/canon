@@ -61,18 +61,17 @@ export default function GenerateImage() {
       maxheight: "100%",
       margin: "auto",
       padding: 10,
-      
     },
     imageContainer: {
       maxWidth: "100%",
       maxHeight: "100%",
       margin: 0,
       backgroundColor: theme.colors?.grey4,
-      borderStyle:"solid",
-      borderLeftWidth:1,
-      borderLeftColor:theme.colors?.grey2,
-      borderRightWidth:1,
-      borderRightColor:theme.colors?.grey2,
+      borderStyle: "solid",
+      borderLeftWidth: 1,
+      borderLeftColor: theme.colors?.grey2,
+      borderRightWidth: 1,
+      borderRightColor: theme.colors?.grey2,
     },
     image: {
       maxWidth: "100%",
@@ -85,33 +84,33 @@ export default function GenerateImage() {
       flexDirection: "row",
       width: "100%",
       backgroundColor: theme.colors?.grey4,
-      borderStyle:"solid",
-      borderBottomWidth:1,
-      borderBottomColor:theme.colors?.grey2,
+      borderStyle: "solid",
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors?.grey2,
     },
     text: {
-      fontWeight:"bold",
-      fontSize:16,
-      overflow:"scroll",
+      fontWeight: "bold",
+      fontSize: 16,
+      overflow: "scroll",
       color: theme.colors?.black,
       textAlign: "center",
       maxWidth: 540,
-      padding:5,
+      padding: 5,
     },
     textContainer: {
       display: "flex",
       flexDirection: "column",
-      alignItems:"center",
+      alignItems: "center",
       justifyContent: "flex-start",
-      marginBottom:50,
-      paddingTop:50,
-      paddingLeft:20,
-      paddingRight:20,
+      marginBottom: 50,
+      paddingTop: 50,
+      paddingLeft: 20,
+      paddingRight: 20,
       backgroundColor: theme.colors?.grey4,
-      borderStyle:"solid",
-      borderTopWidth:1,
-      borderTopColor:theme.colors?.grey2,
-        }
+      borderStyle: "solid",
+      borderTopWidth: 1,
+      borderTopColor: theme.colors?.grey2,
+    },
   });
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -174,21 +173,17 @@ export default function GenerateImage() {
               PlaceholderContent={<ActivityIndicator />}
             />
           ) : (
-              <View style={styles.textContainer}>
-                <Text style={styles.text}>
-                  Click generate to create a unique image using AI to start a
-                  new story!
-                </Text>
-                <Text style={styles.text}>
-                  Share the generated image as a starting point and invite
-                  friends to contibute to the story.
-                </Text>
-              </View>
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>
+                Click generate to create a unique image using AI to start a new
+                story!
+              </Text>
+              <Text style={styles.text}>
+                Share the generated image as a starting point and invite friends
+                to contibute to the story.
+              </Text>
+            </View>
           )}
-        </View>
-
-        <View>
-          <Text>{image && image.publicUrl}</Text>
         </View>
         <View style={styles.buttons}>
           <Button
@@ -197,6 +192,7 @@ export default function GenerateImage() {
             containerStyle={{ padding: 5, flexGrow: 1 }}
             loading={newImageStatus === "pending"}
             title={image?.publicUrl ? "Re-generate" : "Generate"}
+            disabled={!session}
           />
           <Button
             type="outline"
@@ -206,6 +202,9 @@ export default function GenerateImage() {
             title="Share"
           />
         </View>
+        {!session && (
+          <Text style={{ color: "red" }}>Please sign-in first 🙏</Text>
+        )}
       </View>
     </ScreenBackground>
   );
