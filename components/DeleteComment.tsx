@@ -1,4 +1,4 @@
-import { Text, Button, Icon } from "react-native-elements";
+import { Text, Icon } from "react-native-elements";
 import { View, StyleSheet } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -6,6 +6,7 @@ import { supabase } from "../lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { Dispatch, SetStateAction } from "react";
 import { Comment } from "./Comments";
+import { useTheme, Button, } from "@rneui/themed";
 
 interface DeleteCommentProps {
   story_id: number;
@@ -15,16 +16,14 @@ interface DeleteCommentProps {
   setComments: any;
 }
 
-const styles = StyleSheet.create({
-  submitButton: {
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "flex-end",
-    margin: 5,
-  },
-});
 export default function DeleteComment({ story_id, profile_id, comment_id, comments, setComments }: DeleteCommentProps) {
   const [session, setSession] = useState<Session | null>(null);
+  const { theme, updateTheme } = useTheme()
+  const styles = StyleSheet.create({
+    submitButton: {
+      margin: 5,
+    },
+  });
   const onSubmit = async () => {
     try {
       const { data, error } = await supabase
@@ -64,14 +63,14 @@ export default function DeleteComment({ story_id, profile_id, comment_id, commen
   }, []);
   if (profile_id === session?.user.id) {
     return (
+      <>
       <Button
-        style={styles.submitButton}
+        color={"error"}
         type="solid"
         onPress={onSubmit}
         icon={<Icon name="delete" size={20} color="white" />}
-      >
-        <Icon name="Save" />
-      </Button>
+      />
+      </>
     );
   }
 }

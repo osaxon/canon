@@ -28,13 +28,9 @@ export default function Votes({ story_id, storyVotes }: votesProps) {
     },
     
     votesBox: {
-        display: "flex",
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      marginTop: "2%",
-      marginLeft: "38%",
-      marginRight: "38%",
       borderRadius: 10,
       backgroundColor: theme.colors?.grey2,
       padding: 0

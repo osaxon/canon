@@ -9,6 +9,7 @@ import { Tables } from "../types/database";
 import { Dispatch, SetStateAction } from "react";
 import { useTheme } from "@rneui/themed";
 import { Comment } from "./Comments";
+import { useFocusEffect } from '@react-navigation/native'
 
 // interface Comment extends Tables<"story_comments"> {
 //   profiles: { username: string | null; avatar_url: string | null } | null;
@@ -150,6 +151,33 @@ export default function AddComment({ story_id, comments, setComments }: Comments
       padding: 0,
     },
   });
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
+
+  useFocusEffect(() => {
+    async function fetchAvatarUrl() {
+      if (!session?.user.id) {
+        return;
+      }
+
+      if (session?.user.id) {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("avatar_url, username")
+          .eq("id", session?.user.id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching avatar URL:", error);
+        } else if (data && data.avatar_url) {
+         setUsername(data.username)
+          setAvatarUrl(data.avatar_url);
+        }
+      }
+    }
+    fetchAvatarUrl();
+  });
+
 
   return (
     <View style={styles.addCommentBox}>
@@ -165,7 +193,9 @@ export default function AddComment({ story_id, comments, setComments }: Comments
           backgroundColor:"white",
         }}
         source={{
-          uri: "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
+          uri: avatarUrl
+            ? avatarUrl
+            : "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
         }}
       />
       <View style={styles.InputSubmitBox}>
@@ -179,8 +209,8 @@ export default function AddComment({ story_id, comments, setComments }: Comments
         {!inputError ? null : <Error message="Please add text" />}
         {!sessionError ? null : <Error message="Please sign-in" />}
         {!requestFailed ? null : <Error message="Sorry request failed" />}
-        <View style={styles.submitButtonContainer}>
-        <Button title={`Submit ${comments?.length ? comments?.length : 0 }` } onPress={onSubmit} />
+        <View style={styles.submitButtonContainer}> 
+        <Button title={`Submit`} onPress={onSubmit} />
         </View>
       </View>
     </View>

@@ -5,6 +5,7 @@ import { Avatar, Button, Input, Text, Image, useTheme } from "react-native-eleme
 import { ImageContext } from "../types/functions";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
+import { useFocusEffect } from '@react-navigation/native'
 
 
 
@@ -159,6 +160,34 @@ export default function AddToStory({
     },
   });
 
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
+
+  useFocusEffect(() => {
+    async function fetchAvatarUrl() {
+      if (!session?.user.id) {
+        return;
+      }
+
+      if (session?.user.id) {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("avatar_url, username")
+          .eq("id", session?.user.id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching avatar URL:", error);
+        } else if (data && data.avatar_url) {
+         setUsername(data.username)
+          setAvatarUrl(data.avatar_url);
+        }
+      }
+    }
+    fetchAvatarUrl();
+  });
+
+
   return (
     <View>
       <View style={styles.avatarInputSubmitBox}>
@@ -175,7 +204,7 @@ export default function AddToStory({
               backgroundColor:"white",
             }}
             source={{
-              uri: "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
+              uri: avatarUrl ? avatarUrl : "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
             }}
           />
         </View>

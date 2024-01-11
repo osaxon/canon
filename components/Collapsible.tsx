@@ -57,7 +57,7 @@ const Collapsible= ({children, title, icon}: CollapsibleProps) => {
         <View style={styles.textAndButton}>
         <Text style={styles.text}>{title+" "}<MaterialIcons name={icon} color={"white"} size={18} /></Text>
         <View style={styles.buttonContainer}>
-        <Button size={"sm"} style={styles.showCommentButton} onPress={toggleComments} >
+        <Button size={"sm"}  onPress={toggleComments} >
         {isCollapsed ? 
         <MaterialIcons name={"expand-more"} color={theme.colors?.white} size={22} />: 
         <MaterialIcons name={"expand-less"} color={theme.colors?.white} size={22} />}

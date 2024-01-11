@@ -2,9 +2,9 @@ import React from "react";
 import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParams } from "../App";
-import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image } from "react-native";
 import { timeAgo } from "../utils/timeFunctions";
-import { Avatar, Divider, useTheme } from "@rneui/themed";
+import { Avatar, useTheme, Divider } from "@rneui/themed";
 import StoryItemVotes from "./StoryItemVotes";
 
 interface StoryItemCardProps {
@@ -90,16 +90,14 @@ const StoryItemCard = ({
       borderWidth: 1,
     },
     metadataVotesBox: {
-      flexDirection: "row",
-      alignContent: "center",
-      justifyContent: "flex-start",
-      overflow: "hidden",
+      flexDirection: "column",
+      alignContent: "flex-end",
+      justifyContent: "center",
     },
     votesContainer: {
-      padding: 0,
-      margin: 5,
-      marginLeft: "auto",
-      marginRight: "auto",
+      padding: 5,
+      margin: 10,
+      marginRight:10
     },
     metadataBox: {
       marginLeft: 5,
@@ -139,12 +137,12 @@ const StoryItemCard = ({
           />
           <View style={styles.metadataBox}>
             <Text style={styles.promptText}>{`"${prompt}"`}</Text>
-            <Divider />
+            <Divider width={1} color={theme.colors?.grey3} />
+            <Text style={styles.text}>
+              {`${profiles?.username} posted ${timeAgo(created_at)}`}
+            </Text>
+            <Divider width={1} color={theme.colors?.grey3} />
             <View style={styles.metadataVotesBox}>
-              <Text style={styles.text}>{`${
-                profiles?.username
-              } posted ${timeAgo(created_at)}`}</Text>
-              <Divider />
               <View style={styles.votesContainer}>
                 <StoryItemVotes story_item_id={id} story_item_votes={votes} />
               </View>

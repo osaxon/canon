@@ -12,13 +12,11 @@ import React from "react";
 import AddComment from "../components/AddComment";
 import DeleteComment from "./DeleteComment";
 
-
-
 type CommentsProps = {
   story_id: number;
 };
 
- export interface Comment extends Tables<"story_comments"> {
+export interface Comment extends Tables<"story_comments"> {
   profiles: { username: string | null; avatar_url: string | null } | null;
 }
 
@@ -38,50 +36,65 @@ function Comments(props: CommentsProps) {
 
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
 
-  const { theme, updateTheme } = useTheme()
+  const { theme, updateTheme } = useTheme();
   const styles = StyleSheet.create({
     avatarBox: {
       flexDirection: "row",
       alignContent: "center",
       justifyContent: "flex-start",
       borderRadius: 10,
+      flex: 1,
     },
     textBox: {
+      flex: 1,
       flexDirection: "column",
       alignContent: "center",
       justifyContent: "flex-start",
       borderRadius: 10,
-      marginLeft:10,
+      marginLeft: 10,
       backgroundColor: theme.colors?.white,
       borderColor: theme.colors?.grey2,
       borderStyle: "solid",
-      borderWidth:1,
+      borderWidth: 1,
       padding: 5,
+      overflow: "visible",
     },
     text: {
-      fontSize:16
+      flex: 1,
+      flexDirection: "column",
+      alignContent: "center",
+      justifyContent: "flex-start",
+      fontSize: 16,
     },
     avatarTextBox: {
       boxSixing: "border-box",
-      display: "flex",
+      flex: 1,
       flexDirection: "row",
       alignContent: "flex-start",
       justifyContent: "flex-start",
       minWidth: "50%",
       width: "100%",
-      maxWidth: 500,
+      maxWidth: 540,
       height: "auto",
       maxheight: "100%",
-      marginTop:10,
-      marginLeft:10,
+      marginTop: 10,
+      marginLeft: 10,
       marginBottom: 10,
-      margin:0,
+      margin: 0,
       borderRadius: 10,
       padding: 0,
     },
     background: {
-      backgroundColor:"rgba(150,150,150,0.4)"
-    }
+      backgroundColor: "rgba(150,150,150,0.4)",
+    },
+    deleteCommentContainer: {
+      flexDirection: "row",
+      alignContent: "center",
+      justifyContent: "flex-end",
+      borderRadius: 20,
+      marginTop: 5,
+      margin: 10,
+    },
   });
 
   return (
@@ -108,13 +121,25 @@ function Comments(props: CommentsProps) {
                 comment.created_at
               )}`}</Text>
               <Text style={styles.text}>{comment.content}</Text>
-              <DeleteComment story_id={props.story_id} profile_id = {comment.profile_id} comment_id = {comment.id} comments ={comments} setComments={setComments}/>
+              <View style={styles.deleteCommentContainer}>
+                <DeleteComment
+                  story_id={props.story_id}
+                  profile_id={comment.profile_id}
+                  comment_id={comment.id}
+                  comments={comments}
+                  setComments={setComments}
+                />
+              </View>
             </View>
           </View>
         )}
         ListFooterComponent={
           <>
-            <AddComment story_id={props.story_id} comments ={comments} setComments={setComments} />
+            <AddComment
+              story_id={props.story_id}
+              comments={comments}
+              setComments={setComments}
+            />
           </>
         }
       />
