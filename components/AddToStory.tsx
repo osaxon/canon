@@ -1,13 +1,18 @@
 import { UseMutateFunction } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Avatar, Button, Input, Text, Image, useTheme } from "react-native-elements";
+import {
+  Avatar,
+  Button,
+  Input,
+  Text,
+  Image,
+  useTheme,
+} from "react-native-elements";
 import { ImageContext } from "../types/functions";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
-import { useFocusEffect } from '@react-navigation/native'
-
-
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function AddToStory({
   generate,
@@ -75,7 +80,7 @@ export default function AddToStory({
 
     return storyItem || [];
   };
-  const { theme, updateTheme } = useTheme()
+  const { theme, updateTheme } = useTheme();
   const styles = StyleSheet.create({
     text: {
       marginTop: 5,
@@ -96,7 +101,7 @@ export default function AddToStory({
       width: "100%",
       maxWidth: "82%",
       backgroundColor: theme.colors?.grey4,
-      borderColor:theme.colors?.grey2,
+      borderColor: theme.colors?.grey2,
       borderRadius: 10,
     },
     avatarBox: {
@@ -179,14 +184,13 @@ export default function AddToStory({
         if (error) {
           console.error("Error fetching avatar URL:", error);
         } else if (data && data.avatar_url) {
-         setUsername(data.username)
+          setUsername(data.username);
           setAvatarUrl(data.avatar_url);
         }
       }
     }
     fetchAvatarUrl();
   });
-
 
   return (
     <View>
@@ -199,12 +203,14 @@ export default function AddToStory({
               borderColor: "slategrey",
               borderStyle: "solid",
               borderWidth: 2,
-              marginTop:5,
-              marginLeft:5,
-              backgroundColor:"white",
+              marginTop: 5,
+              marginLeft: 5,
+              backgroundColor: "white",
             }}
             source={{
-              uri: avatarUrl ? avatarUrl : "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
+              uri: avatarUrl
+                ? avatarUrl
+                : "https://ykmnivylzhcxvtsjznhb.supabase.co/storage/v1/object/public/avatars/user.png",
             }}
           />
         </View>
@@ -253,16 +259,23 @@ export default function AddToStory({
                 />
               </>
             ) : (
-              <Button
-                style={styles.generateSubmitButton}
-                title={"Generate"}
-                onPress={() => {
-                  generate({ prompt: input });
-                  setInput("");
-                }}
-                disabled={!session || !input || nextImageStatus === "pending"}
-                loading={nextImageStatus === "pending"}
-              />
+              <>
+                {!session && (
+                  <Text style={{ color: "red", alignSelf: "center" }}>
+                    Please sign-in first 🙏
+                  </Text>
+                )}
+                <Button
+                  style={styles.generateSubmitButton}
+                  title={"Generate"}
+                  onPress={() => {
+                    generate({ prompt: input });
+                    setInput("");
+                  }}
+                  disabled={!session || !input || nextImageStatus === "pending"}
+                  loading={nextImageStatus === "pending"}
+                />
+              </>
             )}
           </View>
         </View>
