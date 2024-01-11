@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useMutation } from "@tanstack/react-query";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StackParams } from "../App";
 import AddToStory from "../components/AddToStory";
 import Collapsible from "../components/Collapsible";
@@ -13,8 +13,9 @@ import { Json, Tables } from "../types/database";
 import { useFullStory } from "../utils/hooks";
 import { generateNextImage, storeImage } from "../utils/supabase";
 import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { useTheme } from "@rneui/themed";
+import { Session } from "@supabase/supabase-js";
 
 type Props = NativeStackScreenProps<StackParams, "FullStory">;
 
@@ -97,7 +98,26 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
         imgContext: fullStory?.image_context as Json,
       }),
   });
-  console.log(nextImage?.publicUrl);
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
+  // console.log(nextImage?.publicUrl);
+  let show = false;
+  const filteredStoryItems = fullStory?.storyItems.forEach((storyItem) => {
+    if(storyItem.profile_id === session?.user.id) {show = true}
+  })
+  
+  
+
+  
   return (
     <ScreenBackground>
       <KeyboardAwareFlatList
@@ -105,14 +125,18 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
         data={fullStory?.storyItems.sort((a, b) => {
           return a.id - b.id;
         })}
-        renderItem={({ item: storyItem }) => (
-          <StoryItemCard storyItemData={storyItem as any} />
+        renderItem={({ item: storyItem, index }) => (
+          <StoryItemCard storyItemData={storyItem as any} show = {show ? true : fullStory?.storyItems.length! - 1 === index}/>
         )}
         ListHeaderComponent={
+          <>
           <View style={styles.votesContainer}>
             <Votes story_id={story_id} storyVotes={votes} />
           </View>
-
+          <View style={styles.votesContainer}>
+          {!show && fullStory?.storyItems.length! !== 1 ? <Text> The previous images are hidden until you have added to the story.</Text> : null}
+          </View>
+          </>
         }
         ListFooterComponent={
           <>
@@ -135,3 +159,5 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
 };
 
 export default FullStory;
+
+//true ? true : fullStory?.storyItems.length! - 1 === index

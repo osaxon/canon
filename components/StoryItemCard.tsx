@@ -20,6 +20,7 @@ interface StoryItemCardProps {
     prompt: string | null;
     profiles: { username: string | null; avatar_url: string | null } | null;
   };
+  show: boolean;
 }
 
 const StoryItemCard = ({
@@ -34,7 +35,7 @@ const StoryItemCard = ({
     votes,
     prompt,
     profiles,
-  },
+  }, show
 }: StoryItemCardProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<StackParams>>();
 
@@ -110,7 +111,7 @@ const StoryItemCard = ({
     },
   });
 
-  return (
+  return ( !show ? null :
     <>
       <View style={styles.StoryItemCard}>
         <Image style={styles.image} source={{ uri: image_url! }} />
