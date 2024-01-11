@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, useTheme } from "@rneui/themed";
+import { Button, useTheme } from "react-native-elements";
 import { StackParams } from "../App";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/core";
