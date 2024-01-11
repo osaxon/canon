@@ -84,6 +84,18 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
       paddingBottom: 5,
       backgroundColor: theme.colors?.grey4,
     },
+    textContainer: {
+      flex:1,
+      alignItems:"center",
+      justifyContent:"center",
+      padding: "auto",
+      borderColor: theme.colors?.grey4,
+      borderStyle: "solid",
+      marginLeft: "auto",
+      marginRight: "auto",
+      paddingBottom: 10,
+      backgroundColor: theme.colors?.grey4,
+    },
   })
   const {
     mutate: generate,
@@ -133,7 +145,7 @@ const FullStory: React.FC<Props> = ({ route, navigation }) => {
           <View style={styles.votesContainer}>
             <Votes story_id={story_id} storyVotes={votes} />
           </View>
-          <View style={styles.votesContainer}>
+          <View style={styles.textContainer}>
           {!show && fullStory?.storyItems.length! !== 1 ? <Text> The previous images are hidden until you have added to the story.</Text> : null}
           </View>
           </>
