@@ -153,7 +153,7 @@ const StoryCard = (props: StoryCardProps) => {
           />
           <View style={styles.MetadataBox}>
             <Text style={styles.text}>{`${username} posted ${created_at && timeAgo(created_at)}`}</Text>
-            <Text style={styles.text}>{`${comment_count} comments: ${votes} votes`}</Text>
+            <Text style={styles.text}>{`${comment_count} ${commentText}: ${votes} ${voteText}`}</Text>
           </View>
         </View>
       </View>
