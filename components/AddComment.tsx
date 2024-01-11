@@ -180,7 +180,7 @@ export default function AddComment({ story_id, comments, setComments }: Comments
         {!sessionError ? null : <Error message="Please sign-in" />}
         {!requestFailed ? null : <Error message="Sorry request failed" />}
         <View style={styles.submitButtonContainer}>
-        <Button title={`Submit ${comments?.length ? comments?.length : 0 }` } onPress={onSubmit} />
+        <Button title={`Submit` } onPress={onSubmit} />
         </View>
       </View>
     </View>
