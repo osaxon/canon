@@ -115,7 +115,7 @@ Deno.serve(async (req) => {
     // merged context
     // retain old context for subjects actions
     // replace for location and mood
-    let mergedImageContext = {
+    const mergedImageContext = {
         location: newImageContext.location,
         subjects: [...newImageContext.subjects, ...imageContext.subjects],
         actions: [...newImageContext.actions, ...imageContext.actions],
