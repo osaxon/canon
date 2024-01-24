@@ -1,3 +1,7 @@
+<div align="center">
+<img src="https://github.com/osaxon/canon/blob/main/assets/canon.png" style="width:25%">
+</div>
+
 # Canon
 
 A social app that provides a unique experience for users by combining a collaboration with a generative image model.
